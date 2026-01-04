@@ -1,1 +1,20 @@
 @import 'tailwindcss';
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('/fonts/Pretendard-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TTHovesProTrial';
+  src: url('/fonts/TT Hoves Pro Trial Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@theme {
+  --font-mainFont: 'Pretendard', system-ui, sans-serif;
+  --font-logoFont: 'TTHovesProTrial', system-ui, sans-serif;
+}
