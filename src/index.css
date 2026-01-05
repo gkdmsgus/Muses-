@@ -1,1 +1,41 @@
 @import 'tailwindcss';
+
+@font-face {
+  font-family: 'Pretendard';
+  src: url('/fonts/Pretendard-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TTHovesProTrial';
+  src: url('/fonts/TT Hoves Pro Trial Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@theme {
+  /* 폰트 */
+  --font-mainFont: 'Pretendard', system-ui, sans-serif;
+  --font-logoFont: 'TTHovesProTrial', system-ui, sans-serif;
+
+  /* 메인 색상 */
+  --color-mainBlack: #111827;
+  --color-mainWhite: #f9fbfd;
+  /* Purple 색상 */
+  --color-solidPurple: #a855f7;
+  --color-pastelPurple: #e9d5ff;
+  /* Blue 색상 */
+  --color-solidBlue: #6366f1;
+  --color-pastelBlue: #bfdbfe;
+  /* Pink 색상 */
+  --color-solidPink: #ec4899;
+  --color-pastelPink: #fbcfe8;
+  /* 보조 팔레트 - White */
+  --color-white80: #f3f4f6;
+  --color-white60: #e5e7eb;
+  /* 보조 팔레트 - Black */
+  --color-black80: #4b5563;
+  --color-black60: #687280;
+  --color-black40: #9ca3af;
+}
