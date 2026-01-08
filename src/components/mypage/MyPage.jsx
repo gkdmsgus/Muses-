@@ -18,7 +18,7 @@ const LIKED_PROJECTS = [
   {
     id: 1,
     title: '2024 Neon City Jazz Festival',
-    image: 'https://images.unsplash.com/photo-1514525253440-b393452e3383?auto=format&fit=crop&q=80&w=400',
+    image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=400',
     percentage: 124,
   },
   {
