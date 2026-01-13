@@ -7,29 +7,21 @@ interface SocialLoginButtonProps {
   onClick?: () => void;
 }
 
-const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({ text, bgColor, textColor = '#000000', onClick }) => {
+const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
+  text,
+  bgColor,
+  textColor = '#000000',
+  onClick,
+}) => {
   return (
     <button
       onClick={onClick}
-      className="flex items-center justify-center font-mainFont hover:brightness-95 transition-all overflow-hidden"
-      style={{
-        width: '185px',
-        height: '48px',
-        backgroundColor: bgColor,
-        borderRadius: '9999px',
-        paddingTop: '12px',
-        paddingBottom: '12px',
-        lineHeight: '1.2',
-      }}
+      className={`flex items-center justify-center font-mainFont hover:brightness-95 transition-all overflow-hidden w-[185px] h-[48px] rounded-full py-[12px] leading-[1.2]`}
+      style={{ backgroundColor: bgColor }}
     >
       <span
-        style={{
-          color: textColor,
-          fontSize: '16px',
-          fontWeight: '600',
-          textAlign: 'center',
-          display: 'block'
-        }}
+        className="text-[16px] font-semibold text-center block"
+        style={{ color: textColor }}
       >
         {text}
       </span>

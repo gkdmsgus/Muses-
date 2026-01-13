@@ -4,23 +4,8 @@ import SocialLoginButton from '../components/LoginPage/SocialLoginButton';
 
 const SignUpPage: React.FC = () => {
   return (
-    <div
-      className="flex items-center justify-center min-h-screen bg-cover bg-center"
-      style={{
-        backgroundImage: "url('/images/backgrounds/login_bg.png')",
-        width: '100%',
-        height: '100vh',
-      }}
-    >
-      <div
-        className="flex flex-col"
-        style={{
-          width: '448px',
-          height: '773px',
-          gap: '24px',
-          opacity: '1',
-        }}
-      >
+    <div className="flex items-center justify-center min-h-screen bg-[url('/images/backgrounds/login_bg.png')] bg-cover bg-center w-full h-screen">
+      <div className="flex flex-col w-[448px] h-[773px] gap-6">
         <button className="flex items-center text-black60 text-sm hover:text-mainBlack transition-colors w-fit">
           <img
             src="/images/icons/back_arrow.png"
@@ -30,23 +15,7 @@ const SignUpPage: React.FC = () => {
           뒤로 가기
         </button>
 
-        <div
-          className="flex flex-col items-center shadow-xl"
-          style={{
-            width: '448px',
-            height: '725px',
-            backgroundColor: '#FFFFFFE5',
-            borderRadius: '24px',
-            border: '1px solid #FFFFFFF2',
-            backdropFilter: 'blur(20px)',
-            paddingTop: '26px',
-            paddingRight: '33px',
-            paddingBottom: '26px',
-            paddingLeft: '33px',
-            gap: '26px',
-            opacity: '1',
-          }}
-        >
+        <div className="flex flex-col items-center shadow-xl w-[448px] h-[725px] bg-white/90 rounded-[24px] border border-white/95 backdrop-blur-[20px] pt-[26px] px-[33px] pb-[26px] gap-[26px]">
           <div className="mt-4 flex flex-col items-center">
             <div className="flex items-center gap-2 mb-1">
               <img
@@ -64,9 +33,9 @@ const SignUpPage: React.FC = () => {
           <SignUpForm />
 
           <div className="w-full flex items-center gap-4">
-            <div className="flex-1 h-[1px] bg-[#E5E7EB]"></div>
-            <span className="text-[12px] text-[#9CA3AF]">또는</span>
-            <div className="flex-1 h-[1px] bg-[#E5E7EB]"></div>
+            <div className="flex-1 h-[1px] bg-white60"></div>
+            <span className="text-[12px] text-black40">또는</span>
+            <div className="flex-1 h-[1px] bg-white60"></div>
           </div>
 
           <div className="flex gap-[12px]">
@@ -83,8 +52,8 @@ const SignUpPage: React.FC = () => {
           </div>
 
           <div className="text-[14px]">
-            <span className="text-[#4B5563]">이미 계정이 있으신가요? </span>
-            <button className="font-semibold underline underline-offset-2">
+            <span className="text-black80">이미 계정이 있으신가요? </span>
+            <button className="font-semibold underline underline-offset-2 hover:text-mainBlack transition-colors">
               로그인
             </button>
           </div>

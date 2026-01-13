@@ -7,24 +7,18 @@ interface LoginFormProps {
   setPassword: (value: string) => void;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ email, setEmail, password, setPassword }) => {
+const LoginForm: React.FC<LoginFormProps> = ({
+  email,
+  setEmail,
+  password,
+  setPassword,
+}) => {
   return (
-    <div
-      style={{
-        position: 'absolute',
-        width: '382px',
-        height: '236px',
-        top: '137px',
-        left: '33px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '16px',
-        opacity: 1,
-      }}
-    >
-
+    <div className="absolute w-[382px] h-[236px] top-[137px] left-[33px] flex flex-col gap-4 opacity-100">
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-semibold text-black80 ml-1">이메일</label>
+        <label className="text-sm font-semibold text-black80 ml-1">
+          이메일
+        </label>
         <div className="relative">
           <img
             src="/images/icons/mail.png"
@@ -36,14 +30,17 @@ const LoginForm: React.FC<LoginFormProps> = ({ email, setEmail, password, setPas
             placeholder="example@muses.com"
             className="w-full h-12 pl-12 pr-4 border border-white60 rounded-xl focus:outline-none focus:border-solidPurple transition-all placeholder:text-black40"
             value={email}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setEmail(e.target.value)
+            }
           />
         </div>
       </div>
 
-
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-semibold text-black80 ml-1">비밀번호</label>
+        <label className="text-sm font-semibold text-black80 ml-1">
+          비밀번호
+        </label>
         <div className="relative">
           <img
             src="/images/icons/lock.png"
@@ -55,12 +52,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ email, setEmail, password, setPas
             placeholder="........"
             className="w-full h-12 pl-12 pr-4 border border-white60 rounded-xl focus:outline-none focus:border-solidPurple transition-all placeholder:text-black40"
             value={password}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setPassword(e.target.value)
+            }
           />
         </div>
       </div>
 
-     
       <button className="w-full h-12 bg-mainBlack text-mainWhite rounded-full font-semibold mt-auto hover:opacity-90 transition-opacity">
         로그인
       </button>

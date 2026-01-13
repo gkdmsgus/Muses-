@@ -6,7 +6,6 @@ import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import OnBoardingPage from './pages/OnBoardingPage';
 
-import LoginSignupPage from './pages/LoginSignupPage';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import EventListPage from './pages/EventListPage';

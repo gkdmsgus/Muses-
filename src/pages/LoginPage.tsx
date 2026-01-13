@@ -11,18 +11,8 @@ const LoginPage: React.FC = () => {
   const handleGoogleLogin = (): void => console.log('구글 로그인');
 
   return (
-    <div
-      className="flex items-center justify-center min-h-screen bg-cover bg-center"
-      style={{
-        backgroundImage: "url('/images/backgrounds/login_bg.png')",
-        width: '100%',
-        height: '100vh',
-      }}
-    >
-      <div
-        className="relative bg-white rounded-[32px] shadow-xl p-10 flex flex-col items-center"
-        style={{ width: '448px', height: '686px' }}
-      >
+    <div className="flex items-center justify-center min-h-screen bg-[url('/images/backgrounds/login_bg.png')] bg-cover bg-center w-full h-screen">
+      <div className="relative bg-white rounded-[32px] shadow-xl p-10 flex flex-col items-center w-[448px] h-[686px]">
         <button className="absolute top-8 left-8 flex items-center text-black60 text-sm hover:text-mainBlack transition-colors">
           <img
             src="/images/icons/back_arrow.png"
@@ -53,10 +43,7 @@ const LoginPage: React.FC = () => {
           setPassword={setPassword}
         />
 
-        <div
-          className="w-full flex flex-col items-center"
-          style={{ marginTop: '260px' }}
-        >
+        <div className="w-full flex flex-col items-center mt-[260px]">
           <div className="w-full flex items-center my-6">
             <div className="flex-1 h-[1px] bg-white60"></div>
             <span className="px-4 text-[12px] text-black40 font-mainFont">
@@ -65,7 +52,7 @@ const LoginPage: React.FC = () => {
             <div className="flex-1 h-[1px] bg-white60"></div>
           </div>
 
-          <div className="w-full flex justify-between" style={{ gap: '12px' }}>
+          <div className="w-full flex justify-between gap-[12px]">
             <SocialLoginButton
               text="카카오로 계속하기"
               bgColor="#FACC15"
@@ -82,15 +69,12 @@ const LoginPage: React.FC = () => {
         </div>
 
         <div className="mt-auto mb-8 flex items-center justify-center gap-2">
-          <span className="font-mainFont text-[16px] font-[500] text-black">
+          <span className="font-mainFont text-[16px] font-medium text-black">
             계정이 없으신가요?
           </span>
-          {/* <button className="font-mainFont text-[16px] font-[500] text-black underline underline-offset-2 hover:opacity-70 transition-opacity">
-            회원가입
-          </button> */}
           <Link
             to="/signup"
-            className="font-mainFont text-[16px] font-[500] text-black underline underline-offset-2 hover:opacity-70 transition-opacity"
+            className="font-mainFont text-[16px] font-medium text-black underline underline-offset-2 hover:opacity-70 transition-opacity"
           >
             회원가입
           </Link>

@@ -4,22 +4,8 @@ import ProfileSetupForm from '../components/OnBoardingPage/ProfileSetupForm';
 
 const OnBoardingPage: React.FC = () => {
   return (
-    <div
-      className="flex items-center justify-center min-h-screen bg-cover bg-center"
-      style={{
-        backgroundImage: "url('/images/backgrounds/login_bg.png')",
-        width: '100%',
-        height: '100vh',
-      }}
-    >
-      <div
-        className="flex flex-col"
-        style={{
-          width: '448px',
-          height: '773px',
-          gap: '24px',
-        }}
-      >
+    <div className="flex items-center justify-center min-h-screen bg-[url('/images/backgrounds/login_bg.png')] bg-cover bg-center w-full h-screen">
+      <div className="flex flex-col w-[448px] h-[773px] gap-6">
         <button className="flex items-center text-black60 text-sm hover:text-mainBlack transition-colors w-fit">
           <img
             src="/images/icons/back_arrow.png"
@@ -29,22 +15,8 @@ const OnBoardingPage: React.FC = () => {
           뒤로 가기
         </button>
 
-        <div
-          className="flex flex-col items-center shadow-xl"
-          style={{
-            width: '448px',
-            height: '725px',
-            backgroundColor: '#FFFFFFE5',
-            borderRadius: '24px',
-            border: '1px solid #FFFFFFF2',
-            backdropFilter: 'blur(20px)',
-            padding: '26px 33px',
-            gap: '26px',
-            opacity: '1',
-          }}
-        >
+        <div className="flex flex-col items-center shadow-xl w-[448px] h-[725px] bg-white/90 rounded-[24px] border border-white/95 backdrop-blur-[20px] p-[26px_33px] gap-[26px]">
           <ProfileHeader />
-
           <ProfileSetupForm />
         </div>
       </div>
