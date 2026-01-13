@@ -1,0 +1,20 @@
+language: 'ko-KR'
+early_access: false
+reviews:
+  profile: 'chill'
+  request_changes_workflow: false
+  high_level_summary: false
+  poem: false
+  review_status: false
+  walkthrough: false
+  auto_review:
+    enabled: true
+    drafts: false
+    auto_incremental_review: false
+  finishing_touches:
+    docstrings:
+      enabled: false
+    unit_tests:
+      enabled: false
+chat:
+  auto_reply: false
