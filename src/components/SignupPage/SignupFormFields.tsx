@@ -63,7 +63,7 @@ const SignupFormFields: React.FC = () => {
           <input
             type="text"
             placeholder="2000.01.01"
-            className="w-full h-[49px] px-[16px] bg-white border border-[#C3C5C8] rounded-[12px] text-black40 focus:outline-none font-mainFont"
+            className="w-full h-[49px] px-[16px] bg-white border border-[#C3C5C8] rounded-[12px] text-black40 focus:outline-none focus:border-solidPurple transition-all font-mainFont"
           />
         </div>
 
