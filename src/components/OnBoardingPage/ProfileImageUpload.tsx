@@ -6,7 +6,7 @@ const ProfileImageUpload: React.FC = () => {
     <div className="relative w-[128px] h-[128px] mx-auto mt-[12px]">
       <div className="w-full h-full rounded-full bg-[#F3F4F6] border border-white60 flex items-center justify-center overflow-hidden shadow-inner">
         <img
-          src="/images/icons/profile_placeholder.png"
+          src="src/assets/images/icons/profile_placeholder.png"
           alt="profile placeholder"
           className="w-[90px] h-[78px] object-contain"
         />

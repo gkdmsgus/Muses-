@@ -9,7 +9,9 @@ const OnBoardingPage: React.FC = () => {
   return (
     <div
       className="min-h-screen w-full flex items-center justify-center bg-white bg-cover bg-center bg-no-repeat py-8"
-      style={{ backgroundImage: 'url("/images/backgrounds/login_bg.png")' }}
+      style={{
+        backgroundImage: 'url("src/assets/images/backgrounds/login_bg.png")',
+      }}
     >
       <div className="w-[448px] flex flex-col gap-[24px]">
         <BackButton onClick={() => window.history.back()} />

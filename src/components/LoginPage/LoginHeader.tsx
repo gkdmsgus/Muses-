@@ -11,7 +11,7 @@ const LoginHeader: React.FC<LoginHeaderProps> = ({ subtitle }) => {
         <div className="w-[114px] h-[46px] flex items-center gap-[8px]">
           <div className="w-[46px] h-[46px] flex items-center justify-center overflow-hidden rounded-[12px]">
             <img
-              src="/images/icons/logo.png"
+              src="src/assets/images/icons/logo.png"
               alt="logo"
               className="w-full h-full object-cover"
             />

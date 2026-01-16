@@ -6,7 +6,7 @@ const LoginPage: React.FC = () => {
     <div
       className="min-h-screen w-full flex items-center justify-center bg-white bg-cover bg-center bg-no-repeat"
       style={{
-        backgroundImage: 'url("/images/backgrounds/login_bg.png")',
+        backgroundImage: 'url("src/assets/images/backgrounds/login_bg.png")',
       }}
     >
       <LoginFormCard />

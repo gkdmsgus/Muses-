@@ -12,7 +12,7 @@ const GoogleLoginSection: React.FC = () => {
         iconClassName="left-[20px]"
         icon={
           <img
-            src="/images/icons/google_logo.png"
+            src="src/assets/images/icons/google_logo.png"
             alt="Google"
             className="w-[26px] h-[26px]"
           />

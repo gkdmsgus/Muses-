@@ -22,7 +22,7 @@ const SocialLoginSection: React.FC = () => {
         iconClassName="left-[19.5px]"
         icon={
           <img
-            src="/images/icons/kakao_logo.png"
+            src="src/assets/images/icons/kakao_logo.png"
             alt="Kakao"
             className="w-[28px] h-[28px] rounded-[23px]"
           />
