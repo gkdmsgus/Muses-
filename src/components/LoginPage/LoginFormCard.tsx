@@ -12,9 +12,9 @@ const LoginFormCard: React.FC = () => {
       <div className="w-[448px] flex flex-col gap-[24px]">
         <BackButton onClick={() => window.history.back()} />
 
-        <div className="w-full h-[638px] bg-white border border-white rounded-[24px] shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)] backdrop-blur-[20px] relative overflow-hidden">
+        <div className="w-full h-[638px] bg-white/80 border border-white rounded-[24px] shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)] backdrop-blur-[20px] ">
           <div className="flex flex-col pt-[33px] px-[33px]">
-            <LoginHeader />
+            <LoginHeader subtitle="계정에 로그인하세요" />
 
             <div className="mt-[26px]">
               <LoginFormFields />
