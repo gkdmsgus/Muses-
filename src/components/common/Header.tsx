@@ -1,12 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom';
 import museslogo from '../../assets/images/museslogo.png';
-import LoginSignupButton from '../LandingPage/LoginSignupButton';
 
 const Header = () => {
   const navigate = useNavigate();
 
   return (
-    <nav className="absolute flex w-full px-6 py-4 border-b border-white/40 bg-white/70 backdrop-blur-[6px] items-center justify-between">
+    <nav className="fixed top-0 left-0 z-50 flex w-full px-6 py-4 border-b border-white/40 bg-white/70 backdrop-blur-[6px] items-center justify-between">
+      {/* 왼쪽 영역 */}
       <div className="flex items-center gap-6">
         <div className="flex items-center gap-2">
           <img src={museslogo} alt="Muses Logo" className="size-8" />
@@ -33,9 +33,16 @@ const Header = () => {
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
-        <LoginSignupButton onClick={() => navigate('/login')} />
-      </div>
+      {/* 오른쪽 버튼 */}
+      <button
+        onClick={() => navigate('/login')}
+        className="flex items-center justify-center
+          px-5 py-2.5 rounded-full bg-mainBlack
+          text-sm font-boldFont text-white
+          transition-transform hover:scale-105"
+      >
+        로그인/회원가입
+      </button>
     </nav>
   );
 };
