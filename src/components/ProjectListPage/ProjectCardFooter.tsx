@@ -1,17 +1,9 @@
 import { Bell, Calendar, Award } from 'lucide-react';
-import type { Project } from './ProjectCard';
+import type { Project } from '../../types/projects';
+import { formatDeadlineDisplay, formatOpenDate } from '../../utils/date';
 
 interface ProjectCardFooterProps {
   project: Project;
-}
-
-// 날짜 형식 변환
-function formatOpenDate(dateString: string): string {
-  const parts = dateString.split('.');
-  if (parts.length >= 3) {
-    return `${parts[1]}.${parts[2]} 오픈`;
-  }
-  return dateString;
 }
 
 export default function ProjectCardFooter({ project }: ProjectCardFooterProps) {
@@ -26,7 +18,7 @@ export default function ProjectCardFooter({ project }: ProjectCardFooterProps) {
             </span>
             {project.deadline && (
               <span className="text-xs font-boldFont text-black60 bg-white80 px-2 py-1 rounded">
-                {project.deadline}
+                {formatDeadlineDisplay(project.deadline)}
               </span>
             )}
           </div>
@@ -54,7 +46,13 @@ export default function ProjectCardFooter({ project }: ProjectCardFooterProps) {
             </div>
           )}
           {project.hasNotification && (
-            <button className="flex items-center gap-2 bg-[#EEF2FF] hover:bg-[#E0E7FF] text-[#4F46E5] px-3 py-1.5 rounded-full text-xs font-boldFont transition-colors">
+            <button
+              className="cursor-pointer flex items-center gap-2 bg-[#EEF2FF] hover:bg-[#E0E7FF] text-solidBlue px-3 py-1.5 rounded-full text-xs font-boldFont transition-colors"
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+              }}
+            >
               <Bell className="w-3 h-3" />
               알림신청
             </button>

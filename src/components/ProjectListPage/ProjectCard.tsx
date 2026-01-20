@@ -1,30 +1,33 @@
 import { MapPin } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import ProjectCardFooter from './ProjectCardFooter';
-
-export interface Project {
-  id: number;
-  location: string;
-  status: '진행중' | '오픈예정' | '종료';
-  tags: string[];
-  title: string;
-  progress?: number;
-  deadline?: string;
-  backgroundColor: string;
-  hasNotification?: boolean;
-  openDate?: string;
-}
+import type { Project } from '../../types/projects';
+import fallbackPoster from '../../assets/images/fallbackPoster.png';
 
 interface ProjectCardProps {
   project: Project;
 }
 
 export default function ProjectCard({ project }: ProjectCardProps) {
+  const posterSrc = project.posterImage ?? fallbackPoster;
+
   return (
-    <div className="flex flex-col group cursor-pointer font-mainFont h-fit">
+    <Link
+      to={`/project/${project.id}`}
+      className="flex flex-col group cursor-pointer font-mainFont h-fit"
+    >
       {/* 위치 및 상태, 썸네일 */}
       <div
-        className={`${project.backgroundColor} rounded-3xl p-4 shadow-sm cursor-pointer h-[400px] w-[300px] mb-4 group-hover:shadow-lg transition-all relative overflow-hidden`}
+        className="rounded-3xl p-4 shadow-sm cursor-pointer h-[380px] w-[285px] mb-5 group-hover:shadow-lg transition-all relative overflow-hidden bg-cover bg-center"
+        style={{ backgroundImage: `url(${posterSrc})` }}
       >
+        <div
+          className="absolute bottom-0 left-0 right-0 h-full rounded-b-3xl"
+          style={{
+            background:
+              'linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, transparent 50%)',
+          }}
+        />
         <div className="flex items-center mb-4 relative">
           <div className="flex items-center gap-1 bg-white/90 rounded-lg px-2.5 py-1 shadow-sm mr-2">
             <MapPin className="w-4 h-4 text-solidBlue" />
@@ -48,15 +51,8 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         {/* 종료 상태 오버레이 */}
         {project.status === '종료' && (
           <>
-            {/* 하단 그라데이션 오버레이 */}
-            <div
-              className="absolute bottom-0 left-0 right-0 h-full rounded-b-3xl"
-              style={{
-                opacity: 0.6,
-                background:
-                  'linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.4) 100%)',
-              }}
-            />
+            {/* 배경 오버레이 */}
+            <div className="absolute bottom-0 left-0 right-0 h-full rounded-b-3xl bg-black/40" />
 
             {/* CLOSED\ 텍스트 */}
             <div className="absolute inset-0 flex items-center justify-center z-20">
@@ -76,7 +72,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
       </div>
       <div className="group-hover:-translate-y-[-8px] transition-all">
         {/* 태그 */}
-        <div className="flex gap-2 mb-3 flex-wrap">
+        <div className="flex gap-2 mb-2 flex-wrap">
           {project.tags.map((tag) => (
             <span
               key={tag}
@@ -89,12 +85,18 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
         {/* 제목 */}
         <h3 className="text-[20px] font-boldFont text-mainBlack mb-4 group-hover:text-solidBlue transition-all duration-500">
-          {project.title}
+          <span
+            className={`title-clamp ${
+              project.status === '진행중' ? 'title-clamp--fixed' : ''
+            }`}
+          >
+            {project.title}
+          </span>
         </h3>
 
         {/* 달성률, 마감일 */}
         <ProjectCardFooter project={project} />
       </div>
-    </div>
+    </Link>
   );
 }

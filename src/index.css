@@ -66,3 +66,107 @@
   --color-black60: #6b7280;
   --color-black40: #9ca3af;
 }
+
+.title-clamp {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.title-clamp--fixed {
+  line-height: 1.4;
+  min-height: calc(1.4em * 2);
+}
+
+.project-detail-content img {
+  width: 100%;
+}
+
+/* 달성도 진행 바 애니메이션 */
+
+.progress-box {
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  border-top-left-radius: 32px;
+  border-top-right-radius: 32px;
+  background: linear-gradient(90deg, var(--color-solidBlue) 0%, var(--color-solidPurple) 50%, var(--color-solidPink) 100%);
+  pointer-events: none;
+}
+
+@keyframes progress-slide {
+  from {
+    width: 0%;
+  }
+  to {
+    width: var(--progress-width);
+  }
+}
+
+.animate-progress-slide {
+  animation: progress-slide 900ms ease-out forwards;
+}
+
+/* 좋아요 하트 애니메이션 */
+.like-heart--active {
+  color: #ef4444;
+  fill: #ef4444;
+  animation: like-pop 220ms ease-out;
+}
+
+@keyframes like-pop {
+  0% {
+    transform: scale(1);
+  }
+  60% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.like-particle {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  line-height: 1;
+  opacity: 0.8;
+  animation: like-particle-float 520ms ease-out forwards;
+}
+
+.like-particle--heart {
+  color: #ef4444;
+}
+
+.like-particle--heart::before {
+  content: '❤';
+}
+
+.like-heart-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes like-particle-float {
+  0% {
+    transform: translateY(0) scale(1.2);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-18px) scale(0.6);
+    opacity: 0;
+  }
+}
