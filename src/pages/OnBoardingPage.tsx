@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import BackButton from '../components/LoginPage/BackButton';
 import LoginHeader from '../components/LoginPage/LoginHeader';
 import AuthButton from '../components/LoginPage/AuthButton';
@@ -6,9 +7,14 @@ import ProfileImageUpload from '../components/OnBoardingPage/ProfileImageUpload'
 import OnboardingFormFields from '../components/OnBoardingPage/OnboardingFormFields';
 
 const OnBoardingPage: React.FC = () => {
+  const navigate = useNavigate();
+  const handleFinalSignup = () => {
+    console.log('Final Signup clicked');
+    navigate('/');
+  };
   return (
     <div
-      className="min-h-screen w-full flex items-center justify-center bg-white bg-cover bg-center bg-no-repeat py-8"
+      className="min-h-screen w-full flex flex-col items-center justify-center bg-white bg-cover bg-center bg-no-repeat py-12"
       style={{
         backgroundImage: 'url("src/assets/images/backgrounds/login_bg.png")',
       }}
@@ -36,7 +42,7 @@ const OnBoardingPage: React.FC = () => {
               text="회원가입"
               variant="primary"
               className="h-[48px] shrink-0"
-              onClick={() => console.log('Final Signup clicked')}
+              onClick={handleFinalSignup}
             />
           </div>
         </div>

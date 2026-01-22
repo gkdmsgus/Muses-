@@ -14,7 +14,7 @@ const SignupPage: React.FC = () => {
   };
   return (
     <div
-      className="min-h-screen w-full flex items-center justify-center bg-white bg-cover bg-center bg-no-repeat"
+      className="w-full min-h-screen pt-24 flex justify-center bg-white bg-cover bg-center bg-no-repeat"
       style={{
         backgroundImage: 'url("src/assets/images/backgrounds/login_bg.png")',
       }}

@@ -8,7 +8,7 @@ import LoginFooter from './LoginFooter';
 
 const LoginFormCard: React.FC = () => {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-mainWhite p-4 font-mainFont">
+    <div className="flex items-center justify-center  bg-mainWhite p-4 font-mainFont">
       <div className="w-[448px] flex flex-col gap-[24px]">
         <BackButton onClick={() => window.history.back()} />
 

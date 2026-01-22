@@ -18,7 +18,7 @@ const AuthButton: React.FC<AuthButtonProps> = ({
   iconClassName = 'left-[20px]',
 }) => {
   const baseStyles =
-    'relative w-full h-[48px] rounded-full flex items-center justify-center font-semiBoldFont text-[16px] transition-all active:scale-[0.98]';
+    'relative w-full h-[48px] rounded-full flex items-center justify-center font-semiBoldFont text-[16px] transition-all active:scale-[0.98] cursor-pointer';
 
   const variantStyles = {
     primary: 'bg-mainBlack text-white hover:bg-black80',

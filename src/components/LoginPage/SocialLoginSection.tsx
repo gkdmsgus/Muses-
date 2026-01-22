@@ -18,7 +18,7 @@ const SocialLoginSection: React.FC = () => {
         text="카카오로 계속하기"
         variant="kakao"
         onClick={() => console.log('Kakao Login clicked')}
-        className="font-semiBoldFont text-[16px] leading-[24px]"
+        className="font-semiBoldFont text-[16px] leading-[24px] cursor-pointer"
         iconClassName="left-[19.5px]"
         icon={
           <img

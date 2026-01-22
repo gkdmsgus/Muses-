@@ -8,7 +8,7 @@ const GoogleLoginSection: React.FC = () => {
         text="구글로 계속하기"
         variant="google"
         onClick={() => console.log('Google Login clicked')}
-        className="border-mainBlack font-semiBoldFont text-[16px] leading-[24px]"
+        className="border-mainBlack font-semiBoldFont text-[16px] leading-[24px] cursor-pointer"
         iconClassName="left-[20px]"
         icon={
           <img
