@@ -30,6 +30,7 @@ const AuthButton: React.FC<AuthButtonProps> = ({
 
   return (
     <button
+      type="button"
       onClick={onClick}
       className={`${baseStyles} ${variantStyles[variant]} ${className}`}
     >

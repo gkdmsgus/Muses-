@@ -4,8 +4,14 @@ import LoginHeader from '../components/LoginPage/LoginHeader';
 import SignupFormFields from '../components/SignupPage/SignupFormFields';
 import AuthButton from '../components/LoginPage/AuthButton';
 import SignupFooter from '../components/SignupPage/SignupFooter';
+import { useNavigate } from 'react-router-dom';
 
 const SignupPage: React.FC = () => {
+  const navigate = useNavigate();
+  const handleSignup = () => {
+    console.log('Signup clicked');
+    navigate('/onboarding');
+  };
   return (
     <div
       className="min-h-screen w-full flex items-center justify-center bg-white bg-cover bg-center bg-no-repeat"
@@ -26,7 +32,7 @@ const SignupPage: React.FC = () => {
               text="계속하기"
               variant="primary"
               className="mt-[12px]"
-              onClick={() => console.log('Signup clicked')}
+              onClick={handleSignup}
             />
           </div>
 

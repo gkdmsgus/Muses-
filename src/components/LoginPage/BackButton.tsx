@@ -12,6 +12,7 @@ const BackButton: React.FC<BackButtonProps> = ({
 }) => {
   return (
     <button
+      type="button"
       onClick={onClick}
       className="w-[88px] h-[24px] flex items-center gap-1 text-black60 hover:text-mainBlack transition-colors group"
     >
