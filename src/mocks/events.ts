@@ -27,4 +27,30 @@ export const MOCK_EVENTS: EventData[] = [
     created_at: '2025-01-24',
     updated_at: '2025-01-24',
   },
+  {
+    event_id: 3,
+    category: 'NOTICE',
+    title: 'test1',
+    desscription:
+      '이제 후원과 함께 아티스트에게 응원 메시지를 남겨보세요. 전광판 송출 기능이 추가되었습니다.',
+    content: '상세 내용...',
+    start_date: null,
+    end_date: null,
+    posted_at: '2025.06.20',
+    created_at: '2025-01-24',
+    updated_at: '2025-01-24',
+  },
+  {
+    event_id: 4,
+    category: 'NOTICE',
+    title: 'test2',
+    desscription:
+      '이제 후원과 함께 아티스트에게 응원 메시지를 남겨보세요. 전광판 송출 기능이 추가되었습니다.',
+    content: '상세 내용...',
+    start_date: null,
+    end_date: null,
+    posted_at: '2025.06.20',
+    created_at: '2025-01-24',
+    updated_at: '2025-01-24',
+  },
 ];

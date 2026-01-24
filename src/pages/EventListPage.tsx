@@ -4,7 +4,7 @@ import EventList from '../components/EventListPage/EventList';
 export default function EventListPage() {
   return (
     <div
-      className="min-h-screen w-full bg-cover bg-center bg-no-repeat"
+      className="min-h-screen w-full bg-cover bg-center bg-fixed bg-no-repeat"
       style={{
         backgroundImage: 'url("src/assets/images/backgrounds/event_bg.png")',
       }}
