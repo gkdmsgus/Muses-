@@ -24,7 +24,7 @@ function App() {
         <Route path="/onboarding" element={<OnBoardingPage />} />
         <Route path="/events" element={<EventListPage />} />
         <Route path="/project/:id" element={<ProjectDetailPage />} />
-        <Route path="/event/:id" element={<EventDetailPage />} />
+        <Route path="/events/:id" element={<EventDetailPage />} />
       </Routes>
       <Footer />
     </BrowserRouter>
