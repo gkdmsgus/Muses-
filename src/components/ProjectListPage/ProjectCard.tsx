@@ -6,11 +6,18 @@ import fallbackPoster from '../../assets/images/fallbackPoster.png';
 
 interface ProjectCardProps {
   project: Project;
+  posterClassNameValue?: string;
+  contentClassNameValue?: string;
 }
 
-export default function ProjectCard({ project }: ProjectCardProps) {
+export default function ProjectCard({
+  project,
+  posterClassNameValue,
+  contentClassNameValue,
+}: ProjectCardProps) {
   const posterSrc = project.posterImage ?? fallbackPoster;
-
+  const posterClassName =
+    posterClassNameValue ?? 'h-[380px] w-[285px] rounded-3xl';
   return (
     <Link
       to={`/project/${project.id}`}
@@ -18,7 +25,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     >
       {/* 위치 및 상태, 썸네일 */}
       <div
-        className="rounded-3xl p-4 shadow-sm cursor-pointer h-[380px] w-[285px] mb-5 group-hover:shadow-lg transition-all relative overflow-hidden bg-cover bg-center"
+        className={`${posterClassName} p-4 shadow-sm cursor-pointer mb-5 relative overflow-hidden bg-cover bg-center`}
         style={{ backgroundImage: `url(${posterSrc})` }}
       >
         <div
@@ -70,7 +77,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           </>
         )}
       </div>
-      <div className="group-hover:-translate-y-[-8px] transition-all">
+      <div className={`${contentClassNameValue ?? ''}`}>
         {/* 태그 */}
         <div className="flex gap-2 mb-2 flex-wrap">
           {project.tags.map((tag) => (

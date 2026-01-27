@@ -6,7 +6,7 @@ import TrendingNow from '../components/LandingPage/TrendingNow';
 export default function LandingPage() {
   return (
     <div className="min-h-screen">
-      <div className='mx-auto'>
+      <div className="mx-auto">
         <LandingBanner />
         <BrandIdentity />
         <PlatformFeatures />
