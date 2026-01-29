@@ -10,6 +10,7 @@ import ProjectDetailPage from './pages/ProjectDetailPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import OnBoardingPage from './pages/OnBoardingPage';
+import EventDetailPage from './pages/EventDetailPage';
 
 function App() {
   return (
@@ -53,6 +54,7 @@ function AppLayout() {
         <Route path="/events" element={<EventListPage />} />
         <Route path="/project/:id" element={<ProjectDetailPage />} />
         <Route path="/mypage" element={<MyPage />} />
+        <Route path="/events/:id" element={<EventDetailPage />} />
       </Routes>
       <Footer />
     </>
