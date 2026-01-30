@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import BackButton from '../components/LoginPage/BackButton';
-import LoginHeader from '../components/LoginPage/LoginHeader';
-import AuthButton from '../components/LoginPage/AuthButton';
+import { BackButton } from '../components/LoginPage/BackButton';
+import { LoginHeader } from '../components/LoginPage/LoginHeader';
+import { AuthButton } from '../components/LoginPage/AuthButton';
 import ProfileImageUpload from '../components/OnBoardingPage/ProfileImageUpload';
 import OnboardingFormFields from '../components/OnBoardingPage/OnboardingFormFields';
 

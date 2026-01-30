@@ -7,7 +7,7 @@ import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import EventListPage from './pages/EventListPage';
 import ProjectDetailPage from './pages/ProjectDetailPage';
-import LoginPage from './pages/LoginPage';
+import { LoginPage } from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import OnBoardingPage from './pages/OnBoardingPage';
 import EventDetailPage from './pages/EventDetailPage';
@@ -17,7 +17,6 @@ function App() {
     <BrowserRouter>
       <ScrollToTop />
       <AppLayout />
-      <Footer />
     </BrowserRouter>
   );
 }
