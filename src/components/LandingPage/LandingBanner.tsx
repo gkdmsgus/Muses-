@@ -4,14 +4,16 @@ import green3D from '../../assets/images/3D/green3D.png';
 import glass3D from '../../assets/images/3D/glass3D.png';
 import pink3D from '../../assets/images/3D/pink3D.png';
 import string3D from '../../assets/images/3D/string3D.png';
-import yellowclover3D from '../../assets/images/3D/yellowclover3D.png'
-import yellowcircle3D from '../../assets/images/3D/yellowcircle3D.png'
-import cube3D from '../../assets/images/3D/cube3D.png'
-import nut3D from '../../assets/images/3D/nut3D.png'
-import pufferball3D from '../../assets/images/3D/pufferball3D.png'
-
+import yellowclover3D from '../../assets/images/3D/yellowclover3D.png';
+import yellowcircle3D from '../../assets/images/3D/yellowcircle3D.png';
+import cube3D from '../../assets/images/3D/cube3D.png';
+import nut3D from '../../assets/images/3D/nut3D.png';
+import pufferball3D from '../../assets/images/3D/pufferball3D.png';
+import { useNavigate } from 'react-router-dom';
 
 export default function LandingBanner() {
+  const navigate = useNavigate();
+
   return (
     <section className="relative min-h-[675px] flex justify-center overflow-hidden">
       <style>{`
@@ -91,7 +93,10 @@ export default function LandingBanner() {
 
           <FadeIn delay={800}>
             <div className="pt-4">
-              <button className="flex gap-2 items-center px-10 py-5 shadow-[0px_8px_10px_-6px_rgba(233,213,255,1.00)] shadow-[0px_20px_25px_-5px_rgba(233,213,255,1.00)] rounded-full bg-mainBlack text-white font-boldFont text-xl transition-transform cursor-pointer hover:scale-105">
+              <button
+                onClick={() => navigate('/create')}
+                className="flex gap-2 items-center px-10 py-5 shadow-[0px_8px_10px_-6px_rgba(233,213,255,1.00)] shadow-[0px_20px_25px_-5px_rgba(233,213,255,1.00)] rounded-full bg-mainBlack text-white font-boldFont text-xl transition-transform cursor-pointer hover:scale-105"
+              >
                 프로젝트 시작하기
                 <ArrowRight className="w-5 h-5 relative" />
               </button>

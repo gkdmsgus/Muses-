@@ -1,4 +1,4 @@
-import FadeIn from "./FadeIn"
+import FadeIn from './FadeIn';
 
 export default function BrandIdentity() {
   return (
@@ -29,14 +29,14 @@ export default function BrandIdentity() {
           <FadeIn delay={200}>
             <div className="inline-flex flex-col justify-center items-start gap-2.5">
               <h3 className="font-boldFont text-4xl text-solidBlue">Connect</h3>
-                <p className="text-black80 font-mediumFont text-xl leading-8">
-                  흩어져 있던 영감과 사람을 연결합니다.
-                  <br />
-                  크리에이터와 팬, 기획자와 공간이 만나는 접점에서
-                  <br />
-                  새로운 문화가 피어납니다.
-                </p>
-              </div>
+              <p className="text-black80 font-mediumFont text-xl leading-8">
+                흩어져 있던 영감과 사람을 연결합니다.
+                <br />
+                크리에이터와 팬, 기획자와 공간이 만나는 접점에서
+                <br />
+                새로운 문화가 피어납니다.
+              </p>
+            </div>
           </FadeIn>
         </div>
 
@@ -45,30 +45,32 @@ export default function BrandIdentity() {
           <FadeIn delay={200}>
             <div className="inline-flex flex-col justify-center items-start gap-2.5">
               <h3 className="font-boldFont text-4xl text-solidPink">Support</h3>
-                <p className="text-black80 font-mediumFont text-xl leading-8">
-                  막막했던 대관료, 복잡한 입장 관리.
-                  <br />
-                  뮤즈는 크리에이터가 오롯이 무대에만 집중할 수 있도록
-                  <br />
-                  가장 든든한 서포터가 됩니다.
-                </p>
-              </div>
-          </FadeIn>  
+              <p className="text-black80 font-mediumFont text-xl leading-8">
+                막막했던 대관료, 복잡한 입장 관리.
+                <br />
+                뮤즈는 크리에이터가 오롯이 무대에만 집중할 수 있도록
+                <br />
+                가장 든든한 서포터가 됩니다.
+              </p>
+            </div>
+          </FadeIn>
         </div>
 
         {/* Realize */}
         <div className="self-stretch pt-8 inline-flex justify-start items-start ml-16">
           <FadeIn delay={200}>
             <div className="inline-flex flex-col justify-center items-start gap-2.5">
-              <h3 className="font-boldFont text-4xl text-solidPurple">Realize</h3>
-                <p className="text-black80 font-mediumFont text-xl leading-8">
-                  화면 속의 아이디어가
-                  <br />
-                  손에 잡히는 티켓이 되고, 눈앞의 무대가 됩니다.
-                  <br />
-                  당신의 꿈을 현실로 만드세요.
-                </p>
-              </div>
+              <h3 className="font-boldFont text-4xl text-solidPurple">
+                Realize
+              </h3>
+              <p className="text-black80 font-mediumFont text-xl leading-8">
+                화면 속의 아이디어가
+                <br />
+                손에 잡히는 티켓이 되고, 눈앞의 무대가 됩니다.
+                <br />
+                당신의 꿈을 현실로 만드세요.
+              </p>
+            </div>
           </FadeIn>
         </div>
       </div>
