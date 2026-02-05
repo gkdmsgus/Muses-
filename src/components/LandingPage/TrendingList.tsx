@@ -1,5 +1,5 @@
 import ProjectCard from '../ProjectListPage/ProjectCard';
-import { MOCK_PROJECTS } from '../../types/projects';
+import { MOCK_PROJECTS } from '../../mocks/project';
 
 interface TrendingListProps {
   index: number;
@@ -18,7 +18,7 @@ export default function TrendingList({ index }: TrendingListProps) {
       >
         {MOCK_PROJECTS.map((project) => (
           <div
-            key={project.id}
+            key={project.project_id}
             className="w-fit p-5 border border-white80 rounded-[40px] shadow-xs"
           >
             <ProjectCard

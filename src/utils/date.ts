@@ -1,15 +1,20 @@
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 export function parseBackendDateTime(dateString: string) {
-  const [datePart, timePart] = dateString.split('T');
-  const [year, month, day] = datePart.split('.').map(Number);
-  const [hour = 0, minute = 0, second = 0] = (timePart || '')
-    .split(':')
-    .map(Number);
+  if (!dateString) return null;
+
+  const [datePart, rawTimePart] = dateString.split('T');
+  const [year, month, day] = datePart.split(/[-./]/).map(Number);
 
   if (!year || !month || !day) return null;
 
-  return new Date(year, month - 1, day, hour, minute, second);
+  const timePart = rawTimePart
+    ? rawTimePart.replace(/Z$/, '').split(/[+-]/)[0]
+    : '';
+  const [hour = 0, minute = 0, secondRaw = '0'] = timePart.split(':');
+  const second = Number(String(secondRaw).split('.')[0] || 0);
+
+  return new Date(year, month - 1, day, Number(hour), Number(minute), second);
 }
 
 // projectListPage projectCardFooter
