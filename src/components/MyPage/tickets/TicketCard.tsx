@@ -45,29 +45,29 @@ const ticketItems: TicketItem[] = [
 ];
 
 const TicketCard = () => {
-  const [selectedTicket, setSelectedTicket] =
-    useState<SelectedTicket>(null);
+  const [selected, setSelected] = useState<TicketItem | null>(null);
 
   return (
     <div className="self-stretch pb-6 inline-flex gap-6 overflow-hidden">
-      {ticketItems.map((item) => (
+      {ticketItems.map(item => (
         <TicketItemCard
           key={item.id}
           item={item}
-          onSelect={setSelectedTicket}
+          onSelect={setSelected}
         />
       ))}
 
-      {selectedTicket && (
+      {selected && (
         <QrCard
-          title={selectedTicket.title}
-          seat={selectedTicket.seat}
-          ticketId={selectedTicket.ticketId}
-          onClose={() => setSelectedTicket(null)}
+          title={selected.title}
+          seat={selected.selectedSeat}
+          ticketId={selected.selectedTicketId}
+          onClose={() => setSelected(null)}
         />
       )}
     </div>
   );
 };
+
 
 export default TicketCard;
