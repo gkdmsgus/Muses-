@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface BackButtonProps {
   onClick?: () => void;
   text?: string;

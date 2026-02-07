@@ -1,6 +1,34 @@
+import { useState } from 'react';
 import { AuthButton } from './AuthButton';
+import { loginAPI } from '../../api/auth';
+import { useNavigate } from 'react-router-dom';
 
 export function LoginFormFields() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      alert('이메일과 비밀번호를 모두 입력해주세요.');
+      return;
+    }
+
+    try {
+      const response = await loginAPI({ email, password });
+
+      if (response.success) {
+        localStorage.setItem('accessToken', response.data.accessToken);
+        alert(`${response.data.name}님 환영합니다!`);
+        navigate('/');
+      } else {
+        alert(response.error?.message || '로그인에 실패했습니다.');
+      }
+    } catch (error: any) {
+      console.error(error);
+      alert('서버 통신 중 오류가 발생했습니다.');
+    }
+  };
   return (
     <div className="w-full max-w-[382px] flex flex-col gap-[16px]">
       <div className="flex flex-col items-start gap-[8px] self-stretch">
@@ -34,6 +62,8 @@ export function LoginFormFields() {
           </div>
           <input
             type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="example@muses.com"
             className="w-full h-full bg-white border border-[#C3C5C8] rounded-[12px] pl-[40px] pr-[16px] py-[14.5px] font-mainFont text-[16px] placeholder:text-black40 focus:outline-none focus:border-solidPurple transition-colors"
           />
@@ -78,6 +108,8 @@ export function LoginFormFields() {
           </div>
           <input
             type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
             className="w-full h-full bg-white border border-[#C3C5C8] rounded-[12px] pl-[40px] pr-[16px] py-[14.5px] font-mainFont text-[16px] placeholder:text-black40 focus:outline-none focus:border-solidPurple transition-colors"
           />
@@ -85,11 +117,7 @@ export function LoginFormFields() {
       </div>
 
       <div className="mt-[8px]">
-        <AuthButton
-          text="로그인"
-          variant="primary"
-          onClick={() => console.log('Login clicked')}
-        />
+        <AuthButton text="로그인" variant="primary" onClick={handleLogin} />
       </div>
     </div>
   );
