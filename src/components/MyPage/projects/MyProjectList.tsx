@@ -1,6 +1,6 @@
 import { Plus } from 'lucide-react';
 import MyProjectItem from './MyProjectItem';
-import type { Project } from './ProjectType';
+import type { Project } from '../types/projectType';
 
 interface MyProjectListProps {
   projects: Project[];
@@ -23,14 +23,7 @@ const MyProjectList = ({ projects }: MyProjectListProps) => {
       {/* 리스트 */}
       <div className="flex flex-col gap-4">
         {projects.map((project) => (
-          <MyProjectItem
-            key={project.id}
-            status={project.status}
-            dday={project.dday}
-            title={project.title}
-            progressPercent={project.progressPercent}
-            amount={project.amount}
-          />
+          <MyProjectItem key={project.id} project={project} />
         ))}
       </div>
     </div>

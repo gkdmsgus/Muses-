@@ -21,8 +21,10 @@ export const ENDPOINTS = {
   },
 
   //주문
+  ORDERS_PREPARE: `${BASE_URL}/orders/prepare`,
 
   //결제
+  BILLING_ISSUE: `${BASE_URL}/billing-auth/issue`,
 
   //티켓
 

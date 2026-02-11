@@ -1,6 +1,6 @@
 import { ChartLine, Wallet } from 'lucide-react';
 import MyProjectList from '../projects/MyProjectList';
-import type { Project } from '../projects/ProjectType';
+import type { Project } from '../types/projectType';
 
 interface Props {
   projects: Project[];
@@ -48,7 +48,7 @@ const CreatorSection = ({ projects }: Props) => {
         </div>
       </div>
 
-      <MyProjectList projects={activeProjects} />
+      <MyProjectList projects={projects} />
     </section>
   );
 };

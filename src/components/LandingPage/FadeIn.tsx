@@ -1,18 +1,18 @@
-import { useEffect, useRef, useState } from "react";
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState } from 'react';
+import type { ReactNode } from 'react';
 
 interface FadeInProps {
   children: ReactNode;
   delay?: number;
   className?: string;
-  direction?: "up" | "down" | "none";
+  direction?: 'up' | 'down' | 'none';
 }
 
 export default function FadeIn({
   children,
   delay = 0,
-  className = "",
-  direction = "up",
+  className = '',
+  direction = 'up',
 }: FadeInProps) {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
@@ -27,7 +27,7 @@ export default function FadeIn({
       },
       {
         threshold: 0.1,
-        rootMargin: "50px",
+        rootMargin: '50px',
       }
     );
 
@@ -36,11 +36,11 @@ export default function FadeIn({
   }, []);
 
   const translateClass =
-    direction === "up"
-      ? "translate-y-10"
-      : direction === "down"
-      ? "-translate-y-10"
-      : "";
+    direction === 'up'
+      ? 'translate-y-10'
+      : direction === 'down'
+        ? '-translate-y-10'
+        : '';
 
   return (
     <div
@@ -48,7 +48,7 @@ export default function FadeIn({
       className={`
         transform transition-all duration-1000
         ease-[cubic-bezier(0.22,1,0.36,1)]
-        ${isVisible ? "opacity-100 translate-y-0" : `opacity-0 ${translateClass}`}
+        ${isVisible ? 'opacity-100 translate-y-0' : `opacity-0 ${translateClass}`}
         ${className}
       `}
       style={{ transitionDelay: `${delay}ms` }}

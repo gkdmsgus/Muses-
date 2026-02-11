@@ -21,13 +21,13 @@ const items: DonationItemType[] = [
 ];
 
 const RecentDonations = () => {
-  const [selected, setSelected] = useState<DonationItemType | null>(null);
+const [selected, setSelected] = useState<DonationItemType | null>(null);
 
   return (
     <>
       <div className="flex flex-col gap-4">
         {items.map((item, idx) => (
-          <DonationItem key={idx} item={item} onSelect={setSelected} />
+          <DonationItem key={`${item.date}-${item.title}`} item={item} onSelect={setSelected} />
         ))}
       </div>
 
