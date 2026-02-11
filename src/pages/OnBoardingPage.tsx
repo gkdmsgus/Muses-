@@ -33,7 +33,7 @@ const OnBoardingPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="w-[382px] h-[403px] flex flex-col gap-[172px] mx-auto mt-[20px] shrink-0">
+          <div className="w-[382px] h-[426px] flex flex-col gap-[110px] mx-auto mt-[20px] shrink-0">
             <div className="shrink-0">
               <OnboardingFormFields />
             </div>

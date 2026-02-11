@@ -16,6 +16,10 @@ export const ENDPOINTS = {
 
   //프로젝트
 
+  EVENTS: {
+    LIST: `${BASE_URL}/api/events`,
+  },
+
   //주문
 
   //결제

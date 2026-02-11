@@ -1,49 +1,55 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import EventCard from './EventCard';
-import { MOCK_EVENTS } from '../../mocks/events';
-import type { EventData } from '../../types/event';
+import { fetchEventsAPI, type EventData } from '../../api/eventAPI';
 
 export default function EventList() {
-  const ITEMS_PER_PAGE = 2; // 한 번에 보여줄 개수(테스트용)
-  const [events, setEvents] = useState<EventData[]>(
-    MOCK_EVENTS.slice(0, ITEMS_PER_PAGE)
-  );
+  const ITEMS_PER_PAGE = 3;
+  const [events, setEvents] = useState<EventData[]>([]);
+  const [page, setPage] = useState(0);
   const [isFetching, setIsFetching] = useState(false);
-  const [hasNextPage, setHasNextPage] = useState(
-    MOCK_EVENTS.length > ITEMS_PER_PAGE
-  );
+  const [hasNextPage, setHasNextPage] = useState(true);
 
   const observerTarget = useRef<HTMLDivElement>(null);
 
-  const fetchNextPage = useCallback(() => {
+  const fetchNextPage = useCallback(async () => {
     if (isFetching || !hasNextPage) return;
 
     setIsFetching(true);
 
-    //api 대신 넣어둠(임시)
-    setTimeout(() => {
-      const currentLength = events.length;
-      const nextBatch = MOCK_EVENTS.slice(
-        currentLength,
-        currentLength + ITEMS_PER_PAGE
-      );
+    try {
+      const response = await fetchEventsAPI({
+        page: page,
+        size: ITEMS_PER_PAGE,
+      });
 
-      if (nextBatch.length > 0) {
-        setEvents((prev) => [...prev, ...nextBatch]);
+      if (response.success && response.data) {
+        const newEvents = response.data;
+
+        setEvents((prev) => [...prev, ...newEvents]);
+
+        const totalFetched = events.length + newEvents.length;
+        const totalCount = response.page?.total ?? 0;
+
+        if (newEvents.length < ITEMS_PER_PAGE || totalFetched >= totalCount) {
+          setHasNextPage(false);
+        } else {
+          setPage((prev) => prev + 1);
+        }
       }
-
-      // 더 이상 가져올 데이터가 없으면 종료 신호
-      if (currentLength + nextBatch.length >= MOCK_EVENTS.length) {
-        setHasNextPage(false);
-      }
-
+    } catch (error) {
+      console.error('이벤트 로딩 실패:', error);
+      setHasNextPage(false);
+    } finally {
       setIsFetching(false);
-    }, 500); // 로딩 느낌을 위해 아주 짧은 딜레이
-  }, [events.length, isFetching, hasNextPage]);
+    }
+  }, [page, isFetching, hasNextPage, events.length]);
 
   useEffect(() => {
-    // 더 이상 데이터가 없으면 감시를 중단함
-    if (!observerTarget.current || !hasNextPage) return;
+    fetchNextPage();
+  }, []);
+
+  useEffect(() => {
+    if (!observerTarget.current || !hasNextPage || isFetching) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -56,12 +62,12 @@ export default function EventList() {
 
     observer.observe(observerTarget.current);
     return () => observer.disconnect();
-  }, [fetchNextPage, hasNextPage]);
+  }, [fetchNextPage, hasNextPage, isFetching]);
 
   return (
     <div className="flex flex-col gap-[32px] w-full items-center">
       {events.map((event) => (
-        <EventCard key={event.event_id} event={event} />
+        <EventCard key={event.eventId} event={event} />
       ))}
 
       {hasNextPage && (
