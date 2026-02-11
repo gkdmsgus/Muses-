@@ -1,31 +1,31 @@
-import React from 'react';
-
 interface LoginHeaderProps {
   subtitle: string;
 }
 
-const LoginHeader: React.FC<LoginHeaderProps> = ({ subtitle }) => {
+export function LoginHeader({ subtitle }: LoginHeaderProps) {
   return (
-    <div className="w-[382px] h-[78px] flex flex-col items-center gap-[8px] mx-auto">
-      <div className="w-[382px] h-[46px] flex items-center justify-center">
-        <div className="w-[114px] h-[46px] flex items-center gap-[8px]">
-          <div className="w-[46px] h-[46px] flex items-center justify-center overflow-hidden rounded-[12px]">
+    <div className="w-full max-w-[382px] flex flex-col items-start gap-[8px]">
+      <div className="w-full h-[46px] flex flex-col items-center self-stretch">
+        <div className="flex items-center gap-[8px] w-[114px] h-[46px]">
+          <div className="w-[46px] h-[46px] flex items-center justify-center rounded-[12px] overflow-hidden">
             <img
-              src="src/assets/images/icons/logo.png"
-              alt="logo"
+              src="/src/assets/images/icons/logo.png"
+              alt="Muses Logo"
               className="w-full h-full object-cover"
             />
           </div>
-          <span className="font-logoFont font-bold text-[20px] text-mainBlack">
+
+          <span className="text-mainBlack font-logoFont font-bold text-[20px] leading-[28px] tracking-[-0.5px]">
             muses
           </span>
         </div>
       </div>
-      <p className="text-[16px] font-mainFont text-mainBlack text-center">
-        {subtitle}
-      </p>
+
+      <div className="w-full h-[24px] flex flex-col items-center self-stretch">
+        <p className="text-mainBlack font-mainFont font-normal text-[16px] leading-[24px] text-center">
+          {subtitle}
+        </p>
+      </div>
     </div>
   );
-};
-
-export default LoginHeader;
+}
