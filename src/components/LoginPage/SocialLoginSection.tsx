@@ -2,7 +2,7 @@ import { AuthButton } from './AuthButton';
 
 export function SocialLoginSection() {
   const handleKakaoLogin = () => {
-    console.log('Kakao Login clicked');
+    window.location.href = 'https://mymuses.site/api/auth/oauth/kakao/url';
   };
   return (
     <div className="w-full max-w-[382px] flex flex-col gap-[24px]">

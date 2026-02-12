@@ -12,6 +12,8 @@ export const ENDPOINTS = {
     CHECK_NICKNAME: `${BASE_URL}/api/auth/profile/check-nickname`,
     CHECK_EMAIL: `${BASE_URL}/api/auth/signup/check-email`,
     CREATE_PROFILE: `${BASE_URL}/api/auth/profile/create`,
+    KAKAO_LOGIN: `${BASE_URL}/api/auth/oauth/kakao/url`,
+    GOOGLE_LOGIN: `${BASE_URL}/api/oauth2/authorization/google`,
   },
 
   //프로젝트

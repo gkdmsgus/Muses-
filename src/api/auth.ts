@@ -37,6 +37,21 @@ export const loginAPI = async (credentials: {
   return response.data;
 };
 
+export const socialLoginAPI = async (
+  provider: 'kakao' | 'google',
+  code: string
+) => {
+  const endpoint =
+    provider === 'kakao'
+      ? ENDPOINTS.AUTH.KAKAO_LOGIN
+      : ENDPOINTS.AUTH.GOOGLE_LOGIN;
+
+  const response = await axios.post<ApiResponse<UserAuthData>>(endpoint, {
+    code,
+  });
+  return response.data;
+};
+
 //로그아웃
 export const logoutAPI = async () => {
   const response = await axios.post<ApiResponse<string>>(ENDPOINTS.AUTH.LOGOUT);
@@ -57,7 +72,6 @@ export const checkNicknameAPI = async (nickname: string) => {
 export const signupAPI = async (userData: {
   name: string;
   email: string;
-  phoneNumber: string;
   password: string;
 }) => {
   const response = await axios.post<ApiResponse<number>>(
@@ -82,7 +96,7 @@ export const createProfileAPI = async (profileData: {
   nickName: string;
   introduction?: string;
   birthday: string;
-  gender: string;
+  gender: number;
 }) => {
   const formData = new FormData();
 
@@ -92,7 +106,9 @@ export const createProfileAPI = async (profileData: {
   formData.append('nickName', profileData.nickName);
   formData.append('introduction', profileData.introduction || '');
   formData.append('birthday', profileData.birthday);
-  formData.append('gender', profileData.gender);
+  formData.append('gender', profileData.gender.toString());
+
+  const token = localStorage.getItem('accessToken');
 
   const response = await axios.post<ApiResponse<UserAuthData>>(
     ENDPOINTS.AUTH.CREATE_PROFILE,
@@ -100,6 +116,7 @@ export const createProfileAPI = async (profileData: {
     {
       headers: {
         'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
       },
     }
   );

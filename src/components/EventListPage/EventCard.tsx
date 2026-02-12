@@ -2,6 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import type { EventData } from '../../api/eventAPI';
 import { getEventThumbnail } from '../../utils/getEventThumbnail';
 
+const DEFAULT_EVENT_IMAGE = '/assets/images/backgrounds/default-event.png';
+
 export default function EventCard({ event }: { event: EventData }) {
   const navigate = useNavigate();
   const thumbnail = getEventThumbnail(event.content);
@@ -35,8 +37,11 @@ export default function EventCard({ event }: { event: EventData }) {
             alt={event.title}
             className="w-full h-full object-cover"
             onError={(e) => {
-              (e.target as HTMLImageElement).src =
-                '/assets/images/default-thumbnail.png';
+              const target = e.target as HTMLImageElement;
+
+              if (target.src !== window.location.origin + DEFAULT_EVENT_IMAGE) {
+                target.src = DEFAULT_EVENT_IMAGE;
+              }
             }}
           />
         </div>

@@ -23,7 +23,7 @@ export default function EventDetailBanner({
       {hasPrev && (
         <button
           onClick={onPrev}
-          className="absolute z-10 left-[48px] top-[96px] w-[48px] h-[48px] p-[12px] flex items-center justify-center rounded-[9999px] bg-[rgba(178, 178, 178, 0.40)] backdrop-blur-[6px] transition-colors hover:bg-[rgba(178, 178, 178, 0.60)]"
+          className="absolute z-10 left-[48px] top-[96px] w-[48px] h-[48px] p-[12px] flex items-center justify-center rounded-[9999px] bg-[rgba(178,178,178,0.40)] border border-white/20 backdrop-blur-[6px] transition-colors hover:bg-[rgba(178,178,178,0.60)]"
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path

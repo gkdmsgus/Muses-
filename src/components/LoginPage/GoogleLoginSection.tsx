@@ -2,7 +2,8 @@ import { AuthButton } from './AuthButton';
 
 export function GoogleLoginSection() {
   const handleGoogleLogin = () => {
-    console.log('Google Login clicked');
+    window.location.href =
+      'https://mymuses.site/api/oauth2/authorization/google';
   };
 
   return (

@@ -2,7 +2,11 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import EventCard from './EventCard';
 import { fetchEventsAPI, type EventData } from '../../api/eventAPI';
 
-export default function EventList() {
+interface EventListProps {
+  keyword: string;
+}
+
+export default function EventList({ keyword }: EventListProps) {
   const ITEMS_PER_PAGE = 3;
   const [events, setEvents] = useState<EventData[]>([]);
   const [page, setPage] = useState(0);
@@ -11,42 +15,53 @@ export default function EventList() {
 
   const observerTarget = useRef<HTMLDivElement>(null);
 
-  const fetchNextPage = useCallback(async () => {
-    if (isFetching || !hasNextPage) return;
+  const fetchNextPage = useCallback(
+    async (isReset = false) => {
+      if (isFetching || (!isReset && !hasNextPage)) return;
 
-    setIsFetching(true);
+      setIsFetching(true);
+      const targetPage = isReset ? 0 : page;
 
-    try {
-      const response = await fetchEventsAPI({
-        page: page,
-        size: ITEMS_PER_PAGE,
-      });
+      try {
+        const response = await fetchEventsAPI({
+          keyword: keyword,
+          page: targetPage,
+          size: ITEMS_PER_PAGE,
+        });
 
-      if (response.success && response.data) {
-        const newEvents = response.data;
+        if (response.success && response.data) {
+          const newEvents = response.data;
 
-        setEvents((prev) => [...prev, ...newEvents]);
+          setEvents((prev) => (isReset ? newEvents : [...prev, ...newEvents]));
 
-        const totalFetched = events.length + newEvents.length;
-        const totalCount = response.page?.total ?? 0;
+          const totalCount = response.page?.total ?? 0;
+          const currentTotal = (isReset ? 0 : events.length) + newEvents.length;
 
-        if (newEvents.length < ITEMS_PER_PAGE || totalFetched >= totalCount) {
-          setHasNextPage(false);
-        } else {
-          setPage((prev) => prev + 1);
+          if (newEvents.length < ITEMS_PER_PAGE || currentTotal >= totalCount) {
+            setHasNextPage(false);
+          } else {
+            setPage(targetPage + 1);
+            setHasNextPage(true);
+          }
         }
+      } catch (error) {
+        console.error('이벤트 로딩 실패:', error);
+        setHasNextPage(false);
+      } finally {
+        setIsFetching(false);
       }
-    } catch (error) {
-      console.error('이벤트 로딩 실패:', error);
-      setHasNextPage(false);
-    } finally {
-      setIsFetching(false);
-    }
-  }, [page, isFetching, hasNextPage, events.length]);
+    },
+
+    [page, isFetching, hasNextPage, events.length, keyword]
+  );
 
   useEffect(() => {
-    fetchNextPage();
-  }, []);
+    setEvents([]);
+    setPage(0);
+    setHasNextPage(true);
+
+    fetchNextPage(true);
+  }, [keyword]);
 
   useEffect(() => {
     if (!observerTarget.current || !hasNextPage || isFetching) return;
@@ -69,6 +84,12 @@ export default function EventList() {
       {events.map((event) => (
         <EventCard key={event.eventId} event={event} />
       ))}
+
+      {!isFetching && events.length === 0 && (
+        <p className="mt-10 text-gray-500 font-mainFont">
+          검색 결과가 없습니다.
+        </p>
+      )}
 
       {hasNextPage && (
         <div

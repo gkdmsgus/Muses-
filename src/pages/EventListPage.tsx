@@ -1,7 +1,12 @@
+import { useState } from 'react';
 import EventHero from '../components/EventListPage/EventHero';
 import EventSearchBar from '../components/EventListPage/EventSearchBar';
 import EventList from '../components/EventListPage/EventList';
 export default function EventListPage() {
+  const [keyword, setKeyword] = useState('');
+  const handleSearch = (newKeyword: string) => {
+    setKeyword(newKeyword);
+  };
   return (
     <div
       className="min-h-screen w-full bg-cover bg-center bg-fixed bg-no-repeat"
@@ -12,10 +17,10 @@ export default function EventListPage() {
       <section className="mx-auto w-[896px] flex flex-col pt-[128px] pb-[80px] px-[24px] gap-[64px]">
         <div className="flex flex-col items-center gap-[24px]">
           <EventHero />
-          <EventSearchBar />
+          <EventSearchBar onSearch={handleSearch} />
         </div>
 
-        <EventList />
+        <EventList keyword={keyword} />
       </section>
     </div>
   );

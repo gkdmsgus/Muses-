@@ -8,7 +8,7 @@ export function LoginPage() {
         backgroundImage: 'url("/src/assets/images/backgrounds/login_bg.png")',
       }}
     >
-      <div className=" w-full flex justify-center">
+      <div className=" pt-11 w-full flex justify-center">
         <LoginFormCard />
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, type ChangeEvent } from 'react';
+import { useRef, useEffect, type ChangeEvent, useState } from 'react';
 
 function DropdownIcon() {
   return (
@@ -20,12 +20,17 @@ function DropdownIcon() {
   );
 }
 
-export default function OnboardingFormFields() {
-  const [nickname, setNickname] = useState('');
-  const [intro, setIntro] = useState('');
-  const [birth, setBirth] = useState('');
-  const [gender, setGender] = useState('여자');
+interface FormProps {
+  onChange: (data: any) => void;
+  values: {
+    nickName: string;
+    introduction: string;
+    birthday: string;
+    gender: string;
+  };
+}
 
+export default function OnboardingFormFields({ onChange, values }: FormProps) {
   const [isGenderOpen, setIsGenderOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -33,9 +38,9 @@ export default function OnboardingFormFields() {
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // 내용 높이에 맞춰 확장
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
-  }, [intro]);
+  }, [values.introduction]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -50,11 +55,19 @@ export default function OnboardingFormFields() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleIntroChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    const value = e.target.value;
-    if (value.length <= 150) {
-      setIntro(value);
+  const handleBirthChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^0-9]/g, '');
+    let result = '';
+
+    if (value.length <= 4) {
+      result = value;
+    } else if (value.length <= 6) {
+      result = `${value.substring(0, 4)}-${value.substring(4)}`;
+    } else {
+      result = `${value.substring(0, 4)}-${value.substring(4, 6)}-${value.substring(6, 8)}`;
     }
+
+    onChange({ birthday: result });
   };
 
   return (
@@ -65,10 +78,8 @@ export default function OnboardingFormFields() {
         </label>
         <input
           type="text"
-          value={nickname}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setNickname(e.target.value)
-          }
+          value={values.nickName}
+          onChange={(e) => onChange({ nickName: e.target.value })}
           placeholder="푸른 오렌지"
           className="w-full h-[58px] px-[17px] bg-white border border-[#C3C5C8] rounded-[12px] focus:outline-none focus:border-[#8B5CF6] transition-all text-[16px]"
         />
@@ -80,15 +91,19 @@ export default function OnboardingFormFields() {
             소개글
           </label>
           <span
-            className={`text-[12px] ${intro.length >= 150 ? 'text-red-500' : 'text-[#9CA3AF]'}`}
+            className={`text-[12px] ${values.introduction.length >= 150 ? 'text-red-500' : 'text-[#9CA3AF]'}`}
           >
-            {intro.length}/150
+            {values.introduction.length}/150
           </span>
         </div>
         <textarea
           ref={textareaRef}
-          value={intro}
-          onChange={handleIntroChange}
+          value={values.introduction}
+          onChange={(e) => {
+            if (e.target.value.length <= 150) {
+              onChange({ introduction: e.target.value });
+            }
+          }}
           placeholder="150자 이내로 소개글을 적어주세요!"
           rows={1}
           className="w-full min-h-[58px] px-[17px] py-[16px] bg-white border border-[#C3C5C8] rounded-[12px] focus:outline-none focus:border-[#8B5CF6] transition-all text-[16px] resize-none overflow-hidden leading-[1.5]"
@@ -103,12 +118,11 @@ export default function OnboardingFormFields() {
           <div className="w-full h-[49px] px-[16px] py-[14px] flex items-center bg-white border border-[#D1D5DB] focus-within:border-[#8B5CF6] rounded-[12px]">
             <input
               type="text"
-              value={birth}
-              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                setBirth(e.target.value)
-              }
-              placeholder="••••••••"
-              className="w-full bg-transparent outline-none text-[16px] font-normal text-[#111111] placeholder:text-[#9CA3AF]  transition-all"
+              value={values.birthday}
+              onChange={handleBirthChange}
+              maxLength={10}
+              placeholder="YYYY-MM-DD"
+              className="w-full bg-transparent outline-none text-[16px] font-normal text-[#111111] placeholder:text-[#9CA3AF] transition-all"
             />
           </div>
         </div>
@@ -129,7 +143,7 @@ export default function OnboardingFormFields() {
     focus:border-[#8B5CF6]`}
             >
               <span className="text-[16px] font-normal text-[#111111]">
-                {gender}
+                {values.gender}
               </span>
               <div
                 className={`transition-transform duration-200 ${isGenderOpen ? 'rotate-180' : ''}`}
@@ -143,7 +157,7 @@ export default function OnboardingFormFields() {
                 <button
                   type="button"
                   onClick={() => {
-                    setGender('여자');
+                    onChange({ gender: '여자' });
                     setIsGenderOpen(false);
                   }}
                   className="w-full px-[16px] py-[12px] text-left text-[15px] hover:bg-gray-100 transition-colors border-b border-[#F3F4F6]"
@@ -153,7 +167,7 @@ export default function OnboardingFormFields() {
                 <button
                   type="button"
                   onClick={() => {
-                    setGender('남자');
+                    onChange({ gender: '남자' });
                     setIsGenderOpen(false);
                   }}
                   className="w-full px-[16px] py-[12px] text-left text-[15px] hover:bg-gray-100 transition-colors"
