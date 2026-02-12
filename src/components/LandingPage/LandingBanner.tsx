@@ -94,7 +94,7 @@ export default function LandingBanner() {
           <FadeIn delay={800}>
             <div className="pt-4">
               <button
-                onClick={() => navigate('/create')}
+                onClick={() => navigate('/projects')}
                 className="flex gap-2 items-center px-10 py-5 shadow-[0px_8px_10px_-6px_rgba(233,213,255,1.00)] shadow-[0px_20px_25px_-5px_rgba(233,213,255,1.00)] rounded-full bg-mainBlack text-white font-boldFont text-xl transition-transform cursor-pointer hover:scale-105"
               >
                 프로젝트 시작하기

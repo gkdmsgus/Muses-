@@ -3,6 +3,7 @@ import { BackButton } from '../components/LoginPage/BackButton';
 import { LoginHeader } from '../components/LoginPage/LoginHeader';
 import SignupFormFields from '../components/SignupPage/SignupFormFields';
 import SignupFooter from '../components/SignupPage/SignupFooter';
+import loginBackground from '../assets/images/backgrounds/login_bg.png';
 
 export default function SignupPage() {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ export default function SignupPage() {
     <div
       className="w-full min-h-screen pt-24 flex justify-center bg-white bg-cover bg-center bg-no-repeat"
       style={{
-        backgroundImage: 'url("src/assets/images/backgrounds/login_bg.png")',
+        backgroundImage: `url(${loginBackground})`,
       }}
     >
       <div className="w-[448px] flex flex-col gap-[24px]">

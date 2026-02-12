@@ -1,3 +1,5 @@
+import logo from '../../assets/images/icons/logo.png';
+
 interface LoginHeaderProps {
   subtitle: string;
 }
@@ -9,7 +11,7 @@ export function LoginHeader({ subtitle }: LoginHeaderProps) {
         <div className="flex items-center gap-[8px] w-[114px] h-[46px]">
           <div className="w-[46px] h-[46px] flex items-center justify-center rounded-[12px] overflow-hidden">
             <img
-              src="/src/assets/images/icons/logo.png"
+              src={logo}
               alt="Muses Logo"
               className="w-full h-full object-cover"
             />
