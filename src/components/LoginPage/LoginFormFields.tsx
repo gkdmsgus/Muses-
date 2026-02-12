@@ -21,6 +21,7 @@ export function LoginFormFields() {
         localStorage.setItem('accessToken', response.data.accessToken);
         alert(`${response.data.name}님 환영합니다!`);
         navigate('/');
+        window.location.reload();
       } else {
         alert(response.error?.message || '로그인에 실패했습니다.');
       }
