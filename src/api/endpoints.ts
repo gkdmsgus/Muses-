@@ -1,6 +1,6 @@
 // 엔드포인트가 추가/변경될 경우 이 파일에서 수정하면 됩니다.
 
-const BASE_URL = 'https://mymuses.site';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'https://mymuses.site';
 
 export const ENDPOINTS = {
   // 회원
