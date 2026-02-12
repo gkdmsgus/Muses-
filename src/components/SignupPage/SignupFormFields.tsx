@@ -1,110 +1,248 @@
-import React, { useState } from 'react';
-import { Mail, Lock, ChevronDown } from 'lucide-react';
+import { useState } from 'react';
+import { AuthButton } from '../LoginPage/AuthButton';
+import { checkEmailAPI, signupAPI } from '../../api/auth';
+import { useNavigate } from 'react-router-dom';
 
-const SignupFormFields: React.FC = () => {
-  const [isGenderOpen, setIsGenderOpen] = useState(false);
+const MailIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+  >
+    <path
+      d="M16.6666 3.33325H3.33329C2.41282 3.33325 1.66663 4.07944 1.66663 4.99992V14.9999C1.66663 15.9204 2.41282 16.6666 3.33329 16.6666H16.6666C17.5871 16.6666 18.3333 15.9204 18.3333 14.9999V4.99992C18.3333 4.07944 17.5871 3.33325 16.6666 3.33325Z"
+      stroke="#9CA3AF"
+      strokeWidth="1.66667"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M18.3333 5.83325L10.8583 10.5833C10.601 10.7444 10.3036 10.8299 9.99996 10.8299C9.69636 10.8299 9.3989 10.7444 9.14163 10.5833L1.66663 5.83325"
+      stroke="#9CA3AF"
+      strokeWidth="1.66667"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
 
-  const [selectedGender, setSelectedGender] = useState('여자');
+const LockIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+  >
+    <path
+      d="M9.99996 14.1667C10.4602 14.1667 10.8333 13.7936 10.8333 13.3333C10.8333 12.8731 10.4602 12.5 9.99996 12.5C9.53972 12.5 9.16663 12.8731 9.16663 13.3333C9.16663 13.7936 9.53972 14.1667 9.99996 14.1667Z"
+      stroke="#9CA3AF"
+      strokeWidth="1.66667"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M15.8333 8.33325H4.16667C3.24619 8.33325 2.5 9.07944 2.5 9.99992V16.6666C2.5 17.5871 3.24619 18.3333 4.16667 18.3333H15.8333C16.7538 18.3333 17.5 17.5871 17.5 16.6666V9.99992C17.5 9.07944 16.7538 8.33325 15.8333 8.33325Z"
+      stroke="#9CA3AF"
+      strokeWidth="1.66667"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M5.83337 8.33341V5.83341C5.83337 4.72835 6.27236 3.66854 7.05376 2.88714C7.83516 2.10573 8.89497 1.66675 10 1.66675C11.1051 1.66675 12.1649 2.10573 12.9463 2.88714C13.7277 3.66854 14.1667 4.72835 14.1667 5.83341V8.33341"
+      stroke="#9CA3AF"
+      strokeWidth="1.66667"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
 
-  const genderOptions = ['여자', '남자'];
+const PhoneIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+  >
+    <path
+      d="M15.6 14.5221C13.205 17.0421 7.09603 10.9881 9.50003 8.45811C10.968 6.91311 9.31003 5.14811 8.39203 3.84911C6.66903 1.41411 2.88803 4.77611 3.00203 6.91511C3.36503 13.6611 10.662 21.6551 17.728 20.9571C19.938 20.7391 22.478 16.7471 19.943 15.2881C18.675 14.5581 16.934 13.1181 15.6 14.5211"
+      stroke="#9CA3AF"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export default function SignupFormFields() {
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    password: '',
+  });
+
+  const [isEmailChecked, setIsEmailChecked] = useState(false);
+
+  const handleCheckEmail = async (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    console.log('보내려는 이메일:', formData.email);
+
+    if (!formData.email) {
+      alert('이메일을 입력해주세요.');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      alert('유효한 이메일 형식이 아닙니다.');
+      return;
+    }
+
+    try {
+      const response = await checkEmailAPI(formData.email);
+      console.log('서버로부터 받은 응답:', response);
+
+      if (response.success && response.data === true) {
+        alert('이미 사용 중인 이메일입니다.');
+        setIsEmailChecked(false);
+      } else {
+        alert('사용 가능한 이메일입니다.');
+        setIsEmailChecked(true);
+      }
+    } catch (error) {
+      console.error('API 호출 자체 실패:', error);
+    }
+  };
+
+  const handleSignup = async () => {
+    const { name, email, phone, password } = formData;
+
+    if (!name.trim() || !email.trim() || !phone.trim() || !password.trim()) {
+      alert('모든 항목을 정확히 입력해주세요.');
+      return;
+    }
+
+    if (!isEmailChecked) {
+      alert('이메일 중복 확인을 먼저 해주세요.');
+      return;
+    }
+
+    try {
+      const response = await signupAPI({
+        name,
+        email,
+        phoneNumber: phone,
+        password,
+      });
+
+      if (response.success) {
+        alert('회원가입이 완료되었습니다!');
+        navigate('/onboarding');
+      }
+    } catch (error) {
+      alert('회원가입 처리 중 오류가 발생했습니다.');
+    }
+  };
 
   return (
-    <div className="w-[382px] flex flex-col gap-[16px]">
-      <div className="flex flex-col gap-[8px]">
-        <label className="text-[14px] font-mediumFont text-black80">
-          이름*
-        </label>
-        <input
-          type="text"
-          placeholder="홍길동"
-          className="w-full h-[50px] px-[16px] bg-white border border-[#C3C5C8] rounded-[12px] focus:outline-none focus:border-solidPurple transition-all font-mainFont"
-        />
-      </div>
-
-      <div className="flex flex-col gap-[8px]">
-        <label className="text-[14px] font-mediumFont text-black80">
-          이메일*
-        </label>
-        <div className="relative">
-          <Mail
-            className="absolute left-[16px] top-1/2 -translate-y-1/2 text-black40"
-            size={20}
-          />
-          <input
-            type="email"
-            placeholder="example@muses.com"
-            className="w-full h-[50px] pl-[40px] pr-[16px] bg-white border border-[#C3C5C8] rounded-[12px] focus:outline-none focus:border-solidPurple transition-all font-mainFont"
-          />
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-[8px]">
-        <label className="text-[14px] font-mediumFont text-black80">
-          비밀번호*
-        </label>
-        <div className="relative">
-          <Lock
-            className="absolute left-[16px] top-1/2 -translate-y-1/2 text-black40"
-            size={20}
-          />
-          <input
-            type="password"
-            placeholder="••••••••"
-            className="w-full h-[50px] pl-[40px] pr-[16px] bg-white border border-[#C3C5C8] rounded-[12px] focus:outline-none focus:border-solidPurple transition-all font-mainFont"
-          />
-        </div>
-      </div>
-
-      <div className="flex gap-[28px] w-full">
-        <div className="flex flex-col gap-[4px] flex-1">
-          <label className="text-[14px] font-mediumFont text-black80">
-            생년월일
-          </label>
+    <div className="w-[382px] h-[444px] flex flex-col gap-[16px] font-['Pretendard']">
+      <div className="w-full flex flex-col gap-[8px]">
+        <label className="text-[14px] font-[500] text-[#374151]">이름</label>
+        <div className="relative w-full h-[53px]">
+          <div className="absolute left-[12px] top-[15px]">
+            <MailIcon />
+          </div>
           <input
             type="text"
-            placeholder="2000.01.01"
-            className="w-full h-[49px] px-[16px] bg-white border border-[#C3C5C8] rounded-[12px] text-black40 focus:outline-none focus:border-solidPurple transition-all font-mainFont"
+            placeholder="이름을 입력해주세요"
+            className="w-full h-full px-[16px] pl-[40px] rounded-[12px] border border-[#D1D5DB] focus:outline-none"
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
         </div>
+      </div>
 
-        <div className="flex flex-col gap-[4px] relative">
-          <label className="text-[14px] font-mediumFont text-black80">
-            성별
+      <div className="w-full flex flex-col gap-[8px]">
+        <div className="flex justify-between items-center w-full h-[28px]">
+          <label className="text-[14px] font-[500] text-[#374151]">
+            이메일
           </label>
-
-          <div
-            onClick={() => setIsGenderOpen(!isGenderOpen)}
-            className="w-[121px] h-[49px] px-[16px] bg-white border border-[#C3C5C8] rounded-[12px] flex items-center justify-between cursor-pointer hover:border-solidPurple transition-all"
+          <button
+            type="button"
+            onClick={handleCheckEmail}
+            className="px-[8px] h-[20px] rounded-[5px] bg-[#E7E7E7] text-[10px] text-[#374151] font-medium"
           >
-            <span className="font-bold font-mainFont text-[16px] text-black60">
-              {selectedGender}
-            </span>
-            <ChevronDown
-              size={16}
-              className={`text-[#6B7280] transition-transform ${isGenderOpen ? 'rotate-180' : ''}`}
-            />
+            중복확인
+          </button>
+        </div>
+        <div className="relative w-full h-[53px]">
+          <div className="absolute left-[12px] top-[15.5px]">
+            <MailIcon />
           </div>
-
-          {isGenderOpen && (
-            <div className="absolute top-[78px] left-0 w-[121px] bg-white border border-[#C3C5C8] rounded-[12px] shadow-lg z-[100] overflow-hidden">
-              {genderOptions.map((option) => (
-                <div
-                  key={option}
-                  onClick={() => {
-                    setSelectedGender(option);
-                    setIsGenderOpen(false);
-                  }}
-                  className="w-full h-[40px] px-[16px] flex items-center text-[14px] font-mainFont text-black60 hover:bg-white80 hover:text-mainBlack cursor-pointer transition-colors"
-                >
-                  {option}
-                </div>
-              ))}
-            </div>
-          )}
+          <input
+            type="email"
+            value={formData.email}
+            placeholder="example@muses.com"
+            className="w-full h-full px-[16px] pl-[40px] rounded-[12px] border border-[#D1D5DB] focus:outline-none"
+            onChange={(e) => {
+              setFormData({ ...formData, email: e.target.value });
+              setIsEmailChecked(false);
+            }}
+          />
         </div>
       </div>
+
+      <div className="w-full flex flex-col gap-[8px]">
+        <label className="text-[14px] font-[500] text-[#374151]">
+          전화번호
+        </label>
+        <div className="relative w-full h-[53px]">
+          <div className="absolute left-[9px] top-[14.5px]">
+            <PhoneIcon />
+          </div>
+          <input
+            type="text"
+            placeholder="010-0000-0000"
+            className="w-full h-full px-[16px] pl-[40px] rounded-[12px] border border-[#D1D5DB] focus:outline-none"
+            onChange={(e) =>
+              setFormData({ ...formData, phone: e.target.value })
+            }
+          />
+        </div>
+      </div>
+
+      <div className="w-full flex flex-col gap-[8px]">
+        <label className="text-[14px] font-[500] text-[#374151]">
+          비밀번호
+        </label>
+        <div className="relative w-full h-[53px]">
+          <div className="absolute left-[9px] top-[14.5px]">
+            <LockIcon />
+          </div>
+          <input
+            type="password"
+            placeholder="비밀번호를 입력해주세요"
+            className="w-full h-full px-[16px] pl-[40px] rounded-[12px] border border-[#D1D5DB] focus:outline-none"
+            onChange={(e) =>
+              setFormData({ ...formData, password: e.target.value })
+            }
+          />
+        </div>
+      </div>
+
+      <AuthButton
+        text="계속하기"
+        variant="primary"
+        className="border-mainBlack font-semiBoldFont text-[16px] leading-[24px] cursor-pointer"
+        onClick={handleSignup}
+      />
     </div>
   );
-};
-
-export default SignupFormFields;
+}

@@ -1,7 +1,6 @@
 import { useParams } from 'react-router-dom';
 import ProjectMain from '../components/ProjectDetailPage/ProjectMain';
 import ProjectInfo from '../components/ProjectDetailPage/ProjectInfo';
-import ProjectFooter from '../components/ProjectDetailPage/ProjectFooter';
 import { MOCK_PROJECTS } from '../mocks/project';
 import type { Project } from '../types/projects';
 
@@ -27,7 +26,6 @@ export default function ProjectDetailPage() {
     <div className="min-h-screen pt-24 pb-[230px] w-full bg-mainWhite flex flex-col items-center overflow-x-hidden">
       <ProjectMain project={project} />
       <ProjectInfo projectId={project.project_id} />
-      <ProjectFooter />
     </div>
   );
 }

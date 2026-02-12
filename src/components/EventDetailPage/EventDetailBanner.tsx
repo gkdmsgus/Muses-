@@ -1,42 +1,41 @@
-import type { EventData } from '../../types/event';
+import type { EventData } from '../../api/eventAPI';
 import detailBg from '../../assets/images/backgrounds/event_detail_bg.png';
 
 interface EventDetailBannerProps {
   event: EventData;
-  onPrev?: () => void;
+  onPrev: () => void;
+  hasPrev: boolean;
 }
 
 export default function EventDetailBanner({
   event,
   onPrev,
+  hasPrev,
 }: EventDetailBannerProps) {
+  const formattedDate = new Date(event.date)
+    .toLocaleDateString('ko-KR')
+    .replace(/\.$/, '');
   return (
     <section className="relative w-full h-[285.2px]  px-[48px] pb-[48px] flex justify-center items-end self-stretch">
       <div className="absolute inset-0 z-0">
         <img src={detailBg} alt={event.title} />
       </div>
-      <button
-        onClick={onPrev}
-        disabled={!onPrev}
-        className="absolute z-10 left-[48px] top-[96px] w-[48px] h-[48px] p-[12px] flex items-center justify-center rounded-[9999px] bg-[rgba(178, 178, 178, 0.40)] backdrop-blur-[6px] transition-colors hover:bg-[rgba(178, 178, 178, 0.60)]"
-        aria-label="이전 글"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
+      {hasPrev && (
+        <button
+          onClick={onPrev}
+          className="absolute z-10 left-[48px] top-[96px] w-[48px] h-[48px] p-[12px] flex items-center justify-center rounded-[9999px] bg-[rgba(178, 178, 178, 0.40)] backdrop-blur-[6px] transition-colors hover:bg-[rgba(178, 178, 178, 0.60)]"
         >
-          <path
-            d="M15 18L9 12L15 6"
-            stroke="white"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
-      </button>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M15 18L9 12L15 6"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
+      )}
 
       <div className=" z-10 w-[896px] max-w-[896px] h-[184px] flex flex-col items-start gap-[16px]">
         <div className="flex px-[16px] py-[6px] items-start rounded-full bg-black/30 backdrop-blur-[6px]">
@@ -87,9 +86,7 @@ export default function EventDetailBanner({
             />
           </svg>
           <span className="z-10 text-[#000000] font-mainFont text-[18px] leading-[28px]">
-            {event.category === 'COLLAB'
-              ? `${event.start_date} - ${event.end_date}`
-              : event.posted_at}
+            {formattedDate}
           </span>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import type { EventData } from '../../types/event';
+import type { EventData } from '../../api/eventAPI';
 
 interface EventDetailBodyProps {
   event: EventData;
@@ -13,7 +13,7 @@ export default function EventDetailBody({
     <section className="mx-auto w-[768px] max-w-[768px] py-[48px] px-[24px] flex flex-col items-start gap-[64px] bg-white">
       <div className="flex flex-col items-start gap-[48px] self-stretch">
         <p className="self-stretch text-[#111827] font-boldFont text-[20px] leading-[28px]">
-          {event.desscription}
+          {event.description}
         </p>
 
         <div className="flex p-[32px] flex-col items-start gap-[16px] self-stretch rounded-[24px] border border-[#F3F4F6] bg-[#FAF5FF]">

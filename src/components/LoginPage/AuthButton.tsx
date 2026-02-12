@@ -7,23 +7,25 @@ interface AuthButtonProps {
   className?: string;
   icon?: React.ReactNode;
   iconClassName?: string;
+  children?: React.ReactNode; // 커스텀 자식을 받을 수 있게 확장
 }
 
-const AuthButton: React.FC<AuthButtonProps> = ({
+export function AuthButton({
   text,
   onClick,
   variant = 'primary',
   className = '',
   icon,
   iconClassName = 'left-[20px]',
-}) => {
+  children,
+}: AuthButtonProps) {
   const baseStyles =
-    'relative w-full h-[48px] rounded-full flex items-center justify-center font-semiBoldFont text-[16px] transition-all active:scale-[0.98] cursor-pointer';
+    'relative w-full h-[48px] rounded-full flex items-center justify-center font-semiBoldFont text-[16px] leading-[24px] transition-all active:scale-[0.98] cursor-pointer';
 
   const variantStyles = {
     primary: 'bg-mainBlack text-white hover:bg-black80',
     kakao: 'bg-[#FBE300] text-mainBlack',
-    google: 'bg-white border border-mainBlack text-mainBlack hover:bg-white80',
+    google: 'bg-white border border-[#C3C5C8] text-mainBlack hover:bg-white80',
     outline:
       'bg-transparent border border-white60 text-mainBlack hover:bg-white80',
   };
@@ -41,9 +43,8 @@ const AuthButton: React.FC<AuthButtonProps> = ({
           {icon}
         </div>
       )}
-      <span>{text}</span>
+
+      {children ? children : <span>{text}</span>}
     </button>
   );
-};
-
-export default AuthButton;
+}

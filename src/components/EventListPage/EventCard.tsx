@@ -1,24 +1,44 @@
-import type { EventData } from '../../types/event';
 import { useNavigate } from 'react-router-dom';
+import type { EventData } from '../../api/eventAPI';
+import { getEventThumbnail } from '../../utils/getEventThumbnail';
 
 export default function EventCard({ event }: { event: EventData }) {
   const navigate = useNavigate();
+  const thumbnail = getEventThumbnail(event.content);
   // 카테고리별 색상/텍스트 매핑
-  const categoryMap = {
+  const categoryMap: Record<string, { label: string; color: string }> = {
     COLLAB: { label: 'Collaboration', color: 'bg-solidPink' },
     NOTICE: { label: 'Notice', color: 'bg-[#1F2937]' },
-    MUSES: { label: 'Muses', color: 'bg-solidPurple' }, //db 보고 임시로 만든거임 피그마엔 없음
+    MUSES: { label: 'Muses', color: 'bg-solidPurple' },
   };
 
-  const { label, color } = categoryMap[event.category];
-
+  const categoryInfo = categoryMap[event.category] || {
+    label: event.category,
+    color: 'bg-gray-500',
+  };
+  const formatDate = (dateString: string) => {
+    return new Date(dateString)
+      .toLocaleDateString('ko-KR', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      })
+      .replace(/\. /g, '.')
+      .replace(/\.$/, '');
+  };
   return (
     <div>
       <div className="relative w-[848px] pt-[24px] pr-[24px] pb-[24px] pl-[240px] rounded-[40px] border border-[#F3F4F6] bg-white shadow-[0_1px_2px_0_rgba(0,0,0,0.05)] flex items-start">
-        {/*이미지 영역 */}
         <div className="absolute left-[19.94px] top-[17.82px] w-[180px] h-[170px] bg-[#E5E7EB] rounded-[16px] overflow-hidden">
-          <span className="text-black40 text-[12px]">180 x 170</span>
-          {/* <img src={event.thumbnail} className="w-full h-full object-cover" /> */}
+          <img
+            src={thumbnail}
+            alt={event.title}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src =
+                '/assets/images/default-thumbnail.png';
+            }}
+          />
         </div>
 
         {/* 글자 영역*/}
@@ -26,14 +46,12 @@ export default function EventCard({ event }: { event: EventData }) {
           {/* 카테고리 + 날짜 */}
           <div className="w-full pb-[12px] flex items-center gap-[8px]">
             <span
-              className={`${color} text-white text-[10px] font-boldFont leading-[15px] px-[12px] py-[4px] rounded-full uppercase`}
+              className={`${categoryInfo.color} text-white text-[10px] font-bold leading-[15px] px-[12px] py-[4px] rounded-full uppercase`}
             >
-              {event.category}
+              {categoryInfo.label}
             </span>
-            <span className="text-[#9CA3AF] text-[12px] font-mediumFont leading-[16px]">
-              {event.category === 'COLLAB'
-                ? `${event.start_date} - ${event.end_date}`
-                : event.posted_at}
+            <span className="text-[#9CA3AF] text-[12px] font-medium leading-[16px]">
+              {formatDate(event.date)}
             </span>
           </div>
 
@@ -44,12 +62,12 @@ export default function EventCard({ event }: { event: EventData }) {
 
           {/* 디스크립션 */}
           <p className="w-full text-[#6B7280] text-[14px] font-mainFont leading-normal line-clamp-1">
-            {event.desscription}
+            {event.description}
           </p>
 
           {/* 자세히 보기 버튼 */}
           <button
-            onClick={() => navigate(`/events/${event.event_id}`)}
+            onClick={() => navigate(`/events/${event.eventId}`)}
             className="pt-[24px] flex items-center gap-0 text-[#4F46E5] text-[14px] font-boldFont leading-[20px] group cursor-pointer"
           >
             자세히 보기

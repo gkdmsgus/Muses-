@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import BackButton from '../components/LoginPage/BackButton';
-import LoginHeader from '../components/LoginPage/LoginHeader';
-import AuthButton from '../components/LoginPage/AuthButton';
+import { BackButton } from '../components/LoginPage/BackButton';
+import { LoginHeader } from '../components/LoginPage/LoginHeader';
+import { AuthButton } from '../components/LoginPage/AuthButton';
 import ProfileImageUpload from '../components/OnBoardingPage/ProfileImageUpload';
 import OnboardingFormFields from '../components/OnBoardingPage/OnboardingFormFields';
 
@@ -33,7 +33,7 @@ const OnBoardingPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="w-[382px] h-[403px] flex flex-col gap-[172px] mx-auto mt-[20px] shrink-0">
+          <div className="w-[382px] h-[426px] flex flex-col gap-[110px] mx-auto mt-[20px] shrink-0">
             <div className="shrink-0">
               <OnboardingFormFields />
             </div>
