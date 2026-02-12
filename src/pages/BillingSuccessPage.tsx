@@ -1,8 +1,10 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { CheckIcon } from 'lucide-react';
 
 export default function BillingSuccessPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const status = searchParams.get('status') ?? 'loading';
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-6 font-mainFont">
