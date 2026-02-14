@@ -1,10 +1,10 @@
 import { AuthButton } from './AuthButton';
 import kakaoLogo from '../../assets/images/icons/kakao_logo.png';
+import { ENDPOINTS } from '../../api/endpoints';
 
 export function SocialLoginSection() {
   const handleKakaoLogin = () => {
-    window.location.href =
-      'https://mymuses.site/api/oauth2/authorization/kakao';
+    window.location.href = ENDPOINTS.AUTH.KAKAO_LOGIN;
   };
   return (
     <div className="w-full max-w-[382px] flex flex-col gap-[24px]">
