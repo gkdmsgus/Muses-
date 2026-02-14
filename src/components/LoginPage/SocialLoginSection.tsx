@@ -3,7 +3,8 @@ import kakaoLogo from '../../assets/images/icons/kakao_logo.png';
 
 export function SocialLoginSection() {
   const handleKakaoLogin = () => {
-    window.location.href = 'https://mymuses.site/api/auth/oauth/kakao/url';
+    window.location.href =
+      'https://mymuses.site/api/oauth2/authorization/kakao';
   };
   return (
     <div className="w-full max-w-[382px] flex flex-col gap-[24px]">
