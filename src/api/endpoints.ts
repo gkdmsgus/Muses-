@@ -29,12 +29,19 @@ export const ENDPOINTS = {
   BILLING_ISSUE: `${BASE_URL}/api/billing-auth/issue`,
 
   //티켓
+  TICKET_INFO: `${BASE_URL}/api/users/me/tickets`,
+  TICKET_TOKEN: `${BASE_URL}/api/checkin/tickets`,
 
   //랜딩페이지
   LANDING_TRENDING: `${BASE_URL}/api/landing`,
   //이벤트
 
   //마이페이지
+  MY_INFO: `${BASE_URL}/api/users/me`,
+  MY_PROFILE_UPDATE: `${BASE_URL}/api/users/me/profile`,
+  MY_ORDER: `${BASE_URL}/api/users/me/orders`,
+  MY_DETAIL_ORDER:`${BASE_URL}/api/users/me/orders/detail`,
+  CREATOR_SUMMARY: `${BASE_URL}/api/creators/me/summary`,
 
   //어드민
 } as const;

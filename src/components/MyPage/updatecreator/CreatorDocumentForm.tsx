@@ -29,7 +29,7 @@ const CreatorDocumentForm = ({ type, onBack }: Props) => {
         <button
           type="button"
           onClick={onBack}
-          className="flex items-center gap-1 text-black60 text-sm hover:text-mainBlack transition cursor-pointer"
+          className="flex items-center gap-1 text-black60 text-sm font-boldFont hover:text-mainBlack transition cursor-pointer"
         >
           <ChevronLeft size={16} />
           <span>유형 재선택</span>

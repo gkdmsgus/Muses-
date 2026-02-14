@@ -1,38 +1,54 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DonationItem from './DonationItem';
 import DetailDonationItem from './DetailDonationItem';
-import { type DonationItemType } from '../types/types';
-
-const items: DonationItemType[] = [
-  {
-    initial: '밴',
-    status: '결제완료',
-    date: '2025.10.01',
-    title: "밴드 '새벽' 단독 콘서트",
-    amount: '55,000원',
-  },
-  {
-    initial: '재',
-    status: '결제완료',
-    date: '2024.12.15',
-    title: '재즈 페스티벌 얼리버드',
-    amount: '88,000원',
-  },
-];
+import type { OrderItem, OrderDetail } from '../types/order';
+import { fetchMyOrders, fetchOrderDetail } from '../../../api/orders';
 
 const RecentDonations = () => {
-const [selected, setSelected] = useState<DonationItemType | null>(null);
+  const [orders, setOrders] = useState<OrderItem[]>([]);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [detail, setDetail] = useState<OrderDetail | null>(null);
+
+  useEffect(() => {
+    const load = async () => {
+      const data = await fetchMyOrders();
+      setOrders(data);
+    };
+
+    load();
+  }, []);
+
+  useEffect(() => {
+    if (!selectedId) return;
+
+    const loadDetail = async () => {
+      const data = await fetchOrderDetail(selectedId);
+      setDetail(data);
+    };
+
+    loadDetail();
+  }, [selectedId]);
 
   return (
     <>
       <div className="flex flex-col gap-4">
-        {items.map((item, idx) => (
-          <DonationItem key={`${item.date}-${item.title}`} item={item} onSelect={setSelected} />
+        {orders.map((item) => (
+          <DonationItem
+            key={item.orderId}
+            item={item}
+            onSelect={setSelectedId}
+          />
         ))}
       </div>
 
-      {selected && (
-        <DetailDonationItem item={selected} onClose={() => setSelected(null)} />
+      {selectedId && detail && (
+        <DetailDonationItem
+          item={detail}
+          onClose={() => {
+            setSelectedId(null);
+            setDetail(null);
+          }}
+        />
       )}
     </>
   );
