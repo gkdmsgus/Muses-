@@ -1,13 +1,39 @@
 import ProjectCard from '../ProjectListPage/ProjectCard';
-import { MOCK_PROJECTS } from '../../mocks/project';
+import axios from 'axios';
+import ENDPOINTS from '../../api/endpoints';
+import { useEffect, useState } from 'react';
+import type { TrendingItem, TrendingListResponse } from '../../types/trending';
 
 interface TrendingListProps {
   index: number;
 }
 
-const STEP = 1243;
+const STEP = 1232;
 
 export default function TrendingList({ index }: TrendingListProps) {
+  const [trending, setTrending] = useState<TrendingItem[]>([]);
+
+  useEffect(() => {
+    const fetchTrendingList = async () => {
+      try {
+        const response = await axios.post<TrendingListResponse>(
+          ENDPOINTS.LANDING_TRENDING
+        );
+
+        if (!response.data.success) {
+          console.error(response.data.error);
+          return;
+        }
+
+        setTrending(response.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchTrendingList();
+  }, []);
+
   return (
     <div className="relative w-[1232px] overflow-hidden">
       <div
@@ -16,9 +42,9 @@ export default function TrendingList({ index }: TrendingListProps) {
           transform: `translateX(-${index * STEP}px)`,
         }}
       >
-        {MOCK_PROJECTS.map((project) => (
+        {trending.map((project) => (
           <div
-            key={project.project_id}
+            key={project.projectId}
             className="w-fit p-5 border border-white80 rounded-[40px] shadow-xs"
           >
             <ProjectCard

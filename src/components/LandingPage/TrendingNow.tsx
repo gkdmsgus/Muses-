@@ -6,7 +6,7 @@ import FadeIn from './FadeIn';
 export default function TrendingNow() {
   const [index, setIndex] = useState(0);
 
-  const MAX_INDEX = 2;
+  const MAX_INDEX = 1;
 
   const handleNext = () => {
     setIndex((prev) => Math.min(prev + 1, MAX_INDEX));

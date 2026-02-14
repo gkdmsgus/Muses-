@@ -29,7 +29,7 @@ export const ENDPOINTS = {
   //티켓
 
   //랜딩페이지
-
+  LANDING_TRENDING: `${BASE_URL}/api/landing`,
   //이벤트
 
   //마이페이지
