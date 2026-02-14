@@ -1,22 +1,18 @@
 import { useEffect, useState } from 'react';
-import { MOCK_PROJECT_DETAILS } from '../../mocks/projectDetail';
 import { ProjectCreatorCard } from './ProjectCreatorCard';
 import { ProjectRewardList } from './ProjectRewardList';
 import { Heart, Share2 } from 'lucide-react';
 import type { ProjectDetailData } from '../../types/projectDetails';
 
-interface ProjectInfoProps {
-  projectId: number;
+export interface ProjectInfoProps {
+  detail: ProjectDetailData;
 }
 
-export default function ProjectInfo({ projectId }: ProjectInfoProps) {
-  const detail = MOCK_PROJECT_DETAILS.find(
-    (item: ProjectDetailData) => item.projectId === projectId
-  );
+export default function ProjectInfo({ detail }: ProjectInfoProps) {
   const [isLiked, setIsLiked] = useState(false);
   const [likePulseKey, setLikePulseKey] = useState(0);
   const [particles, setParticles] = useState<number[]>([]);
-  const likeCount = (detail?.likes ?? 0) + (isLiked ? 1 : 0);
+  const likeCount = isLiked ? 1 : 0;
   useEffect(() => {
     if (particles.length === 0) return;
     const timer = window.setTimeout(() => setParticles([]), 600);
@@ -36,21 +32,15 @@ export default function ProjectInfo({ projectId }: ProjectInfoProps) {
       <div className="mt-12 flex gap-12 lg:flex-row flex-col justify-center">
         <div className="max-w-[720px] w-full">
           <p className="text-2xl font-boldFont text-mainBlack">프로젝트 소개</p>
-          {detail ? (
-            <div
-              className="project-detail-content mt-6 text-base text-black80 leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: detail.contents.story_html }}
-            />
-          ) : (
-            <p className="mt-6 text-base text-black80 leading-relaxed">
-              프로젝트 소개글이 준비 중이에요.
-            </p>
-          )}
+          <div
+            className="project-detail-content mt-6 text-base text-black80 leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: detail.storyHtml }}
+          />
         </div>
         {/* 크리에이터 및 리워드 목록 */}
         <div className="w-[336px]">
-          <ProjectCreatorCard projectId={projectId} />
-          <ProjectRewardList projectId={projectId} />
+          <ProjectCreatorCard detail={detail} />
+          <ProjectRewardList detail={detail} />
           {/* 좋아요 및 공유하기 */}
           <div className="flex gap-2 w-full">
             <button

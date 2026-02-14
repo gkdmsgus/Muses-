@@ -1,3 +1,4 @@
+import type { Member } from '../types/apitypes/members';
 import ProfileAvatar from './detailprofile/ProfileAvatar';
 import ProfileBadges from './detailprofile/ProfileBadges';
 import ProfileHeader from './detailprofile/ProfileHeader';
@@ -6,30 +7,35 @@ import ProfileStats from './detailprofile/ProfileStats';
 
 interface ProfileCardProps {
   isCreator: boolean;
-  ticketCount?: number;
-  supportCount?: number;
+  member: Member;
   ongoingProjectCount?: number;
 }
 
 export default function ProfileCard({
   isCreator,
-  ticketCount = 2,
-  supportCount = 2,
-  ongoingProjectCount = 0,
+  member,
+  ongoingProjectCount,
 }: ProfileCardProps) {
   return (
     <div className="h-64 p-8 bg-white rounded-[40px] shadow-[0_1px_2px_rgba(0,0,0,0.05)] border border-white80 flex gap-6">
-      <ProfileAvatar />
+      <ProfileAvatar profileImgUrl={member.profileImgUrl} />
 
       <div className="flex flex-col gap-2 flex-1">
-        <ProfileBadges isCreator={isCreator} certifiedCreator='인증된 크리에이터'  supporterClass='Lv3 열정적인 서포터' />
-        <ProfileHeader name='푸른 오렌지' />
-        <ProfileIntro />
+        <ProfileBadges
+          isCreator={isCreator}
+          certifiedCreator="인증된 크리에이터"
+          supporterClass={`Lv${member.supportLevel} 열정적인 서포터`}
+        />
+
+        <ProfileHeader name={member.nickName} />
+
+        <ProfileIntro introduction={member.introduction} />
+
         <ProfileStats
           isCreator={isCreator}
-          ticketCount={ticketCount}
-          supportCount={supportCount}
-          ongoingProjectCount={ongoingProjectCount}
+          ticketCount={member.ticketCount}
+          supportCount={member.supportCount}
+          ongoingProjectCount={ongoingProjectCount ?? 0}
         />
       </div>
     </div>

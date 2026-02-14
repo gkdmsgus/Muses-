@@ -10,11 +10,11 @@ export default function ProjectCardFooter({ project }: ProjectCardFooterProps) {
   return (
     <>
       {/* 달성률, 마감일 */}
-      {project.funding_status === 'FUNDING' && (
+      {!project.isScheduled && project.fundingStatus === 'FUNDING' && (
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <span className="text-[18px] font-blackFont text-[#4F46E5]">
-              {project.achieve_rate || 0}%
+              {project.achieveRate || 0}%
             </span>
             {project.deadline && (
               <span className="text-xs font-boldFont text-black60 bg-white80 px-2 py-1 rounded">
@@ -27,7 +27,7 @@ export default function ProjectCardFooter({ project }: ProjectCardFooterProps) {
             <div
               className="h-full rounded-full transition-all"
               style={{
-                width: `${Math.min(project.achieve_rate || 0, 100)}%`,
+                width: `${Math.min(project.achieveRate || 0, 100)}%`,
                 background: 'linear-gradient(to right, #A855F7, #6366F1)',
               }}
             />
@@ -35,7 +35,7 @@ export default function ProjectCardFooter({ project }: ProjectCardFooterProps) {
         </div>
       )}
 
-      {project.funding_status === 'SCHEDULED' && (
+      {project.isScheduled && (
         <div className="flex items-center justify-between">
           {project.opening && (
             <div className="flex items-center gap-1">
@@ -58,16 +58,16 @@ export default function ProjectCardFooter({ project }: ProjectCardFooterProps) {
         </div>
       )}
 
-      {(project.funding_status === 'SUCCESS' ||
-        project.funding_status === 'FAIL') && (
+      {(project.fundingStatus === 'SUCCESS' ||
+        project.fundingStatus === 'FAIL') && (
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1">
             <Award className="w-4 h-4 text-black60" />
             <span className="text-sm text-black60">펀딩 마감</span>
           </div>
-          {project.achieve_rate && (
+          {project.achieveRate && (
             <span className="text-sm font-boldFont text-[#374151]">
-              {project.achieve_rate}% 달성
+              {project.achieveRate}% 달성
             </span>
           )}
         </div>

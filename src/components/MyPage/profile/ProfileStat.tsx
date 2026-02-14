@@ -19,12 +19,13 @@ export default function ProfileStat({
         {value}
       </div>
       <div
-        className={`text-xs leading-4 ${
-          highlight ? 'text-[#EA580C]' : 'text-black40'
-        }`}
-      >
-        {label}
-      </div>
+  className={`text-xs leading-4 h-8 text-center ${
+    highlight ? 'text-[#EA580C]' : 'text-black40'
+  }`}
+>
+  {label}
+</div>
+
     </div>
   );
 }

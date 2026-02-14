@@ -1,58 +1,68 @@
-export interface ProjectContents {
-  project_id: number;
-  story_html: string;
-  refund_policy: string;
-  location_detail: string | null;
-}
-
-export interface ProjectManager {
-  host_id: number;
-  project_id: number;
-  host_profile_img: string | null;
-  host_phone: string;
-  host_birth: string;
-  host_address: string;
-  host_intro: string | null;
-  manager_name: string | null;
-  manager_phone: string | null;
-  manager_email: string | null;
-}
-
-export interface ProjectTag {
-  tag_id: number;
-  project_id: number;
-  tag_name: string;
-}
+export type ProjectDetailResponse = {
+  success: boolean;
+  data: ProjectDetailData;
+  page?: { offset: number; limit: number; total: number };
+  error?: { code: string; message: string; detail: string };
+};
 
 export type RewardType = 'TICKET' | 'NONE';
+export type AgeLimit = 'ALL' | 'ADULT';
+export type FundingStatus = 'FUNDING' | 'CLOSING' | 'SUCCESS' | 'FAIL';
+export type ProjectStatus =
+  | 'DRAFT'
+  | 'PENDING'
+  | 'REVISION_REQUESTED'
+  | 'APPROVED'
+  | 'REJECTED'
+  | FundingStatus;
 
-export interface ProjectReward {
-  reward_id: number;
-  project_id: number;
-  reward_name: string;
+export type ProjectReward = {
+  rewardId: number;
+  rewardName: string;
   price: number;
-  description: string | null;
-  total_quantity: number | null;
-  sold_quantity: number;
-  entry_at: string | null;
+  description: string;
+  totalQuantity: number;
+  soldQuantity: number;
+  remainingQuantity: number;
   type: RewardType;
-}
+};
 
-export interface CreatorStats {
-  member_id: number;
-  total_funding: number;
-  ongoing_project: number;
-  total_project: number;
-}
+export type ProjectFile = {
+  id: number;
+  fileUrl: string;
+  originalFilename: string;
+  extension: string;
+};
 
-export interface ProjectDetailData {
+export type ProjectDetailData = {
   projectId: number;
-  creatorName: string;
-  creatorStats?: CreatorStats;
-  contents: ProjectContents;
-  manager: ProjectManager;
-  tags: ProjectTag[];
-  posters?: string[];
+  status: ProjectStatus;
+  lastSavedStep: number;
+  title: string;
+  description: string;
+  thumbnailUrl: string | null;
+  tags: string[];
+  ageLimit: AgeLimit;
+  region: string;
+  targetAmount: number;
+  opening: string;
+  deadline: string;
+  fundingStatus: FundingStatus;
   rewards: ProjectReward[];
-  likes: number;
-}
+  storyHtml: string;
+  refundPolicy: string;
+  attachments: ProjectFile[];
+  creatorName: string;
+  creatorNickname: string;
+  hostProfileImg: string | null;
+  hostPhone: string;
+  hostBio: string;
+  managerName: string;
+  managerPhone: string;
+  documents: ProjectFile[];
+  makerDocuments: ProjectFile[];
+  achieveRate: number;
+  supporterCount: number;
+  createdAt: string;
+  updatedAt: string;
+};

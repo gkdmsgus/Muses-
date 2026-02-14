@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import ProjectCardFooter from './ProjectCardFooter';
 import fallbackPoster from '../../assets/images/fallbackPoster.png';
 import type { Project } from '../../types/projects';
-import type { ProjectDetailData, ProjectTag } from '../../types/projectDetails';
-import { MOCK_PROJECT_DETAILS } from '../../mocks/projectDetail';
 
 interface ProjectCardProps {
   project: Project;
@@ -17,15 +15,32 @@ export default function ProjectCard({
   posterClassNameValue,
   contentClassNameValue,
 }: ProjectCardProps) {
-  const posterSrc =
-    MOCK_PROJECT_DETAILS.find(
-      (item: ProjectDetailData) => item.projectId === project.project_id
-    )?.posters?.[0] ?? fallbackPoster;
+  const regionLabels: Record<string, string> = {
+    SEOUL: '서울',
+    GYEONGGI: '경기',
+    INCHEON: '인천',
+    BUSAN: '부산',
+    GWANGJU: '광주',
+    DAEGU: '대구',
+    DAEJEON: '대전',
+    ULSAN: '울산',
+    JEJU: '제주',
+    GANGWON: '강원',
+    GYEONGNAM: '경남',
+    GYEONGBUK: '경북',
+    JEONNAM: '전남',
+    JEONBUK: '전북',
+  };
+  const regionLabel = regionLabels[project.region] ?? project.region;
+  const posterSrc = project.thumbnailUrl || fallbackPoster;
   const posterClassName =
     posterClassNameValue ?? 'h-[380px] w-[285px] rounded-3xl';
+  const isScheduled = project.isScheduled;
+  const isClosed =
+    project.fundingStatus === 'SUCCESS' || project.fundingStatus === 'FAIL';
   return (
     <Link
-      to={`/project/${project.project_id}`}
+      to={`/project/${project.projectId}`}
       className="flex flex-col group cursor-pointer font-mainFont h-fit"
     >
       {/* 위치 및 상태, 썸네일 */}
@@ -44,60 +59,52 @@ export default function ProjectCard({
           <div className="flex items-center gap-1 bg-white/90 rounded-lg px-2.5 py-1 shadow-sm mr-2">
             <MapPin className="w-4 h-4 text-solidBlue" />
             <span className="text-[10px] font-boldFont text-[#1F2937]">
-              {project.region}
+              {regionLabel}
             </span>
           </div>
           <span
             className={`px-2 py-1 rounded text-[10px] font-boldFont ${
-              project.funding_status === 'FUNDING'
-                ? 'bg-solidBlue text-white'
-                : project.funding_status === 'SCHEDULED'
-                  ? 'bg-[#FACC15] text-black'
+              isScheduled
+                ? 'bg-[#FACC15] text-black'
+                : project.fundingStatus === 'FUNDING'
+                  ? 'bg-solidBlue text-white'
                   : 'bg-black60 text-white'
             }`}
           >
-            {project.funding_status === 'FUNDING'
-              ? '진행중'
-              : project.funding_status === 'SCHEDULED'
-                ? '오픈예정'
+            {isScheduled
+              ? '오픈예정'
+              : project.fundingStatus === 'FUNDING'
+                ? '진행중'
                 : '마감'}
           </span>
         </div>
 
         {/* 종료 상태 오버레이 */}
-        {project.funding_status === 'SUCCESS' ||
-          (project.funding_status === 'FAIL' && (
-            <>
-              {/* 배경 오버레이 */}
-              <div className="absolute bottom-0 left-0 right-0 h-full rounded-b-3xl bg-black/40" />
-
-              {/* CLOSED\ 텍스트 */}
-              <div className="absolute inset-0 flex items-center justify-center z-20">
-                <div
-                  className="px-4 py-2 border-2 border-white"
-                  style={{
-                    transform: 'rotate(-15deg)',
-                  }}
-                >
-                  <span className="text-xl font-blackFont text-white tracking-wider">
-                    CLOSED
-                  </span>
-                </div>
+        {isClosed && (
+          <>
+            <div className="absolute bottom-0 left-0 right-0 h-full rounded-b-3xl bg-black/40" />
+            <div className="absolute inset-0 flex items-center justify-center z-20">
+              <div
+                className="px-4 py-2 border-2 border-white"
+                style={{ transform: 'rotate(-15deg)' }}
+              >
+                <span className="text-xl font-blackFont text-white tracking-wider">
+                  CLOSED
+                </span>
               </div>
-            </>
-          ))}
+            </div>
+          </>
+        )}
       </div>
       <div className={`${contentClassNameValue ?? ''}`}>
         {/* 태그 */}
         <div className="flex gap-2 mb-2 flex-wrap">
-          {MOCK_PROJECT_DETAILS.find(
-            (item: ProjectDetailData) => item.projectId === project.project_id
-          )?.tags?.map((tag: ProjectTag) => (
+          {project.tags.map((tag) => (
             <span
-              key={tag.tag_id}
+              key={tag}
               className="text-[10px] text-black60 bg-white80 px-2 py-0.5 rounded border border-white60"
             >
-              {tag.tag_name}
+              #{tag}
             </span>
           ))}
         </div>
@@ -106,7 +113,7 @@ export default function ProjectCard({
         <h3 className="text-[20px] font-boldFont text-mainBlack mb-4 group-hover:text-solidBlue transition-all duration-500">
           <span
             className={`title-clamp ${
-              project.funding_status === 'FUNDING' ? 'title-clamp--fixed' : ''
+              project.fundingStatus === 'FUNDING' ? 'title-clamp--fixed' : ''
             }`}
           >
             {project.title}
