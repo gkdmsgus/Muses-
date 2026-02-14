@@ -14,9 +14,9 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
-    "axios": "^1.13.4",
     "@tosspayments/payment-widget-sdk": "^0.12.1",
     "@tosspayments/tosspayments-sdk": "^2.5.0",
+    "axios": "^1.13.5",
     "lucide-react": "^0.562.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

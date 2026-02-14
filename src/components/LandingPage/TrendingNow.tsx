@@ -16,7 +16,7 @@ export default function TrendingNow() {
     setIndex((prev) => Math.max(prev - 1, 0));
   };
   return (
-    <section className="relative w-full px-20 pt-40 bg-gradient-to-b from-color-white--0%/0 to-color-white--80%/80 inline-flex flex-col justify-center items-center overflow-hidden">
+    <section className="relative w-full px-20 pt-40 bg-linear-to-b from-color-white--0%/0 to-color-white--80%/80 inline-flex flex-col justify-center items-center overflow-hidden">
       <div className="w-full max-w-[1280px] h-[836.5px] px-6 inline-flex flex-col justify-start items-start gap-6">
         {/* 상단 제목과 버튼 */}
         <div className="self-stretch inline-flex justify-between items-end">

@@ -18,8 +18,8 @@ export const ProjectRewardCard = ({
 }: ProjectRewardCardProps) => {
   const canAdjustQuantity = quantity !== undefined && onQuantityChange;
   const remainingQuantity =
-    reward.total_quantity !== null
-      ? Math.max(0, reward.total_quantity - reward.sold_quantity)
+    reward.remainingQuantity !== undefined
+      ? Math.max(0, reward.remainingQuantity)
       : null;
   return (
     <div
@@ -78,7 +78,7 @@ export const ProjectRewardCard = ({
         {reward.price.toLocaleString()}원
       </span>
       <p className="mb-2 text-base font-mediumFont text-mainBlack">
-        {reward.reward_name}
+        {reward.rewardName}
       </p>
       <p className="mb-4 text-sm text-black60 leading-relaxed">
         {reward.description}
@@ -87,7 +87,7 @@ export const ProjectRewardCard = ({
         <div className="flex gap-2 items-center">
           <CircleCheckBig className="w-3 h-3 text-solidBlue" />
           <p className="text-xs font-boldFont text-black40">
-            {reward.sold_quantity}명 선택함
+            {reward.soldQuantity}명 선택함
           </p>
         </div>
         <p className="text-xs font-boldFont text-[#F87171]">

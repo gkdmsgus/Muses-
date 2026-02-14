@@ -20,7 +20,7 @@ export default function PlatformFeatures() {
         <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 justify-items-center">
           {/* Safe Payment */}
           <FadeIn delay={300}>
-            <div className="w-96 h-[377px] pt-[38.79px] pb-16 flex justify-center items-center gap-10 flex-1 relative bg-white/70 rounded-[40px] shadow-[0px_8px_10px_-6px_rgba(224,231,255,0.50)] shadow-[0px_20px_25px_-5px_rgba(224,231,255,0.50)] outline outline-1 outline-offset-[-1px] outline-white backdrop-blur-md overflow-hidden transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[0px_12px_20px_-6px_rgba(165,180,252,0.6)] hover:shadow-[0px_30px_40px_-10px_rgba(165,180,252,0.6)]">
+            <div className="w-96 h-[377px] pt-[38.79px] pb-16 flex justify-center items-center gap-10 flex-1 relative bg-white/70 rounded-[40px] shadow-[0px_8px_10px_-6px_rgba(224,231,255,0.50)] outline-1 outline-offset-1 outline-white backdrop-blur-md overflow-hidden transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[0px_12px_20px_-6px_rgba(165,180,252,0.6)]">
               <div className="flex flex-col items-center gap-10">
                 <img
                   src={safepayment}
@@ -42,7 +42,7 @@ export default function PlatformFeatures() {
 
           {/* Cheering */}
           <FadeIn delay={400}>
-            <div className="w-96 h-[377px] relative bg-white/70 rounded-[40px] shadow-[0px_8px_10px_-6px_rgba(224,231,255,0.50)] shadow-[0px_20px_25px_-5px_rgba(224,231,255,0.50)] outline outline-1 outline-offset-[-1px] outline-white backdrop-blur-md overflow-hidden transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[0px_12px_20px_-6px_rgba(165,180,252,0.6)] hover:shadow-[0px_30px_40px_-10px_rgba(165,180,252,0.6)]">
+            <div className="w-96 h-[377px] relative bg-white/70 rounded-[40px] shadow-[0px_8px_10px_-6px_rgba(224,231,255,0.50)] outline-1 outline-offset-1 outline-white backdrop-blur-md overflow-hidden transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[0px_12px_20px_-6px_rgba(165,180,252,0.6)]">
               <img
                 src={cheering}
                 alt="Cheering"
@@ -60,7 +60,7 @@ export default function PlatformFeatures() {
 
           {/* Smart Entry Solution */}
           <FadeIn delay={500}>
-            <div className="w-96 h-[377px] relative bg-white/70 rounded-[40px] shadow-[0px_8px_10px_-6px_rgba(224,231,255,0.50)] shadow-[0px_20px_25px_-5px_rgba(224,231,255,0.50)] outline outline-1 outline-offset-[-1px] outline-white backdrop-blur-md overflow-hidden transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[0px_12px_20px_-6px_rgba(165,180,252,0.6)] hover:shadow-[0px_30px_40px_-10px_rgba(165,180,252,0.6)]">
+            <div className="w-96 h-[377px] relative bg-white/70 rounded-[40px] shadow-[0px_8px_10px_-6px_rgba(224,231,255,0.50)] outline-1 outline-offset-1 outline-white backdrop-blur-md overflow-hidden transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[0px_12px_20px_-6px_rgba(165,180,252,0.6)]">
               <img
                 src={smartentrysolution}
                 alt="Smart Entry Solution"

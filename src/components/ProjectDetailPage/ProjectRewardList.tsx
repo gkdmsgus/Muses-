@@ -1,30 +1,31 @@
 import { useEffect, useState } from 'react';
-import { type ProjectReward } from '../../types/projectDetails';
-import { MOCK_PROJECT_DETAILS } from '../../mocks/projectDetail';
+import {
+  type ProjectDetailData,
+  type ProjectReward,
+} from '../../types/projectDetails';
 import { ProjectRewardCard } from './ProjectRewardCard';
+import axios from 'axios';
+import { ENDPOINTS } from '../../api/endpoints';
 import { useNavigate } from 'react-router-dom';
 
 interface ProjectRewardListProps {
-  projectId: number;
+  detail: ProjectDetailData;
 }
 
-export const ProjectRewardList = ({ projectId }: ProjectRewardListProps) => {
+export const ProjectRewardList = ({ detail }: ProjectRewardListProps) => {
   const navigate = useNavigate();
   const [selectedQuantities, setSelectedQuantities] = useState<
     Record<number, number>
   >({});
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
   const [showSelectNotice, setShowSelectNotice] = useState(false);
-  const detail = MOCK_PROJECT_DETAILS.find(
-    (item) => item.projectId === projectId
-  );
   const selectedRewards =
     detail?.rewards?.filter(
-      (reward) => (selectedQuantities[reward.reward_id] ?? 0) > 0
+      (reward) => (selectedQuantities[reward.rewardId] ?? 0) > 0
     ) ?? [];
   const totalAmount = selectedRewards.reduce(
     (sum, reward) =>
-      sum + reward.price * (selectedQuantities[reward.reward_id] ?? 0),
+      sum + reward.price * (selectedQuantities[reward.rewardId] ?? 0),
     0
   );
 
@@ -33,8 +34,8 @@ export const ProjectRewardList = ({ projectId }: ProjectRewardListProps) => {
 
   const handleSelectReward = (reward: ProjectReward) => {
     setSelectedQuantities((prev) => {
-      if (prev[reward.reward_id]) return prev;
-      return { ...prev, [reward.reward_id]: 1 };
+      if (prev[reward.rewardId]) return prev;
+      return { ...prev, [reward.rewardId]: 1 };
     });
   };
 
@@ -46,11 +47,11 @@ export const ProjectRewardList = ({ projectId }: ProjectRewardListProps) => {
         return next;
       }
       const reward = detail?.rewards?.find(
-        (item) => item.reward_id === rewardId
+        (item) => item.rewardId === rewardId
       );
       const maxAvailable =
-        reward?.total_quantity !== null && reward?.total_quantity !== undefined
-          ? Math.max(0, reward.total_quantity - reward.sold_quantity)
+        reward?.remainingQuantity !== undefined
+          ? Math.max(0, reward.remainingQuantity)
           : quantity;
       return {
         ...prev,
@@ -78,8 +79,44 @@ export const ProjectRewardList = ({ projectId }: ProjectRewardListProps) => {
   // 결제 처리 api 연동
   const handlePayment = async () => {
     if (selectedRewards.length === 0) return;
-    //setPaymentError('결제 기능은 준비 중입니다.');
-    navigate('/billing/success?status=success');
+    setPaymentError('');
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        alert('로그인 후 이용해주세요.');
+        window.location.href = '/login';
+        return;
+      }
+      const response = await axios.post(
+        ENDPOINTS.ORDERS_PREPARE,
+        {
+          projectId: detail.projectId,
+          items: selectedRewards.map((reward) => ({
+            rewardId: reward.rewardId,
+            quantity: selectedQuantities[reward.rewardId] ?? 0,
+            unitPrice: reward.price,
+          })),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.data?.success) {
+        throw new Error(
+          response.data?.error?.message ?? '주문 생성에 실패했습니다.'
+        );
+      }
+
+      setPaymentError('');
+      navigate('/billing/success');
+    } catch (error) {
+      setPaymentError(
+        error instanceof Error ? error.message : '주문 생성에 실패했습니다.'
+      );
+    }
   };
 
   return (
@@ -87,10 +124,10 @@ export const ProjectRewardList = ({ projectId }: ProjectRewardListProps) => {
       <p className="text-lg font-boldFont text-mainBlack px-2">리워드 선택</p>
       <div className="flex flex-col gap-4">
         {detail?.rewards?.map((reward) => {
-          const selectedQuantity = selectedQuantities[reward.reward_id] ?? 0;
+          const selectedQuantity = selectedQuantities[reward.rewardId] ?? 0;
           return (
             <ProjectRewardCard
-              key={reward.reward_id}
+              key={reward.rewardId}
               reward={reward}
               onClick={handleSelectReward}
               isSelected={selectedQuantity > 0}
@@ -98,7 +135,7 @@ export const ProjectRewardList = ({ projectId }: ProjectRewardListProps) => {
               onQuantityChange={
                 selectedQuantity > 0
                   ? (nextQuantity) =>
-                      handleQuantityChange(reward.reward_id, nextQuantity)
+                      handleQuantityChange(reward.rewardId, nextQuantity)
                   : undefined
               }
             />
@@ -151,16 +188,16 @@ export const ProjectRewardList = ({ projectId }: ProjectRewardListProps) => {
               <div className="flex flex-col gap-5 border-b border-white40 pb-7.5 mb-7.5">
                 {selectedRewards.map((reward) => (
                   <div
-                    key={reward.reward_id}
+                    key={reward.rewardId}
                     className="flex items-start justify-between gap-4"
                   >
                     <div>
                       <div className="flex gap-4 items-center mb-2.5">
                         <p className="text-2xl font-boldFont text-mainBlack">
-                          {reward.reward_name}
+                          {reward.rewardName}
                         </p>
                         <p className="text-base text-black60 font-mediumFont">
-                          x {selectedQuantities[reward.reward_id]}
+                          x {selectedQuantities[reward.rewardId]}
                         </p>
                       </div>
                       <p className="text-base text-black60 font-mediumFont">
@@ -170,7 +207,7 @@ export const ProjectRewardList = ({ projectId }: ProjectRewardListProps) => {
                     <p className="text-lg font-boldFont text-solidBlue">
                       {(
                         reward.price *
-                        (selectedQuantities[reward.reward_id] ?? 0)
+                        (selectedQuantities[reward.rewardId] ?? 0)
                       ).toLocaleString()}
                       원
                     </p>

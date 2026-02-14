@@ -1,47 +1,39 @@
 import { useEffect, useState } from 'react';
-import type { Project } from '../../types/projects';
-import type { ProjectDetailData, ProjectTag } from '../../types/projectDetails';
+import type { ProjectDetailData } from '../../types/projectDetails';
 import fallbackPoster from '../../assets/images/fallbackPoster.png';
-import { MOCK_PROJECT_DETAILS } from '../../mocks/projectDetail';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import {
   formatDeadlineDisplay,
   formatOpenDateTime,
   isFutureOpen,
 } from '../../utils/date';
-import { MOCK_PROJECTS } from '../../mocks/project';
 
-interface ProjectMainProps {
-  project: Project;
+export interface ProjectMainProps {
+  detail: ProjectDetailData;
 }
 
-export default function ProjectMain({ project }: ProjectMainProps) {
-  const posterFallback =
-    MOCK_PROJECT_DETAILS.find(
-      (item: ProjectDetailData) => item.projectId === project.project_id
-    )?.posters?.[0] ?? fallbackPoster;
-  const detail = MOCK_PROJECT_DETAILS.find(
-    (item) => item.projectId === project.project_id
-  );
+export default function ProjectMain({ detail }: ProjectMainProps) {
+  const posterCandidates = [
+    detail.thumbnailUrl,
+    ...detail.attachments.map((file) => file.fileUrl),
+  ].filter((value): value is string => Boolean(value));
   const posters =
-    detail?.posters && detail.posters.length > 0
-      ? detail.posters
-      : [posterFallback];
+    posterCandidates.length > 0 ? posterCandidates : [fallbackPoster];
   const [posterIndex, setPosterIndex] = useState(0);
 
   useEffect(() => {
     setPosterIndex(0);
-  }, [project.project_id]);
+  }, [detail.projectId]);
 
-  const openDateLabel = project.opening
-    ? formatOpenDateTime(project.opening)
+  const openDateLabel = detail.opening
+    ? formatOpenDateTime(detail.opening)
     : '';
-  const isOpenFuture = project.opening ? isFutureOpen(project.opening) : false;
+  const isOpenFuture = detail.opening ? isFutureOpen(detail.opening) : false;
 
-  const deadlineLabel = project.deadline
+  const deadlineLabel = detail.deadline
     ? isOpenFuture
       ? '오픈예정'
-      : formatDeadlineDisplay(project.deadline)
+      : formatDeadlineDisplay(detail.deadline)
     : '';
 
   const hasPrev = posterIndex > 0;
@@ -111,31 +103,23 @@ export default function ProjectMain({ project }: ProjectMainProps) {
       </div>
       {/* 프로젝트 태그 */}
       <div className="flex flex-wrap justify-center gap-2 mb-5 z-10">
-        {MOCK_PROJECT_DETAILS.find(
-          (item: ProjectDetailData) => item.projectId === project.project_id
-        )?.tags?.map((tag: ProjectTag) => (
+        {detail.tags.map((tag) => (
           <span
-            key={tag.tag_id}
+            key={tag}
             className="text-xs text-black80 bg-white/40 px-4 py-1 rounded-full border border-white/30 font-boldFont shadow-xs"
           >
-            {tag.tag_name}
+            #{tag}
           </span>
         ))}
       </div>
 
       {/* 프로젝트 제목 */}
       <h1 className="text-[48px] font-blackFont text-mainBlack text-center mb-4">
-        {project.title}
+        {detail.title}
       </h1>
-      {MOCK_PROJECTS.find(
-        (item: Project) => item.project_id === project.project_id
-      )?.description && (
+      {detail.description && (
         <p className="text-lg text-black80 text-center font-mediumFont">
-          {
-            MOCK_PROJECTS.find(
-              (item: Project) => item.project_id === project.project_id
-            )?.description
-          }
+          {detail.description}
         </p>
       )}
       {/* 프로젝트 달성율 박스 */}
@@ -143,7 +127,7 @@ export default function ProjectMain({ project }: ProjectMainProps) {
         <div className="flex items-end justify-between mb-3">
           <div className="flex items-baseline gap-2">
             <span className="text-[36px] font-blackFont text-mainBlack leading-none">
-              {project.achieve_rate}%
+              {detail.achieveRate}%
             </span>
             <span className="text-sm font-boldFont text-black60">달성</span>
           </div>
@@ -161,13 +145,13 @@ export default function ProjectMain({ project }: ProjectMainProps) {
         </div>
         <div className="w-full h-4 bg-white60 rounded-full overflow-hidden mb-6">
           <div
-            key={project.project_id}
+            key={detail.projectId}
             className="h-full rounded-full animate-progress-slide"
             style={{
               width: 'var(--progress-width)',
               background: 'linear-gradient(to right, #6366F1, #A855F7)',
               ['--progress-width' as string]: `${Math.min(
-                project.achieve_rate,
+                detail.achieveRate,
                 100
               )}%`,
             }}
@@ -182,7 +166,7 @@ export default function ProjectMain({ project }: ProjectMainProps) {
             </div>
             <span className="text-mainBlack font-boldFont pt-1">
               <span className="text-solidBlue font-blackFont">
-                {project.supporter_count}명의 메이커
+                {detail.supporterCount}명의 메이커
               </span>
               가 함께해요
             </span>

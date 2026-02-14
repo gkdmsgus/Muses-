@@ -1,24 +1,21 @@
 export interface Project {
-  project_id: number;
-  user_id: number;
-  status: 'DRAFT' | 'PENDING' | 'REVISION_REQUESTED' | 'APPROVED' | 'REJECTED';
-  last_saved_step: number;
-  title: string;
-  description: string;
-  age_limit: 'ALL' | 'ADULT';
+  projectId: number;
   region: string;
-  target_amount: number;
+  tags: string[];
+  thumbnailUrl: string;
+  title: string;
+  achieveRate: number;
   deadline: string;
+  fundingStatus: 'FUNDING' | 'CLOSING' | 'SUCCESS' | 'FAIL';
+  isScheduled: boolean;
   opening: string;
-  achieve_rate: number;
-  supporter_count: number;
-  created_at: string;
-  updated_at: string;
-  funding_status:
-    | 'PREPARING' // 준비중
-    | 'SCHEDULED' // 오픈예정
-    | 'FUNDING' // 진행중
-    | 'CLOSING' // 마감임박
-    | 'SUCCESS' // 성공
-    | 'FAIL'; // 실패
+  attachmentImageUrl: string | null;
+  dday: number;
 }
+
+export type ProjectListResponse = {
+  success: boolean;
+  data: Project[];
+  page: { offset: number; limit: number; total: number };
+  error?: { code: string; message: string; detail: string };
+};

@@ -48,7 +48,12 @@ export default function TrendingList({ index }: TrendingListProps) {
             className="w-fit p-5 border border-white80 rounded-[40px] shadow-xs"
           >
             <ProjectCard
-              project={project}
+              project={{
+                ...project,
+                isScheduled: false,
+                opening: '',
+                attachmentImageUrl: null,
+              }}
               posterClassNameValue="h-[422.5px] w-[338px] rounded-[32px] group-hover:shadow-lg transition-all"
               contentClassNameValue="group-hover:-translate-y-[-8px] transition-all"
             />
