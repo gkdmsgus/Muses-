@@ -9,6 +9,7 @@ import EventListPage from './pages/EventListPage';
 import ProjectDetailPage from './pages/ProjectDetailPage';
 
 import { LoginPage } from './pages/LoginPage';
+import AuthCallbackPage from './pages/AuthCallbackPage';
 import SignupPage from './pages/SignupPage';
 import OnBoardingPage from './pages/OnBoardingPage';
 import EventDetailPage from './pages/EventDetailPage';
@@ -56,6 +57,7 @@ function AppLayout() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/projects" element={<ProjectListPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/auth/callback" element={<AuthCallbackPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/onboarding" element={<OnBoardingPage />} />
         <Route path="/events" element={<EventListPage />} />

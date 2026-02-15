@@ -21,11 +21,13 @@ export default function SignupPage() {
         <div className="w-full h-auto min-h-[697px] bg-white/80 border border-white rounded-[24px] shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)] backdrop-blur-[20px] px-[33px] py-[26px]">
           <LoginHeader subtitle="새 계정을 만드세요" />
 
-          <div className="mt-[26px] flex flex-col gap-[21px]">
+          <div className="mt-[26px] flex flex-col">
             <SignupFormFields />
           </div>
 
-          <SignupFooter />
+          <div className="mt-[21px]">
+            <SignupFooter />
+          </div>
         </div>
       </div>
     </div>

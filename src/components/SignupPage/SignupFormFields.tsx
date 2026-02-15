@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AuthButton } from '../LoginPage/AuthButton';
-import { checkEmailAPI, signupAPI } from '../../api/auth';
+import { checkEmailAPI, signupAPI, loginAPI } from '../../api/auth';
 import { useNavigate } from 'react-router-dom';
 
 const MailIcon = () => (
@@ -60,31 +60,12 @@ const LockIcon = () => (
   </svg>
 );
 
-const PhoneIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-  >
-    <path
-      d="M15.6 14.5221C13.205 17.0421 7.09603 10.9881 9.50003 8.45811C10.968 6.91311 9.31003 5.14811 8.39203 3.84911C6.66903 1.41411 2.88803 4.77611 3.00203 6.91511C3.36503 13.6611 10.662 21.6551 17.728 20.9571C19.938 20.7391 22.478 16.7471 19.943 15.2881C18.675 14.5581 16.934 13.1181 15.6 14.5211"
-      stroke="#9CA3AF"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
 export default function SignupFormFields() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    phone: '',
     password: '',
   });
 
@@ -92,8 +73,6 @@ export default function SignupFormFields() {
 
   const handleCheckEmail = async (e: React.MouseEvent) => {
     e.preventDefault();
-
-    console.log('보내려는 이메일:', formData.email);
 
     if (!formData.email) {
       alert('이메일을 입력해주세요.');
@@ -108,7 +87,6 @@ export default function SignupFormFields() {
 
     try {
       const response = await checkEmailAPI(formData.email);
-      console.log('서버로부터 받은 응답:', response);
 
       if (response.success && response.data === true) {
         alert('이미 사용 중인 이메일입니다.');
@@ -123,9 +101,9 @@ export default function SignupFormFields() {
   };
 
   const handleSignup = async () => {
-    const { name, email, phone, password } = formData;
+    const { name, email, password } = formData;
 
-    if (!name.trim() || !email.trim() || !phone.trim() || !password.trim()) {
+    if (!name.trim() || !email.trim() || !password.trim()) {
       alert('모든 항목을 정확히 입력해주세요.');
       return;
     }
@@ -139,13 +117,19 @@ export default function SignupFormFields() {
       const response = await signupAPI({
         name,
         email,
-        phoneNumber: phone,
         password,
       });
 
       if (response.success) {
-        alert('회원가입이 완료되었습니다!');
-        navigate('/onboarding');
+        const loginRes = await loginAPI({ email, password });
+
+        if (loginRes.success) {
+          localStorage.setItem('accessToken', loginRes.data.accessToken);
+          localStorage.setItem('refreshToken', loginRes.data.refreshToken);
+
+          alert('회원가입이 완료되었습니다!');
+          navigate('/onboarding');
+        }
       }
     } catch (error) {
       alert('회원가입 처리 중 오류가 발생했습니다.');
@@ -153,7 +137,7 @@ export default function SignupFormFields() {
   };
 
   return (
-    <div className="w-[382px] h-[444px] flex flex-col gap-[16px] font-['Pretendard']">
+    <div className="w-[382px] h-auto flex flex-col gap-[12px] font-['Pretendard']">
       <div className="w-full flex flex-col gap-[8px]">
         <label className="text-[14px] font-[500] text-[#374151]">이름</label>
         <div className="relative w-full h-[53px]">
@@ -199,26 +183,7 @@ export default function SignupFormFields() {
         </div>
       </div>
 
-      <div className="w-full flex flex-col gap-[8px]">
-        <label className="text-[14px] font-[500] text-[#374151]">
-          전화번호
-        </label>
-        <div className="relative w-full h-[53px]">
-          <div className="absolute left-[9px] top-[14.5px]">
-            <PhoneIcon />
-          </div>
-          <input
-            type="text"
-            placeholder="010-0000-0000"
-            className="w-full h-full px-[16px] pl-[40px] rounded-[12px] border border-[#D1D5DB] focus:outline-none"
-            onChange={(e) =>
-              setFormData({ ...formData, phone: e.target.value })
-            }
-          />
-        </div>
-      </div>
-
-      <div className="w-full flex flex-col gap-[8px]">
+      <div className="w-full flex flex-col gap-[8px] mb-[38px]">
         <label className="text-[14px] font-[500] text-[#374151]">
           비밀번호
         </label>
@@ -240,7 +205,7 @@ export default function SignupFormFields() {
       <AuthButton
         text="계속하기"
         variant="primary"
-        className="border-mainBlack font-semiBoldFont text-[16px] leading-[24px] cursor-pointer"
+        className="flex-shrink-0 border-mainBlack font-semiBoldFont text-[16px] leading-[24px] cursor-pointer"
         onClick={handleSignup}
       />
     </div>

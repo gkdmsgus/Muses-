@@ -71,7 +71,11 @@ function PencilIcon() {
   );
 }
 
-export default function ProfileImageUpload() {
+export default function ProfileImageUpload({
+  onImageChange,
+}: {
+  onImageChange: (file: File) => void;
+}) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -88,7 +92,7 @@ export default function ProfileImageUpload() {
 
       const url = URL.createObjectURL(file);
       setPreviewUrl(url);
-
+      onImageChange(file);
       console.log('선택된 파일:', file.name);
     }
   };

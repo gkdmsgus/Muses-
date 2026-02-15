@@ -1,9 +1,10 @@
 import { AuthButton } from './AuthButton';
+import { ENDPOINTS } from '../../api/endpoints';
 import googleLogo from '../../assets/images/icons/google_logo.png';
 
 export function GoogleLoginSection() {
   const handleGoogleLogin = () => {
-    console.log('Google Login clicked');
+    window.location.href = ENDPOINTS.AUTH.GOOGLE_LOGIN;
   };
 
   return (

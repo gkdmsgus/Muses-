@@ -12,6 +12,8 @@ export const ENDPOINTS = {
     CHECK_NICKNAME: `${BASE_URL}/api/auth/profile/check-nickname`,
     CHECK_EMAIL: `${BASE_URL}/api/auth/signup/check-email`,
     CREATE_PROFILE: `${BASE_URL}/api/auth/profile/create`,
+    KAKAO_LOGIN: `${BASE_URL}/api/login/oauth2/code/kakao`,
+    GOOGLE_LOGIN: `${BASE_URL}/api/login/oauth2/code/google`,
   },
 
   //프로젝트
@@ -40,7 +42,7 @@ export const ENDPOINTS = {
   MY_INFO: `${BASE_URL}/api/users/me`,
   MY_PROFILE_UPDATE: `${BASE_URL}/api/users/me/profile`,
   MY_ORDER: `${BASE_URL}/api/users/me/orders`,
-  MY_DETAIL_ORDER:`${BASE_URL}/api/users/me/orders/detail`,
+  MY_DETAIL_ORDER: `${BASE_URL}/api/users/me/orders/detail`,
   CREATOR_SUMMARY: `${BASE_URL}/api/creators/me/summary`,
 
   //어드민
