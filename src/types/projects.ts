@@ -19,3 +19,13 @@ export type ProjectListResponse = {
   page: { offset: number; limit: number; total: number };
   error?: { code: string; message: string; detail: string };
 };
+
+export interface InterestProjectCardProps {
+  location: string;
+  status: string;
+  tags: string[];
+  title: string;
+  progress: number;
+  dday: string;
+  projectId: number;
+}

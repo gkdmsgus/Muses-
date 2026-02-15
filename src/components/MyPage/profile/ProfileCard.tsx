@@ -20,7 +20,7 @@ export default function ProfileCard({
     <div className="h-64 p-8 bg-white rounded-[40px] shadow-[0_1px_2px_rgba(0,0,0,0.05)] border border-white80 flex gap-6">
       <ProfileAvatar profileImgUrl={member.profileImgUrl} />
 
-      <div className="flex flex-col gap-2 flex-1">
+      <div className="flex flex-col flex-1 h-full">
         <ProfileBadges
           isCreator={isCreator}
           certifiedCreator="인증된 크리에이터"
@@ -29,7 +29,9 @@ export default function ProfileCard({
 
         <ProfileHeader name={member.nickName} />
 
-        <ProfileIntro introduction={member.introduction} />
+        <div className="flex-1">
+          <ProfileIntro introduction={member.introduction} />
+        </div>
 
         <ProfileStats
           isCreator={isCreator}

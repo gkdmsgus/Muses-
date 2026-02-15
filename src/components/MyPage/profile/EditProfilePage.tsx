@@ -85,7 +85,7 @@ export default function EditProfilePage() {
             {/* 레벨 */}
             <div className="px-3 py-1 bg-[#EEF2FF] rounded-full inline-flex justify-start items-start">
               <div className="justify-center text-[#4F46E5] text-xs font-boldFont leading-4">
-                Lv.{member?.supportLevel}
+                Lv.{member?.supportLevel} 열정적인 서포터
               </div>
             </div>
 
