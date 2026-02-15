@@ -1,4 +1,4 @@
-import type { ApiResponse } from '../api/eventAPI';
+import type { ApiResponse } from '../api/auth';
 
 export type TrendingItem = {
   projectId: number;

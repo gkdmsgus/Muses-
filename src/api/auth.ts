@@ -2,7 +2,7 @@ import axios from 'axios';
 import { ENDPOINTS } from './endpoints';
 
 // 공통타입
-interface ApiResponse<T> {
+export interface ApiResponse<T> {
   success: boolean;
   data: T;
   page?: {
