@@ -5,11 +5,12 @@ import MyActivitySection from '../components/MyPage/section/MyActivitySection';
 import CreatorSection from '../components/MyPage/section/CreatorSection';
 import CreatorEmptySection from '../components/MyPage/section/CreatorEmptySection';
 import ProfileCard from '../components/MyPage/profile/ProfileCard';
-import { projectItems } from '../components/MyPage/projects/projectData';
 import { useEffect, useState } from 'react';
-import { getMyInfo } from '../api/user';
+import { fetchMyCreatorProjects, getMyInfo } from '../api/user';
 import type { Member } from '../components/MyPage/types/apitypes/members';
 import { getCreatorSummary } from '../api/creator';
+import type { Project } from '../types/projects';
+
 
 export default function MyPage() {
   const [member, setMember] = useState<Member | null>(null);
@@ -17,6 +18,7 @@ export default function MyPage() {
     totalFunding: number;
     ongoingProjectCount: number;
   } | null>(null);
+  const [projects, setProjects] = useState<Project[]>([]);
 
   const [params] = useSearchParams();
   const tab = params.get('tab');
@@ -32,10 +34,14 @@ export default function MyPage() {
     const fetchData = async () => {
       const userData = await getMyInfo();
       setMember(userData);
-      console.log('userData:', userData);
+
       if (isCreator) {
         const summaryData = await getCreatorSummary();
         setCreatorSummary(summaryData);
+
+        // 서버 프로젝트 가져오기
+        const projectData = await fetchMyCreatorProjects();
+        setProjects(projectData);
       }
     };
 
@@ -66,9 +72,7 @@ export default function MyPage() {
 
           {isCreatorTab &&
             (isCreator ? (
-              <CreatorSection
-                projects={projectItems}
-              />
+              <CreatorSection projects={projects} />
             ) : (
               <CreatorEmptySection />
             ))}

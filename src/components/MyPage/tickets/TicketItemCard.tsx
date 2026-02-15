@@ -20,7 +20,7 @@ const TicketItemCard = ({ item, onSelect }: Props) => {
       </div>
 
       {/* 상단 영역 */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 ">
         <div className="text-white/60 text-xs font-mainFont">
           #{item.ticketId}
         </div>
@@ -33,7 +33,8 @@ const TicketItemCard = ({ item, onSelect }: Props) => {
       </div>
 
       {/* 하단 영역 */}
-      <div className="flex justify-between items-end mt-6">
+      <div className="flex justify-between items-end mt-auto pt-6">
+
         <div className="px-3 py-1 bg-white/20 rounded-lg backdrop-blur-sm text-white text-xs font-mainFont">
           {item.seatLabel}
         </div>

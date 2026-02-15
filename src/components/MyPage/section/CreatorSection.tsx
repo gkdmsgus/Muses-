@@ -1,6 +1,6 @@
 import { ChartLine, Wallet } from 'lucide-react';
 import MyProjectList from '../projects/MyProjectList';
-import type { Project } from '../types/projectType';
+import type { Project } from '../types/project';
 
 interface Props {
   projects: Project[];
@@ -8,15 +8,11 @@ interface Props {
 
 const CreatorSection = ({ projects }: Props) => {
   const totalSupportAmount =
-    projects.reduce(
-      (sum, project) =>
-        sum + Number(project.amount.replace(/,/g, '').replace('원', '')),
-      0
-    ) / 10000;
+    projects.reduce((sum, p) => sum + p.raisedAmount, 0) / 10000;
 
-  const activeProjects = projects.filter(
-    (project) => project.status === 'ONGOING'
-  );
+ const activeProjects = projects.filter(
+  (p) => p.fundingStatus === 'FUNDING'
+);
 
   const activeProjectCount = activeProjects.length;
 

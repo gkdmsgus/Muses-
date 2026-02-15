@@ -1,31 +1,45 @@
 import InterestProjectCard from './InterestProjectCard';
-import type { Project } from '../types/project';
+import { useEffect, useState } from 'react';
+import { fetchMyLikedProjects } from '../../../api/user';
+import type { Project } from '../../../types/projects';
 
-const rawData = [
-  {
-    id: 1,
-    location: '서울',
-    status: '진행중',
-    tags: ['졸업전시', '미디어아트'],
-    title: "A대 시각디자인 졸전 'Trace'",
-    progress: 120,
-    dday: 'D-5',
-  },
-];
+const statusMap = {
+  FUNDING: '진행중',
+  CLOSING: '마감임박',
+  SUCCESS: '성공',
+  FAIL: '실패',
+} as const;
 
-const normalizeProgress = (value: number) =>
-  Math.max(0, Math.min(value, 100));
-
-const interestProjectData: Project[] = rawData.map(item => ({
-  ...item,
-  progress: normalizeProgress(item.progress),
-}));
+const formatDday = (dday: number) => {
+  if (dday > 0) return `D-${dday}`;
+  if (dday === 0) return 'D-Day';
+  return `D+${Math.abs(dday)}`;
+};
 
 const InterestProjectList = () => {
+  const [projects, setProjects] = useState<Project[]>([]);
+
+  useEffect(() => {
+    const load = async () => {
+      const res = await fetchMyLikedProjects(0, 10);
+      setProjects(res.data);
+    };
+    load();
+  }, []);
+
   return (
     <div className="inline-flex justify-start items-start gap-6">
-      {interestProjectData.map(item => (
-        <InterestProjectCard key={item.id} {...item} />
+      {projects.map((p) => (
+        <InterestProjectCard
+          projectId={p.projectId}
+          key={p.projectId}
+          location={p.region ?? '지역미정'}
+          status={statusMap[p.fundingStatus]}
+          tags={p.tags ?? []}
+          title={p.title}
+          progress={p.achieveRate}
+          dday={formatDday(p.dday)}
+        />
       ))}
     </div>
   );

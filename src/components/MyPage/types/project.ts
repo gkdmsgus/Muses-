@@ -1,9 +1,12 @@
+export type ProjectStatus = 'FUNDING' | 'SUCCESS' | 'SCHEDULED';
+
 export interface Project {
-  id: number;
-  location: string;
-  status: string;
-  tags: string[];
+  projectId: number;
   title: string;
-  progress: number; // 0 ~ 100 보장
-  dday: string;
+  fundingStatus: ProjectStatus;
+  achieveRate: number;
+  raisedAmount: number;
+  tags: string[];
+  dday: number;
 }
+  

@@ -11,7 +11,6 @@ const DonationItem = ({ item, onSelect }: Props) => {
 
   return (
     <div className="self-stretch p-6 bg-white rounded-[32px] border border-white80 shadow inline-flex items-center gap-6">
-      
       {/* initial 영역 복구 */}
       <div className="w-14 h-14 bg-[#EEF2FF] rounded-2xl flex justify-center items-center">
         <div className="text-solidBlue text-2xl font-boldFont">
@@ -22,11 +21,9 @@ const DonationItem = ({ item, onSelect }: Props) => {
       <div className="flex-1 flex flex-col gap-1">
         <div className="flex justify-between">
           <div className="px-2 py-0.5 bg-[#EEF2FF] rounded text-[#4F46E5] text-xs font-boldFont">
-            {item.status}
+            {item.status === 'PAID' ? '결제완료' : '예약중'}
           </div>
-          <div className="text-black40 text-xs">
-            {item.date}
-          </div>
+          <div className="text-black40 text-xs">{item.date}</div>
         </div>
 
         <div className="text-mainBlack text-base font-boldFont">
