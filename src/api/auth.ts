@@ -43,8 +43,8 @@ export const socialLoginAPI = async (
 ) => {
   const endpoint =
     provider === 'kakao'
-      ? ENDPOINTS.AUTH.KAKAO_LOGIN
-      : ENDPOINTS.AUTH.GOOGLE_LOGIN;
+      ? ENDPOINTS.AUTH.KAKAO_OAUTH_CODE
+      : ENDPOINTS.AUTH.GOOGLE_OAUTH_CODE;
 
   const response = await axios.post<ApiResponse<UserAuthData>>(endpoint, {
     code,

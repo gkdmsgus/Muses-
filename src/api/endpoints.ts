@@ -12,17 +12,17 @@ export const ENDPOINTS = {
     CHECK_NICKNAME: `${BASE_URL}/api/auth/profile/check-nickname`,
     CHECK_EMAIL: `${BASE_URL}/api/auth/signup/check-email`,
     CREATE_PROFILE: `${BASE_URL}/api/auth/profile/create`,
-    KAKAO_LOGIN: `${BASE_URL}/api/login/oauth2/code/kakao`,
-    GOOGLE_LOGIN: `${BASE_URL}/api/login/oauth2/code/google`,
+    // 소셜로그인 시작 주소 (로그인 버튼 클릭 시 호출)
+    KAKAO_LOGIN: `${BASE_URL}/oauth2/authorization/kakao`,
+    GOOGLE_LOGIN: `${BASE_URL}/oauth2/authorization/google`,
+    // 소셜 로그인 콜백 주소
+    KAKAO_OAUTH_CODE: `${BASE_URL}/api/login/oauth2/code/kakao`,
+    GOOGLE_OAUTH_CODE: `${BASE_URL}/api/login/oauth2/code/google`,
   },
 
   //프로젝트
   PROJECT_LIST: `${BASE_URL}/api/projects`,
   PROJECT_DETAIL: `${BASE_URL}/api/projects/{projectId}`,
-
-  EVENTS: {
-    LIST: `${BASE_URL}/api/events`,
-  },
 
   //주문
   ORDERS_PREPARE: `${BASE_URL}/api/orders/prepare`,
@@ -36,7 +36,11 @@ export const ENDPOINTS = {
 
   //랜딩페이지
   LANDING_TRENDING: `${BASE_URL}/api/landing`,
+
   //이벤트
+  EVENTS: {
+    LIST: `${BASE_URL}/api/events`,
+  },
 
   //마이페이지
   MY_INFO: `${BASE_URL}/api/users/me`,
