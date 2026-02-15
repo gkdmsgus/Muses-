@@ -26,7 +26,7 @@ export default function MyPage() {
   const { activeTab, setActiveTab, isActivityTab, isCreatorTab } =
     useMyPageTab(initialTab);
 
-  const isCreator = false;
+  const isCreator = true;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,9 +66,7 @@ export default function MyPage() {
 
           {isCreatorTab &&
             (isCreator ? (
-              <CreatorSection
-                projects={projectItems}
-              />
+              <CreatorSection projects={projectItems} />
             ) : (
               <CreatorEmptySection />
             ))}

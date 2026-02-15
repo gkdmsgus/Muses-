@@ -36,7 +36,9 @@ const MyPageTab = ({ activeTab, onChange, isCreator }: Props) => {
       >
         <div
           className={`text-center justify-center text-base font-boldFont leading-6 ${
-            activeTab === 'activity' ? 'text-[#4F46E5]' : 'text-black40 hover:text-mainBlack cursor-pointer transition'
+            activeTab === 'activity'
+              ? 'text-[#4F46E5]'
+              : 'text-black40 hover:text-mainBlack cursor-pointer transition'
           }`}
         >
           내 활동
@@ -52,7 +54,9 @@ const MyPageTab = ({ activeTab, onChange, isCreator }: Props) => {
       >
         <div
           className={`inline-flex items-center gap-1 text-center justify-center text-base font-boldFont leading-6 whitespace-nowrap ${
-            activeTab === 'creator' ? 'text-[#EA580C]' : 'text-black40 hover:text-mainBlack cursor-pointer transition'
+            activeTab === 'creator'
+              ? 'text-[#EA580C]'
+              : 'text-black40 hover:text-mainBlack cursor-pointer transition'
           }`}
         >
           크리에이터 센터 {!isCreator && <Lock size={12} />}
