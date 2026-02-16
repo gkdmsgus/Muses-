@@ -23,7 +23,6 @@ export const ENDPOINTS = {
   //프로젝트
   PROJECT_LIST: `${BASE_URL}/api/projects`,
   PROJECT_DETAIL: `${BASE_URL}/api/projects/{projectId}`,
-  
 
   //주문
   ORDERS_PREPARE: `${BASE_URL}/api/orders/prepare`,
@@ -47,8 +46,8 @@ export const ENDPOINTS = {
   MY_INFO: `${BASE_URL}/api/users/me`,
   MY_PROFILE_UPDATE: `${BASE_URL}/api/users/me/profile`,
   MY_ORDER: `${BASE_URL}/api/users/me/orders`,
-  MY_DETAIL_ORDER:`${BASE_URL}/api/users/me/orders/detail`,
-  MY_LIKES_PROJECTS:`${BASE_URL}/api/users/me/likes/projects`,
+  MY_DETAIL_ORDER: `${BASE_URL}/api/users/me/orders/detail`,
+  MY_LIKES_PROJECTS: `${BASE_URL}/api/users/me/likes/projects`,
   CREATOR_SUMMARY: `${BASE_URL}/api/creators/me/summary`,
   CREATOR_PROJECT_LIST: `${BASE_URL}/api/creators/me/projects`,
 

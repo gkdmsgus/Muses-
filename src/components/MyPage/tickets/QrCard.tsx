@@ -1,15 +1,51 @@
 // QrCard.tsx
-import { QrCode } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { getTicketQrImageUrl } from '../../../api/ticket';
 
 interface QrCardProps {
+  ticketId: string;
   title: string;
   seat: string;
   ticketToken: string;
   onClose: () => void;
 }
 
-const QrCard = ({ title, seat, ticketToken, onClose }: QrCardProps) => {
-  
+const QrCard = ({
+  ticketId,
+  title,
+  seat,
+  ticketToken,
+  onClose,
+}: QrCardProps) => {
+  const [qrImageUrl, setQrImageUrl] = useState<string | null>(null);
+  const [qrError, setQrError] = useState(false);
+  const objectUrlRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    getTicketQrImageUrl(ticketId)
+      .then((url) => {
+        if (cancelled) {
+          URL.revokeObjectURL(url);
+          return;
+        }
+        objectUrlRef.current = url;
+        setQrImageUrl(url);
+      })
+      .catch(() => {
+        if (!cancelled) setQrError(true);
+      });
+
+    return () => {
+      cancelled = true;
+      if (objectUrlRef.current) {
+        URL.revokeObjectURL(objectUrlRef.current);
+        objectUrlRef.current = null;
+      }
+    };
+  }, [ticketId]);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-[6px]">
       <div className="w-96 bg-white rounded-2xl overflow-hidden">
@@ -32,20 +68,30 @@ const QrCard = ({ title, seat, ticketToken, onClose }: QrCardProps) => {
         {/* QR */}
         <div className="w-96 p-8 bg-[linear-gradient(135deg,var(--color-grey-95,#F3E8FF)_0%,var(--color-grey-96,#F3E8FF)_50%,var(--color-yellow-88,#FEF9C3)_100%)] inline-flex flex-col justify-center items-center">
           <div className="pb-6 flex flex-col justify-start items-start">
-            <div className="p-6 bg-white/80 rounded-[32px]  border border-white/60 flex flex-col justify-start items-start">
-              <QrCode className="text-[#78350F]" strokeWidth={1.5} size={160} />
+            <div className="p-4 bg-white/80 rounded-[32px] border border-white/60 flex flex-col justify-center items-center min-h-[180px] min-w-[180px]">
+              {qrError && (
+                <span className="text-black40 text-sm">
+                  QR을 불러오지 못했어요
+                </span>
+              )}
+              {!qrImageUrl && !qrError && (
+                <span className="text-black40 text-sm">QR 생성 중...</span>
+              )}
+              {qrImageUrl && (
+                <img
+                  src={qrImageUrl}
+                  alt="티켓 QR"
+                  className="w-[160px] h-[160px] object-contain"
+                />
+              )}
             </div>
           </div>
-          <div className="self-stretch flex flex-col justify-start items-start gap-1">
-            <div className="self-stretch flex flex-col justify-start items-center">
-              <div className="text-center justify-center text-black40 text-[10px] font-boldFont leading-4 tracking-wide">
-                TICKET TOKEN
-              </div>
+          <div className="self-stretch flex flex-col items-center gap-1">
+            <div className="text-black40 text-[10px] font-boldFont leading-4 tracking-wide">
+              TICKET ID
             </div>
-            <div className="self-stretch flex flex-col justify-start items-center">
-              <div className="text-center justify-center text-[#1F2937] text-base font-logoFont leading-7 tracking-widest">
-                {ticketToken}
-              </div>
+            <div className="text-[#1F2937] text-[10px] font-boldFont leading-7 tracking-widest text-center">
+              {ticketToken}
             </div>
           </div>
         </div>

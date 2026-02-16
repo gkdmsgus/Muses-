@@ -7,19 +7,17 @@ import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import EventListPage from './pages/EventListPage';
 import ProjectDetailPage from './pages/ProjectDetailPage';
-
 import { LoginPage } from './pages/LoginPage';
 import AuthCallbackPage from './pages/AuthCallbackPage';
 import SignupPage from './pages/SignupPage';
 import OnBoardingPage from './pages/OnBoardingPage';
 import EventDetailPage from './pages/EventDetailPage';
-
 import CreateProjectPage from './pages/CreateProjectPage';
-
 import EditProfilePage from './components/MyPage/profile/EditProfilePage';
 import ProjectResultPage from './components/MyPage/project-result/ProjectResultPage';
 import BillingSuccessPage from './pages/BillingSuccessPage';
 import BillingFailPage from './pages/BillingFailPage';
+import CheckinResultPage from './pages/CheckinResultPage';
 
 function App() {
   return (
@@ -67,9 +65,10 @@ function AppLayout() {
           <Route path="editprofile" element={<EditProfilePage />} />
           <Route path="projectresult/:id" element={<ProjectResultPage />} />
         </Route>
-         <Route path="/events/:id" element={<EventDetailPage />} />
+        <Route path="/events/:id" element={<EventDetailPage />} />
         <Route path="/billing/success" element={<BillingSuccessPage />} />
         <Route path="/billing/fail" element={<BillingFailPage />} />
+        <Route path="/checkin/result" element={<CheckinResultPage />} />
         <Route path="/create" element={<CreateProjectPage />} />
       </Routes>
       <Footer />

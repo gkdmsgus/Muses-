@@ -1,27 +1,22 @@
 import { ENDPOINTS } from './endpoints';
 import { type TicketResponse } from '../components/MyPage/types/ticket';
-import axios from 'axios';
+import api from './axiosInstance';
 
 export const getMyTickets = async (): Promise<TicketResponse[]> => {
-  const token = localStorage.getItem('accessToken');
-  if (!token) throw new Error('로그인 필요');
-  
-
-  const res = await axios.get(ENDPOINTS.TICKET_INFO, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  console.log("data", res)
+  const res = await api.get(ENDPOINTS.TICKET_INFO);
   return res.data.data;
 };
 
 export const getCheckinToken = async (ticketId: string) => {
-  const token = localStorage.getItem('accessToken');
-  if (!token) throw new Error('로그인 필요');
-
-  const res = await axios.get(`${ENDPOINTS.TICKET_TOKEN}/${ticketId}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-
+  const res = await api.get(`${ENDPOINTS.TICKET_TOKEN}/${ticketId}`);
   return res.data.data; // { ticketToken: "..." }
 };
 
+export const getTicketQrImageUrl = async (
+  ticketId: string
+): Promise<string> => {
+  const res = await api.get(`${ENDPOINTS.TICKET_TOKEN}/${ticketId}/qr.png`, {
+    responseType: 'blob',
+  });
+  return URL.createObjectURL(res.data);
+};

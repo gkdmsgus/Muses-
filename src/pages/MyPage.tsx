@@ -9,8 +9,7 @@ import { useEffect, useState } from 'react';
 import { fetchMyCreatorProjects, getMyInfo } from '../api/user';
 import type { Member } from '../components/MyPage/types/apitypes/members';
 import { getCreatorSummary } from '../api/creator';
-import type { Project } from '../types/projects';
-
+import type { Project } from '../components/MyPage/types/project';
 
 export default function MyPage() {
   const [member, setMember] = useState<Member | null>(null);
@@ -28,7 +27,7 @@ export default function MyPage() {
   const { activeTab, setActiveTab, isActivityTab, isCreatorTab } =
     useMyPageTab(initialTab);
 
-  const isCreator = false;
+  const isCreator = true;
 
   useEffect(() => {
     const fetchData = async () => {

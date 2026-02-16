@@ -9,7 +9,7 @@ interface Props {
   onCountChange?: (count: number) => void;
 }
 
-const TicketCard = ({onCountChange}: Props) => {
+const TicketCard = ({ onCountChange }: Props) => {
   const [tickets, setTickets] = useState<TicketItem[]>([]);
   const [selectedTicket, setSelectedTicket] = useState<TicketItem | null>(null);
   const [selectedToken, setSelectedToken] = useState<string | null>(null);
@@ -18,23 +18,22 @@ const TicketCard = ({onCountChange}: Props) => {
 
   // 티켓 리스트 불러오기
   useEffect(() => {
-  const fetchTickets = async () => {
-    try {
-      const data = await getMyTickets();
-      const mapped = data.map(mapTicketToItem);
+    const fetchTickets = async () => {
+      try {
+        const data = await getMyTickets();
+        const mapped = data.map(mapTicketToItem);
 
-      setTickets(mapped);
-      onCountChange?.(mapped.length); // 🔥 추가
-    } catch {
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
-  };
+        setTickets(mapped);
+        onCountChange?.(mapped.length);
+      } catch {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchTickets();
-}, []);
-
+    fetchTickets();
+  }, []);
 
   // 카드 선택 시 토큰 발급
   const handleSelect = async (ticketId: string) => {
@@ -53,31 +52,27 @@ const TicketCard = ({onCountChange}: Props) => {
   if (error) return <div>티켓을 불러오지 못했습니다.</div>;
 
   return (
-  <>
-    <div className="flex gap-6 overflow-x-auto pb-6">
-      {tickets.map((item) => (
-        <TicketItemCard
-          key={item.id}
-          item={item}
-          onSelect={handleSelect}
+    <>
+      <div className="flex gap-6 overflow-x-auto pb-6">
+        {tickets.map((item) => (
+          <TicketItemCard key={item.id} item={item} onSelect={handleSelect} />
+        ))}
+      </div>
+
+      {selectedTicket && selectedToken && (
+        <QrCard
+          ticketId={selectedTicket.ticketId}
+          title={selectedTicket.title}
+          seat={selectedTicket.selectedSeat}
+          ticketToken={selectedToken}
+          onClose={() => {
+            setSelectedTicket(null);
+            setSelectedToken(null);
+          }}
         />
-      ))}
-    </div>
-
-    {selectedTicket && selectedToken && (
-      <QrCard
-        title={selectedTicket.title}
-        seat={selectedTicket.selectedSeat}
-        ticketToken={selectedToken}
-        onClose={() => {
-          setSelectedTicket(null);
-          setSelectedToken(null);
-        }}
-      />
-    )}
-  </>
-);
-
+      )}
+    </>
+  );
 };
 
 export default TicketCard;
