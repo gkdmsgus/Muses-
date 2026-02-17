@@ -63,7 +63,10 @@ function AppLayout() {
         <Route path="/mypage">
           <Route index element={<MyPage />} />
           <Route path="editprofile" element={<EditProfilePage />} />
-          <Route path="projectresult/:id" element={<ProjectResultPage />} />
+          <Route
+            path="projectresult/:projectId"
+            element={<ProjectResultPage />}
+          />
         </Route>
         <Route path="/events/:id" element={<EventDetailPage />} />
         <Route path="/billing/success" element={<BillingSuccessPage />} />

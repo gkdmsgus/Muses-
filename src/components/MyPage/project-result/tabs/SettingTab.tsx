@@ -8,14 +8,79 @@ import {
   Ticket,
   Trash2,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import {
+  getProjectSetting,
+  updateProjectSetting,
+} from '../../../../types/setting';
 
-{/*interface TabProps {
-  projectId?: string;
-}*/}
+interface TabProps {
+  projectId?: number;
+}
 
-const SettingTab = ({/*{ projectId }: TabProps*/}) => {
+const SettingTab = ({ projectId }: TabProps) => {
   const [isEditing, setIsEditing] = useState(false);
+
+  const [description, setDescription] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
+  const [newTag, setNewTag] = useState('');
+  const [targetAmount, setTargetAmount] = useState(0);
+  const [deadline, setDeadline] = useState('');
+
+  const formattedDeadline = deadline ? deadline.split('T')[0] : '';
+
+  useEffect(() => {
+    if (!projectId) return;
+
+    const fetchSetting = async () => {
+      if (!projectId) return;
+
+      try {
+        const { data } = await getProjectSetting(projectId);
+        const setting = data?.data;
+
+        setDescription(setting?.description ?? '');
+        setTags(Array.isArray(setting?.tags) ? setting.tags : []);
+        setTargetAmount(setting?.targetAmount ?? 0);
+        setDeadline(setting?.deadline ?? '');
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchSetting();
+  }, [projectId]);
+
+  const handleDeleteTag = (tag: string) => {
+    setTags((prev) => prev.filter((t) => t !== tag));
+  };
+
+  const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && newTag.trim()) {
+      e.preventDefault();
+
+      const trimmed = newTag.trim();
+
+      if (!tags.includes(trimmed)) {
+        setTags((prev) => [...prev, trimmed]);
+      }
+
+      setNewTag('');
+    }
+  };
+
+  const handleSave = async () => {
+    if (!projectId) return;
+
+    try {
+      await updateProjectSetting(projectId, { description, tags });
+
+      setIsEditing(false);
+    } catch (error) {
+      console.error(error);
+      alert('저장 실패');
+    }
+  };
 
   return (
     <div>
@@ -29,7 +94,6 @@ const SettingTab = ({/*{ projectId }: TabProps*/}) => {
             </div>
 
             <button
-              data-variant="1"
               className="px-4 py-2 bg-[#9333EA] rounded-lg flex items-center gap-2 text-white cursor-pointer"
               onClick={() => setIsEditing(true)}
             >
@@ -45,9 +109,10 @@ const SettingTab = ({/*{ projectId }: TabProps*/}) => {
                 프로젝트 설명
               </div>
               <input
-                placeholder="지역 문화예술 축제를 통해 커뮤니티를 연결합니다."
-                className="p-4 bg-[#F8F9FC] rounded-xl text-black80 text-base font-mainFont leading-6"
-              ></input>
+                value={description}
+                readOnly
+                className="p-4 bg-[#F8F9FC] rounded-xl text-black80 text-base font-mainFont focus:outline-none leading-6"
+              />
             </div>
 
             {/* tags */}
@@ -56,7 +121,7 @@ const SettingTab = ({/*{ projectId }: TabProps*/}) => {
                 태그
               </div>
               <div className="flex flex-wrap gap-2">
-                {['음악', '축제', '지역문화'].map((tag) => (
+                {tags.map((tag) => (
                   <div
                     key={tag}
                     className="px-3 py-1 bg-[#F3E8FF] rounded-full text-[#7E22CE] text-sm font-mainFont leading-5"
@@ -76,7 +141,7 @@ const SettingTab = ({/*{ projectId }: TabProps*/}) => {
                 <div className="px-4 py-3 bg-white80 rounded-xl flex items-center gap-2 text-black60">
                   <Lock size={16} />
                   <div className="text-base font-mainFont leading-6">
-                    15,000,000원
+                    {targetAmount.toLocaleString()}원
                   </div>
                 </div>
               </div>
@@ -88,7 +153,7 @@ const SettingTab = ({/*{ projectId }: TabProps*/}) => {
                 <div className="px-4 py-3 bg-white80 rounded-xl flex items-center gap-2 text-black60">
                   <Lock size={16} />
                   <div className="text-base font-mainFont leading-6">
-                    2025-01-10
+                    {formattedDeadline}
                   </div>
                 </div>
               </div>
@@ -121,12 +186,11 @@ const SettingTab = ({/*{ projectId }: TabProps*/}) => {
             </div>
 
             <button
-              data-variant="1"
               className="px-4 py-2 bg-[#9333EA] rounded-lg flex items-center gap-2 text-white cursor-pointer"
-              onClick={() => setIsEditing(true)}
+              onClick={handleSave}
             >
               <PencilLine size={16} />
-              <div className="text-base font-mainFont leading-6">수정</div>
+              <div className="text-base font-mainFont leading-6">저장</div>
             </button>
           </div>
 
@@ -137,30 +201,35 @@ const SettingTab = ({/*{ projectId }: TabProps*/}) => {
                 프로젝트 설명
               </div>
               <input
-                placeholder="지역 문화예술 축제를 통해 커뮤니티를 연결합니다."
-                className="p-4 bg-[#F8F9FC] rounded-xl text-black80 text-base font-mainFont leading-6"
-              ></input>
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="p-4 border border-[#E5E7EB] rounded-xl text-black80 text-base font-mainFont leading-6"
+              />
             </div>
 
-            <div className="self-stretch inline-flex justify-start items-start gap-2 flex-wrap text-[#7E22CE]">
-              {['음악', '축제', '공연'].map((tag) => (
+            <div className="flex flex-wrap gap-2 text-[#7E22CE]">
+              {tags.map((tag) => (
                 <div
                   key={tag}
                   className="px-3 h-7 bg-[#F3E8FF] rounded-full inline-flex items-center gap-1"
                 >
                   <span className="text-sm font-mainFont leading-5">{tag}</span>
-                  <Delete size={12} className="cursor-pointer" />
+                  <Delete
+                    size={12}
+                    className="cursor-pointer"
+                    onClick={() => handleDeleteTag(tag)}
+                  />
                 </div>
               ))}
             </div>
 
-            <div className="self-stretch px-4 py-5 bg-white rounded-xl border border-[#E5E7EB] inline-flex justify-center items-start overflow-hidden">
-              <div className="flex-1 inline-flex flex-col justify-start items-start overflow-hidden">
-                <div className="self-stretch justify-center text-black40 text-base font-mainFont">
-                  #태그 입력 (Enter)
-                </div>
-              </div>
-            </div>
+            <input
+              value={newTag}
+              onChange={(e) => setNewTag(e.target.value)}
+              onKeyDown={handleAddTag}
+              placeholder="#태그 입력 (Enter)"
+              className="px-4 py-4 bg-white rounded-xl border border-white60 placeholder:text-black40 placeholder:font-mainFont"
+            />
             <div className="self-stretch pt-6 border-t border-white60 flex flex-col justify-start items-start gap-4">
               <div className="self-stretch p-4 bg-[#F3E8FF] rounded-xl inline-flex justify-start items-start text-[#854D0E]">
                 <div className="w-5 h-5 pt-0.5 inline-flex flex-col justify-start items-start text-[#CA8A04]">
@@ -189,7 +258,7 @@ const SettingTab = ({/*{ projectId }: TabProps*/}) => {
                     </div>
                     <div className="pl-2 inline-flex flex-col justify-start items-start">
                       <div className="justify-center text-base font-mainFont leading-6">
-                        15,000,000원
+                        {targetAmount.toLocaleString()}원
                       </div>
                     </div>
                   </div>
@@ -206,7 +275,7 @@ const SettingTab = ({/*{ projectId }: TabProps*/}) => {
                     </div>
                     <div className="pl-2 inline-flex flex-col justify-start items-start">
                       <div className="justify-center text-base font-mainFont leading-6">
-                        2025-01-10
+                        {formattedDeadline}
                       </div>
                     </div>
                   </div>
