@@ -43,10 +43,12 @@ function ScrollToTop() {
 function AppLayout() {
   const { pathname } = useLocation();
   //const hideHeaderPrefixes = ['/create-project', '/admin']; // 헤더를 숨길 경로 설정 예시, 하단에 추가하시면 됩니다.
-  const hideHeaderPrefixes = ['/admin', '/create'];
+  const hideHeaderPrefixes = ['/admin', '/create', '/checkin'];
   const shouldHideHeader = hideHeaderPrefixes.some((prefix) =>
     pathname.startsWith(prefix)
   );
+
+  const shouldHideFooter = pathname.startsWith('/checkin');
 
   return (
     <>
@@ -71,7 +73,7 @@ function AppLayout() {
         <Route path="/checkin/result" element={<CheckinResultPage />} />
         <Route path="/create" element={<CreateProjectPage />} />
       </Routes>
-      <Footer />
+      {!shouldHideFooter && <Footer />}
     </>
   );
 }
