@@ -1,5 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
 import logo from '../assets/images/icons/logo.png';
+import bg from '../assets/images/backgrounds/result_bg.png';
 
 const CheckinResultPage = () => {
   const [searchParams] = useSearchParams();
@@ -12,7 +13,10 @@ const CheckinResultPage = () => {
   const hasInfo = name && nick && qty && reward;
 
   return (
-    <div className="flex justify-center items-center w-full min-h-screen bg-white80 p-4">
+    <div
+      className="flex justify-center items-center w-full min-h-screen bg-white80 p-4"
+      style={{ backgroundImage: `url(${bg})` }}
+    >
       {hasInfo ? (
         <div className="flex flex-col items-center w-[385px] h-[352px] rounded-[40px] border border-white bg-white/70 shadow-[0_20px_25px_-5px_rgba(224,231,255,0.5),0_8px_10px_-6px_rgba(224,231,255,0.5)] backdrop-blur-[12px] p-5 box-border overflow-hidden">
           <LogoSection />
