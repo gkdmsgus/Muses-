@@ -1,5 +1,6 @@
 import InterestProjectCard from './InterestProjectCard';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { fetchMyLikedProjects } from '../../../api/user';
 import type { Project } from '../../../types/projects';
 
@@ -26,6 +27,22 @@ const InterestProjectList = () => {
     };
     load();
   }, []);
+
+  if (projects.length === 0) {
+    return (
+      <div className="self-stretch py-12 px-6 rounded-xl bg-white60/50 flex flex-col items-center justify-center gap-4 min-h-[120px] font-mainFont">
+        <p className="text-black60 text-base font-normal leading-6">
+          아직 관심있는 프로젝트가 없어요.
+        </p>
+        <Link
+          to="/projects"
+          className="px-5 py-2.5 rounded-full bg-solidPurple text-white text-sm font-mediumFont leading-5 hover:bg-solidPurple/80 transition"
+        >
+          둘러보기
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="inline-flex justify-start items-start gap-6">

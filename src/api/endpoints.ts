@@ -23,7 +23,6 @@ export const ENDPOINTS = {
   //프로젝트
   PROJECT_LIST: `${BASE_URL}/api/projects`,
   PROJECT_DETAIL: `${BASE_URL}/api/projects/{projectId}`,
-  
 
   //주문
   ORDERS_PREPARE: `${BASE_URL}/api/orders/prepare`,
@@ -47,10 +46,22 @@ export const ENDPOINTS = {
   MY_INFO: `${BASE_URL}/api/users/me`,
   MY_PROFILE_UPDATE: `${BASE_URL}/api/users/me/profile`,
   MY_ORDER: `${BASE_URL}/api/users/me/orders`,
-  MY_DETAIL_ORDER:`${BASE_URL}/api/users/me/orders/detail`,
-  MY_LIKES_PROJECTS:`${BASE_URL}/api/users/me/likes/projects`,
+  MY_DETAIL_ORDER: `${BASE_URL}/api/users/me/orders/detail`,
+  MY_LIKES_PROJECTS: `${BASE_URL}/api/users/me/likes/projects`,
   CREATOR_SUMMARY: `${BASE_URL}/api/creators/me/summary`,
   CREATOR_PROJECT_LIST: `${BASE_URL}/api/creators/me/projects`,
+  CREATOR_PROJECT_SETTING: (projectId: number) =>
+    `${BASE_URL}/api/creators/creator-center/projects/${projectId}/setting`,
+  CREATOR_PROJECT_SETTING_DETAILS: (projectId: number) =>
+    `${BASE_URL}/api/creators/creator-center/projects/${projectId}/details`,
+  CREATOR_PROJECT_MAKERS: (projectId: number) =>
+    `${BASE_URL}/api/creators/creator-center/projects/${projectId}/makers`,
+  CREATOR_PROJECT_MAKER_QR_STATUS: (
+    projectId: number,
+    orderId: number,
+    qrStatus: 'ACTIVE' | 'INACTIVE'
+  ) =>
+    `${BASE_URL}/api/creators/creator-center/projects/${projectId}/makers/orderId/${orderId}/status/${qrStatus}`,
 
   //어드민
 
