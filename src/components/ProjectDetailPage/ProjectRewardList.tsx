@@ -6,14 +6,13 @@ import {
 import { ProjectRewardCard } from './ProjectRewardCard';
 import axios from 'axios';
 import { ENDPOINTS } from '../../api/endpoints';
-import { useNavigate } from 'react-router-dom';
+import { loadTossPayments } from '@tosspayments/tosspayments-sdk';
 
 interface ProjectRewardListProps {
   detail: ProjectDetailData;
 }
 
 export const ProjectRewardList = ({ detail }: ProjectRewardListProps) => {
-  const navigate = useNavigate();
   const [selectedQuantities, setSelectedQuantities] = useState<
     Record<number, number>
   >({});
@@ -76,7 +75,7 @@ export const ProjectRewardList = ({ detail }: ProjectRewardListProps) => {
     }
   }, [selectedRewards.length]);
 
-  // 결제 처리 api 연동
+  // Toss 빌링키 발급 (카드 등록)
   const handlePayment = async () => {
     if (selectedRewards.length === 0) return;
     setPaymentError('');
@@ -87,6 +86,12 @@ export const ProjectRewardList = ({ detail }: ProjectRewardListProps) => {
         window.location.href = '/login';
         return;
       }
+
+      const clientKey =
+        import.meta.env.VITE_TOSS_CLIENT_KEY ??
+        'test_ck_Poxy1XQL8RYYmn7EOn9Zr7nO5Wml';
+
+      // 1. 주문 생성 (백엔드에서 orderId, customerKey 발급)
       const response = await axios.post(
         ENDPOINTS.ORDERS_PREPARE,
         {
@@ -98,9 +103,7 @@ export const ProjectRewardList = ({ detail }: ProjectRewardListProps) => {
           })),
         },
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
 
@@ -110,11 +113,28 @@ export const ProjectRewardList = ({ detail }: ProjectRewardListProps) => {
         );
       }
 
-      setPaymentError('');
-      navigate('/billing/success');
+      const { orderId, customerKey } = response.data.data ?? {};
+      if (orderId == null || !customerKey) {
+        throw new Error('주문 정보를 받지 못했습니다.');
+      }
+
+      const successUrl = `${window.location.origin}/billing/success?orderId=${encodeURIComponent(orderId)}`;
+      const failUrl = `${window.location.origin}/billing/fail`;
+
+      const tossPayments = await loadTossPayments(clientKey);
+      const payment = tossPayments.payment({ customerKey });
+      await payment.requestBillingAuth({
+        method: 'CARD',
+        successUrl,
+        failUrl,
+      });
+
+      setIsPaymentOpen(false);
     } catch (error) {
       setPaymentError(
-        error instanceof Error ? error.message : '주문 생성에 실패했습니다.'
+        error instanceof Error
+          ? error.message
+          : '카드 등록 요청에 실패했습니다.'
       );
     }
   };
