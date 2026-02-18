@@ -89,7 +89,7 @@ export const ProjectRewardList = ({ detail }: ProjectRewardListProps) => {
 
       const clientKey =
         import.meta.env.VITE_TOSS_CLIENT_KEY ??
-        'test_ck_Poxy1XQL8RYYmn7EOn9Zr7nO5Wml';
+        'test_ck_ma60RZblrqzpZmzaDQGM8wzYWBn1';
 
       // 1. 주문 생성 (백엔드에서 orderId, customerKey 발급)
       const response = await axios.post(
