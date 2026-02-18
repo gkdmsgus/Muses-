@@ -27,14 +27,8 @@ export const PaymentStatusCard = ({ status }: Props) => {
 
   return (
     <div className="self-stretch p-4 bg-[#F3E8FF] rounded-xl flex items-center">
-      {icon && (
-        <div className={`w-5 h-5 ${color}`}>
-          {icon}
-        </div>
-      )}
-      <div className="pl-3 text-base font-semiBoldFont leading-6">
-        {text}
-      </div>
+      {icon && <div className={`w-5 h-5 ${color}`}>{icon}</div>}
+      <div className="pl-3 text-base font-semiBoldFont leading-6">{text}</div>
     </div>
   );
 };
