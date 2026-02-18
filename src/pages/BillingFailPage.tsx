@@ -1,8 +1,14 @@
 import { X } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export default function BillingFailPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const errorMessage = searchParams.get('message');
+  const errorCode = searchParams.get('code');
+
+  console.log(errorMessage, errorCode);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-6 font-mainFont">
@@ -17,7 +23,7 @@ export default function BillingFailPage() {
           <X className="w-10 h-10 text-solidBlue" />
         </div>
         <p className="text-4xl font-boldFont text-mainBlack mb-2">후원 실패</p>
-        <p className="text-xl text-black40 font-mediumFont">
+        <p className="text-xl text-black40 font-mediumFont mb-2">
           결제 오류로 후원을 실패했어요
         </p>
       </div>

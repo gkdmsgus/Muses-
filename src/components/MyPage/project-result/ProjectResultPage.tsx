@@ -28,7 +28,7 @@ const ProjectResultPage = () => {
       case 'makers':
         return <MakersTab projectId={numericProjectId} />;
       case 'settlement':
-        return <SettlementTab />;
+        return <SettlementTab projectId={numericProjectId} />;
       default:
         return null;
     }

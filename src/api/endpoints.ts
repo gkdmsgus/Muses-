@@ -62,6 +62,8 @@ export const ENDPOINTS = {
     qrStatus: 'ACTIVE' | 'INACTIVE'
   ) =>
     `${BASE_URL}/api/creators/creator-center/projects/${projectId}/makers/orderId/${orderId}/status/${qrStatus}`,
+  CREATOR_PROJECT_SETTLEMENT: (projectId: number) =>
+    `${BASE_URL}/api/creators/creator-center/projects/${projectId}/settlement`,
 
   //어드민
 

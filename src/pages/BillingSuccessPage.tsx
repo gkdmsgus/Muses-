@@ -1,49 +1,64 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { CheckIcon } from 'lucide-react';
-// import axios from 'axios';
-// import { ENDPOINTS } from '../api/endpoints';
+import axios from 'axios';
+import { ENDPOINTS } from '../api/endpoints';
 
 export default function BillingSuccessPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>(
-    'success'
+    'loading'
   );
   const [message, setMessage] = useState('');
 
-  // useEffect(() => {
-  //   const orderId = searchParams.get('orderId');
-  //   const authKey = searchParams.get('authKey');
-  //   const customerKey = searchParams.get('customerKey');
+  useEffect(() => {
+    const orderId = searchParams.get('orderId');
+    const authKey = searchParams.get('authKey');
+    const customerKey = searchParams.get('customerKey');
 
-  //   if (!orderId || !authKey || !customerKey) {
-  //     setStatus('error');
-  //     setMessage('결제 인증 정보를 확인할 수 없습니다.');
-  //     return;
-  //   }
+    if (!orderId || !authKey || !customerKey) {
+      setStatus('error');
+      setMessage('빌링 인증 정보를 확인할 수 없습니다.');
+      return;
+    }
 
-  //   axios
-  //     .post(
-  //       ENDPOINTS.BILLING_ISSUE,
-  //       { authKey, customerKey },
-  //       { params: { orderId } }
-  //     )
-  //     .then((response) => {
-  //       if (!response.data?.success) {
-  //         throw new Error(
-  //           response.data?.error?.message ?? '결제 인증에 실패했습니다.'
-  //         );
-  //       }
-  //       setStatus('success');
-  //     })
-  //     .catch((error) => {
-  //       setStatus('error');
-  //       setMessage(
-  //         error instanceof Error ? error.message : '결제 인증에 실패했습니다.'
-  //       );
-  //     });
-  // }, [searchParams]);
+    // authKey 재사용/만료 루프 방지
+    window.history.replaceState({}, document.title, '/billing/success');
+
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      setStatus('error');
+      setMessage('로그인 정보가 없습니다.');
+      return;
+    }
+
+    axios
+      .post(
+        ENDPOINTS.BILLING_ISSUE,
+        { authKey, customerKey },
+        {
+          params: { orderId },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((response) => {
+        if (!response.data?.success) {
+          throw new Error(
+            response.data?.error?.message ?? '빌링키 발급에 실패했습니다.'
+          );
+        }
+        setStatus('success');
+      })
+      .catch((error) => {
+        setStatus('error');
+        setMessage(
+          error instanceof Error ? error.message : '빌링키 발급에 실패했습니다.'
+        );
+      });
+  }, [searchParams]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-6 font-mainFont">
@@ -72,7 +87,7 @@ export default function BillingSuccessPage() {
         )}
         {status === 'error' && (
           <p className="text-base text-[#EF4444]">
-            {message || '결제 인증에 실패했습니다.'}
+            {message || '카드 등록에 실패했습니다.'}
           </p>
         )}
       </div>
