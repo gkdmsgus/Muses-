@@ -1,11 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Check, FilePlus2, MoveLeft, MoveRight } from 'lucide-react';
+import ENDPOINTS from '../../../../api/endpoints';
+import api from '../../../../api/axiosInstance';
+import type { Makers, MakersResponse } from '../../../../types/makers';
 
-{
-  /*interface TabProps {
-  projectId?: string;
-}*/
-}
 const headers = [
   { label: '닉네임', w: 'w-16' },
   { label: '이름', w: 'w-16' },
@@ -16,20 +14,110 @@ const headers = [
   { label: 'QR 현황', w: 'w-24' },
 ];
 
-const rows = Array.from({ length: 10 });
-const MakersTab = () => {
-  const [qrStatuses, setQrStatuses] = useState([
-    '비활성화',
-    '활성화',
-    '활성화',
-    '활성화',
-    '활성화',
-    '활성화',
-    '비활성화',
-    '활성화',
-    '활성화',
-    '활성화',
-  ]);
+interface MakersTabProps {
+  projectId?: number;
+}
+
+const getQrUI = (status: Makers['qrStatus']) => {
+  switch (status) {
+    case 'ACTIVE':
+      return {
+        displayText: '활성화',
+        pillClass: 'bg-mainBlack text-mainWhite',
+        circleClass: 'bg-mainWhite text-mainBlack',
+        isNone: false,
+        showCheck: true,
+      };
+
+    case 'INACTIVE':
+      return {
+        displayText: '비활성화',
+        pillClass: 'bg-white80 text-mainBlack',
+        circleClass: 'bg-mainBlack text-mainWhite',
+        isNone: false,
+        showCheck: true,
+      };
+
+    case 'NONE':
+    default:
+      return {
+        displayText: '해당 없음',
+        pillClass: 'bg-white60 text-black40',
+        circleClass: '',
+        isNone: true,
+        showCheck: false,
+      };
+  }
+};
+
+const MakersTab = ({ projectId }: MakersTabProps) => {
+  const [makers, setMakers] = useState<Makers[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const pageSize = 20;
+  const totalPages = Math.ceil(makers.length / pageSize);
+
+  const pagedMakers = makers.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
+  const fetchMakers = async () => {
+    try {
+      const response = await api.get<MakersResponse>(
+        ENDPOINTS.CREATOR_PROJECT_MAKERS(projectId)
+      );
+
+      const items = response.data?.data?.items ?? [];
+      setMakers(Array.isArray(items) ? items : []);
+      setCurrentPage(1); // 프로젝트 변경 시 페이지 초기화
+    } catch (error) {
+      console.error(error);
+      setMakers([]);
+    }
+  };
+
+  const toggleQrStatus = async (
+    memberId: number,
+    orderId: number,
+    currentStatus: Makers['qrStatus']
+  ) => {
+    if (currentStatus === 'NONE') return;
+    if (!projectId) return;
+
+    const nextStatus = currentStatus === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+
+    try {
+      const response = await api.post(
+        ENDPOINTS.CREATOR_PROJECT_MAKER_QR_STATUS(
+          projectId,
+          orderId,
+          currentStatus // ← 여기 중요
+        )
+      );
+
+      if (!response.data.success) {
+        throw new Error(response.data.error?.message ?? 'QR 상태 변경 실패');
+      }
+
+      setMakers((prev) =>
+        prev.map((maker) =>
+          maker.memberId === memberId && maker.orderId === orderId
+            ? { ...maker, qrStatus: nextStatus }
+            : maker
+        )
+      );
+    } catch (error: any) {
+      console.error(error);
+      alert(error.message ?? 'QR 상태 변경 실패');
+    }
+  };
+
+  useEffect(() => {
+    if (!projectId) return;
+    fetchMakers();
+  }, [projectId]);
+
   return (
     <div className="w-fit p-8 bg-white rounded-2xl shadow-sm border border-white80 flex flex-col items-center gap-6">
       {/* header */}
@@ -56,95 +144,93 @@ const MakersTab = () => {
         </div>
 
         {/* body rows */}
-        {rows.map((_, i) => (
-          <div key={i} className="flex gap-11 items-center">
-            <div className="w-16 font-mainFont text-center text-black text-[12px]">
-              푸른오렌지
+        {pagedMakers.map((maker) => {
+          const { displayText, pillClass, circleClass, isNone, showCheck } =
+            getQrUI(maker.qrStatus);
+
+          return (
+            <div key={maker.orderId} className="flex gap-11 items-center">
+              <div className="w-16 font-mainFont text-center text-black text-[12px]">
+                {maker.nickname ?? '-'}
+              </div>
+              <div className="w-16 text-center font-mainFont text-black text-[12px]">
+                {maker.name}
+              </div>
+              <div className="w-24 text-center font-mainFont text-black text-[12px]">
+                {maker.phone ?? '-'}
+              </div>
+              <div className="w-28 text-center font-mainFont text-black text-[12px]">
+                {maker.email ?? '-'}
+              </div>
+              <div className="w-10 text-center font-mainFont text-black text-[12px]">
+                {maker.quantity}
+              </div>
+              <div className="w-24 text-center font-mainFont text-black text-[12px]">
+                {maker.rewardName}
+              </div>
+              <div className="w-24 flex items-center justify-center">
+                <button
+                  type="button"
+                  disabled={isNone}
+                  className={`cursor-pointer h-6 w-[80px] flex items-center rounded-full gap-2 text-[9px] ${pillClass}`}
+                  onClick={() =>
+                    toggleQrStatus(
+                      maker.memberId,
+                      maker.orderId,
+                      maker.qrStatus
+                    )
+                  }
+                >
+                  {showCheck && (
+                    <span
+                      className={`w-3.5 h-3.5 ml-3 rounded-full flex items-center justify-center ${circleClass}`}
+                    >
+                      <Check className="w-3 h-3" />
+                    </span>
+                  )}
+                  <span>{displayText}</span>
+                </button>
+              </div>
             </div>
-            <div className="w-16 text-center font-mainFont text-black text-[12px]">
-              김*정
-            </div>
-            <div className="w-24 text-center font-mainFont text-black text-[12px]">
-              010-8537-2259
-            </div>
-            <div className="w-28 text-center font-mainFont text-black text-[12px]">
-              sample@sample.com
-            </div>
-            <div className="w-10 text-center font-mainFont text-black text-[12px]">
-              2
-            </div>
-            <div className="w-24 text-center font-mainFont text-black text-[12px]">
-              VIP 스탠딩석
-            </div>
-            <div className="w-24 flex items-center justify-center">
-              {(() => {
-                const status = qrStatuses[i] ?? '해당없음';
-                const isActive = status === '활성화';
-                const isInactive = status === '비활성화';
-                const pillClass = isActive
-                  ? 'bg-mainBlack text-mainWhite'
-                  : isInactive
-                    ? 'bg-white80 text-mainBlack'
-                    : 'bg-white60 text-black40';
-                const circleClass = isActive
-                  ? 'bg-mainWhite text-mainBlack'
-                  : 'bg-mainBlack text-mainWhite';
-                return (
-                  <button
-                    type="button"
-                    className={`cursor-pointer h-6 w-[80px] flex items-center rounded-full gap-2 text-[9px] ${pillClass}`}
-                    onClick={() => {
-                      setQrStatuses((prev) =>
-                        prev.map((value, index) => {
-                          if (index !== i) return value;
-                          return value === '활성화' ? '비활성화' : '활성화';
-                        })
-                      );
-                    }}
-                  >
-                    {(isActive || isInactive) && (
-                      <span
-                        className={`w-3.5 h-3.5 ml-3 rounded-full flex items-center justify-center ${circleClass}`}
-                      >
-                        <Check className="w-3 h-3" />
-                      </span>
-                    )}
-                    <span>{status}</span>
-                  </button>
-                );
-              })()}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* pagination */}
       <div className="flex items-center gap-2">
-        {/* left arrow */}
-        <div className="w-6 h-6 rounded-full border border-white60 flex items-center justify-center">
-          <MoveLeft size={8} />{' '}
-        </div>
+        <button
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          className="w-6 h-6 rounded-full border border-white60 flex items-center justify-center cursor-pointer"
+        >
+          <MoveLeft size={8} />
+        </button>
 
-        {/* page numbers */}
-        {[1, 2, 3].map((n) => (
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
           <div
             key={n}
-            className={`w-6 h-6 rounded-full border flex items-center justify-center text-[10px] font-boldFont
-        ${
-          n === 1
-            ? 'bg-mainBlack text-white border-mainBlack'
-            : 'border-white60 text-black'
-        }
-      `}
+            onClick={() => setCurrentPage(n)}
+            className={`w-6 h-6 rounded-full border flex items-center justify-center text-[10px] font-boldFont cursor-pointer
+              ${
+                n === currentPage
+                  ? 'bg-mainBlack text-white border-mainBlack'
+                  : 'border-white60 text-black'
+              }
+            `}
           >
             {n}
           </div>
         ))}
 
-        {/* right arrow */}
-        <div className="w-6 h-6 border border-white60 text-black rounded-full flex items-center justify-center">
-          <MoveRight size={8} />{' '}
-        </div>
+        <button
+          disabled={currentPage === totalPages || totalPages === 0}
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
+          className="w-6 h-6 border border-white60 text-black rounded-full flex items-center justify-center cursor-pointer"
+        >
+          <MoveRight size={8} />
+        </button>
       </div>
     </div>
   );
