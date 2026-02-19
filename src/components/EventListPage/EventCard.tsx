@@ -1,12 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 import type { EventData } from '../../api/eventAPI';
 import { getEventThumbnail } from '../../utils/getEventThumbnail';
-
-const DEFAULT_EVENT_IMAGE = '/assets/images/backgrounds/default-event.png';
+import DEFAULT_EVENT_IMAGE from '../../assets/images/icons/logo.png';
 
 export default function EventCard({ event }: { event: EventData }) {
   const navigate = useNavigate();
-  const thumbnail = getEventThumbnail(event.content);
+  let thumbnail = getEventThumbnail(event.content);
+  if (!thumbnail) {
+    thumbnail = DEFAULT_EVENT_IMAGE;
+  }
+
   // 카테고리별 색상/텍스트 매핑
   const categoryMap: Record<string, { label: string; color: string }> = {
     COLLAB: { label: 'Collaboration', color: 'bg-solidPink' },
