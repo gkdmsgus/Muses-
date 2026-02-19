@@ -13,39 +13,31 @@ import { fetchMyCreatorProjects } from '../../../api/user';
 type ProjectTab = 'dashboard' | 'setting' | 'makers' | 'settlement';
 
 const ProjectResultPage = () => {
-  const { projectId } = useParams<{ projectId: string }>();
+  const { id } = useParams<{ id: string }>();
 
   const [project, setProject] = useState<Project | null>(null);
   const [activeTab, setActiveTab] = useState<ProjectTab>('dashboard');
 
   useEffect(() => {
-    if (!projectId) return;
+    if (!id) return;
 
-     const load = async () => {
-     try {
-        const list = await fetchMyCreatorProjects();
-        const found = list.find((p: Project) => String(p.projectId) === id);
-        setProject(found ?? null);
-     } catch (e) {
-       console.error('프로젝트 목록 조회 실패:', e);
-     }
+    const load = async () => {
+      const list = await fetchMyCreatorProjects();
+      const found = list.find((p: Project) => String(p.projectId) === id);
+      setProject(found ?? null);
     };
 
     load();
-  }, [projectId]);
+  }, [id]);
 
   const renderTab = () => {
     switch (activeTab) {
       case 'dashboard':
         return <DashboardTab />;
       case 'setting':
-        return (
-          <SettingTab projectId={projectId ? Number(projectId) : undefined} />
-        );
+        return <SettingTab projectId={numericProjectId} />;
       case 'makers':
-        return (
-          <MakersTab projectId={projectId ? Number(projectId) : undefined} />
-        );
+        return <MakersTab projectId={numericProjectId} />;
       case 'settlement':
         return <SettlementTab projectId={numericProjectId} />;
       default:
@@ -54,7 +46,7 @@ const ProjectResultPage = () => {
   };
 
   return (
-    <div className="w-full min-h-screen mt-30 bg-[#F8F9FC]">
+    <div className="w-[1425px] w-full min-h-screen mt-30 bg-[#F8F9FC] to-color-grey-96">
       <ProjectTabs
         activeTab={activeTab}
         onChange={setActiveTab}

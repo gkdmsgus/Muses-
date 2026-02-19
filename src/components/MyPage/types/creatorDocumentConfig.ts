@@ -1,4 +1,7 @@
 export type CreatorType = 'person' | 'solo' | 'corporate';
+
+export type CreatorApiType = 'INDIVIDUAL' | 'BUSINESS' | 'CORPORATION';
+
 export type CreatorDocType =
   | 'ID_CARD'
   | 'BANKBOOK'
@@ -6,8 +9,8 @@ export type CreatorDocType =
   | 'COMP_REGISTRY'
   | 'COMP_SEAL';
 
-// 프론트 타입 → API 타입 매핑
-export const creatorTypeToApi: Record<CreatorType, 'INDIVIDUAL' | 'BUSINESS' | 'CORPORATION'> = {
+// 프론트 → API 타입 매핑
+export const creatorTypeToApi: Record<CreatorType, CreatorApiType> = {
   person: 'INDIVIDUAL',
   solo: 'BUSINESS',
   corporate: 'CORPORATION',
@@ -54,18 +57,28 @@ export const creatorDocumentConfig: Record<CreatorType, DocumentConfig> = {
   solo: soloConfig,
   corporate: corporateConfig,
 };
+
+// 신청 생성 응답
 export interface CreatorApplication {
   applicationId: number;
-  creatorType: 'INDIVIDUAL' | 'BUSINESS' | 'CORPORATION';
+  creatorType: CreatorApiType;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+}
+
+// 제출 결과 응답
+export interface CreatorSubmitResult {
+  applicationId: number;
   status: 'PENDING' | 'APPROVED' | 'REJECTED';
   submitted: boolean;
-  required: string[]; // 필요한 서류 ID_CARD, BANKBOOK...
-  uploaded: string[]; // 업로드된 서류
-  missing: string[];  // 누락된 서류
+  required: CreatorDocType[];
+  uploaded: CreatorDocType[];
+  missing: CreatorDocType[];
 }
+
+// 업로드 응답
 export interface UploadDocResponse {
   docId: number;
-  docType: string; // ID_CARD, BANKBOOK 등
+  docType: CreatorDocType;
   attachmentId: number;
   fileUrl: string;
   originalFilename: string;

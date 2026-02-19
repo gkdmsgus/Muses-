@@ -16,16 +16,22 @@ const CreatorType = ({ onClose }: CreatorTypeProps) => {
   const [loading, setLoading] = useState(false);
 
   const handleSelect = async (selectedType: CreatorKind) => {
-    setType(selectedType);
     if (!applicationCreated) {
       try {
         setLoading(true);
         await createCreatorApplication(creatorTypeToApi[selectedType]);
         setApplicationCreated(true);
+              setType(selectedType);
+
+      } catch {
+      alert('신청 생성 중 오류가 발생했습니다. 다시 시도해주세요.');
+
       } finally {
         setLoading(false);
       }
     }
+      else {
+    setType(selectedType);
   };
 
   return (
@@ -51,5 +57,5 @@ const CreatorType = ({ onClose }: CreatorTypeProps) => {
     </ModalLayout>
   );
 };
-
+}
 export default CreatorType;

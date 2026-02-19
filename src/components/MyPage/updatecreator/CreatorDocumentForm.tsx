@@ -1,14 +1,13 @@
 import { ChevronLeft } from 'lucide-react';
 import SubmitFile from './SubmitFile';
 import {
+  type CreatorDocType,
   type CreatorType,
   creatorDocumentConfig,
-  creatorTypeToApi,
 } from '../types/creatorDocumentConfig';
 import type { FormEvent } from 'react';
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 import {
-  createCreatorApplication,
   submitCreatorApplication,
   uploadCreatorDoc,
 } from '../../../api/updateCreator';
@@ -22,7 +21,7 @@ const CreatorDocumentForm = ({ type, onBack }: Props) => {
   const { title, files } = creatorDocumentConfig[type];
   const rowCount = Math.ceil(files.length / 2);
 
-  const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<CreatorDocType[]>([]);
   const [loading, setLoading] = useState(false);
 
   const handleFileChange = async (fileConfig: (typeof files)[number]) => {
@@ -35,6 +34,8 @@ const CreatorDocumentForm = ({ type, onBack }: Props) => {
           setLoading(true);
           const res = await uploadCreatorDoc(fileConfig.docType, file);
           setUploadedFiles((prev) => [...prev, res.docType]);
+        } catch {
+          alert('파일 업로드에 실패했습니다. 다시 시도해주세요.');
         } finally {
           setLoading(false);
         }
@@ -59,12 +60,7 @@ const CreatorDocumentForm = ({ type, onBack }: Props) => {
       setLoading(false);
     }
   };
-  useEffect(() => {
-    const initApplication = async () => {
-      await createCreatorApplication(creatorTypeToApi[type]);
-    };
-    initApplication();
-  }, [type]);
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -104,7 +100,11 @@ const CreatorDocumentForm = ({ type, onBack }: Props) => {
                     ? 'opacity-50 cursor-not-allowed'
                     : ''
                 }
-                onClick={() => handleFileChange(file)}
+                onClick={
+                  uploadedFiles.includes(file.docType)
+                    ? undefined
+                    : () => handleFileChange(file)
+                }
               />
             </div>
           );
