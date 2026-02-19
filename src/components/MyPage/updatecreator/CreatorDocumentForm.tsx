@@ -3,8 +3,16 @@ import SubmitFile from './SubmitFile';
 import {
   type CreatorType,
   creatorDocumentConfig,
+  creatorTypeToApi,
 } from '../types/creatorDocumentConfig';
 import type { FormEvent } from 'react';
+import { useEffect, useState } from 'react';
+import {
+  createCreatorApplication,
+  submitCreatorApplication,
+  uploadCreatorDoc,
+} from '../../../api/updateCreator';
+
 interface Props {
   type: CreatorType;
   onBack: () => void;
@@ -14,11 +22,49 @@ const CreatorDocumentForm = ({ type, onBack }: Props) => {
   const { title, files } = creatorDocumentConfig[type];
   const rowCount = Math.ceil(files.length / 2);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log('서류 제출:', type);
+  const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const handleFileChange = async (fileConfig: (typeof files)[number]) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.onchange = async () => {
+      if (input.files?.length) {
+        const file = input.files[0];
+        try {
+          setLoading(true);
+          const res = await uploadCreatorDoc(fileConfig.docType, file);
+          setUploadedFiles((prev) => [...prev, res.docType]);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+    input.click();
   };
 
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (loading) return;
+
+    try {
+      setLoading(true);
+      const res = await submitCreatorApplication();
+      if (res.missing.length > 0) {
+        alert(`누락된 서류가 있습니다: ${res.missing.join(', ')}`);
+        return;
+      }
+      alert('크리에이터 전환 신청 완료!');
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    const initApplication = async () => {
+      await createCreatorApplication(creatorTypeToApi[type]);
+    };
+    initApplication();
+  }, [type]);
   return (
     <form
       onSubmit={handleSubmit}
@@ -38,7 +84,7 @@ const CreatorDocumentForm = ({ type, onBack }: Props) => {
         <span className="text-[#4F46E5] text-sm font-boldFont">{title}</span>
       </div>
 
-      {/* 파일 영역 */}
+      {/* 파일 */}
       <div className="relative w-[624px]" style={{ height: rowCount * 158 }}>
         {files.map((file, idx) => {
           const col = idx % 2;
@@ -50,8 +96,16 @@ const CreatorDocumentForm = ({ type, onBack }: Props) => {
               className="absolute"
               style={{ left: col * 312, top: row * 158 }}
             >
-              <SubmitFile content={file.content} condition={file.condition} />
-              
+              <SubmitFile
+                content={file.content}
+                condition={file.condition}
+                className={
+                  uploadedFiles.includes(file.docType)
+                    ? 'opacity-50 cursor-not-allowed'
+                    : ''
+                }
+                onClick={() => handleFileChange(file)}
+              />
             </div>
           );
         })}
@@ -62,7 +116,9 @@ const CreatorDocumentForm = ({ type, onBack }: Props) => {
         type="submit"
         className="self-stretch py-4 bg-[#4F46E5] rounded-xl inline-flex justify-center items-center hover:bg-[#433cba] transition cursor-pointer"
       >
-        <span className="text-white text-lg font-boldFont">제출하기</span>
+        <span className="text-white text-lg font-boldFont">
+          {loading ? '업로드 중...' : '제출하기'}
+        </span>
       </button>
     </form>
   );

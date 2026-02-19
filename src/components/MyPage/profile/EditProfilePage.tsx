@@ -1,4 +1,4 @@
-import { ChevronDown, Mail, Pencil } from 'lucide-react';
+import { Mail, Pencil } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import profileimg from '../../../assets/images/profileimg.svg';
 import { getMyInfo, updateMyProfile } from '../../../api/user';
@@ -71,14 +71,14 @@ export default function EditProfilePage() {
           <div className="w-32 h-32 relative">
             <div className="flex items-center justify-center w-32 h-32 bg-white rounded-full border border-stone-300">
               <img
-                src={member?.profileImgUrl || profileimg}
+                src={profileimg}
                 alt="profile"
                 className="w-24 h-20"
               />
             </div>
-            <div className="flex absolute top-[75%] right-[3%] w-7 h-7 bg-[#FAFBFD] rounded-full shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] items-center justify-center">
+            <button className="flex absolute top-[75%] right-[3%] w-7 h-7 bg-[#FAFBFD] rounded-full shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] items-center justify-center cursor-pointer hover:bg-[#e7e7e7]">
               <Pencil size={12} />
-            </div>
+            </button>
           </div>
 
           <div className="w-[608px] inline-flex flex-col justify-start items-start gap-3">
@@ -100,7 +100,7 @@ export default function EditProfilePage() {
 
                     <button
                       type="button"
-                      className="p-1 bg-[#E7E7E7] rounded-[5px] flex justify-center items-center gap-2.5"
+                      className="p-1 bg-[#E7E7E7] rounded-[5px] flex justify-center items-center gap-2.5 cursor-pointer hover:bg-black40"
                     >
                       <div className="text-[#374151] text-xs font-boldFont leading-5">
                         중복확인
@@ -168,7 +168,7 @@ export default function EditProfilePage() {
             <div className="self-stretch flex flex-col justify-start items-start gap-2">
               <div className="self-stretch inline-flex justify-start items-start gap-7">
                 {/* 생년월일 */}
-                <div className="flex-1 h-20 inline-flex flex-col justify-center items-center gap-1">
+                <div className="flex-1 h-20 inline-flex flex-col justify-center items-start gap-1">
                   <div className="self-stretch text-[#374151] text-sm font-mediumFont leading-5">
                     생년월일
                   </div>
@@ -179,29 +179,29 @@ export default function EditProfilePage() {
                         name="birthday"
                         value={form.birthday}
                         onChange={handleChange}
-                        className="flex-1 bg-transparent outline-none text-base font-mainFont"
+                        className="flex-1 bg-transparent outline-none text-base font-mainFont "
                       />
                     </div>
                   </div>
                 </div>
 
                 {/* 성별 */}
-                <div className="flex-1 inline-flex flex-col justify-center items-center gap-1">
+                <div className="flex-1 inline-flex flex-col justify-center items-start gap-1 ml-20">
                   <div className="w-32 text-[#374151] text-sm font-mediumFont leading-5">
                     성별
                   </div>
-                  <div className="w-32 h-12 flex flex-col justify-center items-end">
+                  <div className="w-20 h-12 flex flex-col justify-center items-end">
                     <div className="self-stretch h-12 px-4 py-3.5 bg-color-white-solid rounded-xl border border-[#D1D5DB] inline-flex justify-center items-center gap-7 overflow-hidden">
                       <select
                         name="gender"
                         value={form.gender}
                         onChange={handleChange}
-                        className="bg-transparent outline-none text-base font-boldFont"
+                        className="bg-transparent outline-none text-base font-boldFont cursor-pointer"
                       >
                         <option value={0}>남자</option>
                         <option value={1}>여자</option>
                       </select>
-                      <ChevronDown size={16} />
+                      
                     </div>
                   </div>
                 </div>

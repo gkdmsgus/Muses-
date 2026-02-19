@@ -19,6 +19,7 @@ export function LoginFormFields() {
 
       if (response.success) {
         localStorage.setItem('accessToken', response.data.accessToken);
+        localStorage.setItem('role', response.data.role);
         alert(`${response.data.name}님 환영합니다!`);
         navigate('/');
         window.location.reload();

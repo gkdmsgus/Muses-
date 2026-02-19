@@ -41,7 +41,7 @@ const TicketItemCard = ({ item, onSelect }: Props) => {
 
         <button
           type="button"
-          className="px-4 py-2 bg-white rounded-full transition-transform hover:scale-105 text-black text-xs font-boldFont"
+          className="px-4 py-2 bg-white rounded-full duration-100 transition-transform  hover:scale-105 text-black text-xs font-boldFont"
           onClick={() => onSelect(item.ticketId)}
         >
           QR 보기

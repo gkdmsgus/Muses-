@@ -1,37 +1,16 @@
 import { useNavigate } from 'react-router-dom';
-import type { Project } from '../types/project';
-
-const STATUS_MAP = {
-  FUNDING: {
-    label: '진행중',
-    badgeClass: 'bg-[#E0E7FF]',
-    textClass: 'text-[#4F46E5]',
-  },
-  SUCCESS: {
-    label: '완료',
-    badgeClass: 'bg-[#CDE6B7]',
-    textClass: 'text-[#4E833E]',
-  },
-  SCHEDULED: {
-    label: '예정',
-    badgeClass: 'bg-[#E6BDB7]',
-    textClass: 'text-[#983A22]',
-  },
-};
+import { PROJECT_STATUS_STYLE, type Project } from '../types/project';
 
 interface MyProjectItemProps {
   project: Project;
 }
 
 const MyProjectItem = ({ project }: MyProjectItemProps) => {
-  const statusInfo = STATUS_MAP[project.fundingStatus];
+  const statusInfo = PROJECT_STATUS_STYLE[project.fundingStatus];
   const navigate = useNavigate();
 
   return (
-    <div
-      className="inline-flex items-start gap-5"
-      onClick={() => navigate(`projectresult/${project.projectId}`)}
-    >
+    <div className="inline-flex items-start gap-5">
       <div className="w-[661px] p-4 rounded-2xl border border-white80 flex items-center ">
         <div className="w-16 h-16 bg-[#C7D2FE] rounded-xl flex items-center justify-center text-white text-lg font-boldFont shrink-0">
           {project.title[0]}
@@ -74,9 +53,13 @@ const MyProjectItem = ({ project }: MyProjectItemProps) => {
         </div>
       </div>
 
-      <div className="w-24 h-24 p-6 bg-[#EEF2FF] rounded-2xl border border-[#EEF2FF] flex items-center justify-center text-lg font-boldFont text-black">
-        QR
-      </div>
+      <button
+        type="button"
+        onClick={() => navigate(`/mypage/projectresult/${project.projectId}`)}
+        className="w-24 h-24 p-6 bg-[#EEF2FF] rounded-2xl border border-[#EEF2FF] flex items-center justify-center text-[12px] font-boldFont text-black cursor-pointer transition duration-200 hover:scale-105 "
+      >
+        상세보기
+      </button>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import ProjectTabs from './components/ProjectTabs';
 import DashboardTab from './tabs/dashboard/DashboardTab';
@@ -7,26 +7,45 @@ import SettingTab from './tabs/SettingTab';
 import MakersTab from './tabs/MakersTab';
 import SettlementTab from './tabs/SettlementTab';
 
+import type { Project } from '../types/project';
+import { fetchMyCreatorProjects } from '../../../api/user';
+
 type ProjectTab = 'dashboard' | 'setting' | 'makers' | 'settlement';
 
 const ProjectResultPage = () => {
-  const { projectId } = useParams();
+  const { projectId } = useParams<{ projectId: string }>();
+
+  const [project, setProject] = useState<Project | null>(null);
   const [activeTab, setActiveTab] = useState<ProjectTab>('dashboard');
 
-  const numericProjectId = Number(projectId);
+  useEffect(() => {
+    if (!projectId) return;
 
-  if (!projectId || isNaN(Number(projectId))) {
-    return <div>잘못된 접근입니다.</div>;
-  }
+     const load = async () => {
+     try {
+        const list = await fetchMyCreatorProjects();
+        const found = list.find((p: Project) => String(p.projectId) === id);
+        setProject(found ?? null);
+     } catch (e) {
+       console.error('프로젝트 목록 조회 실패:', e);
+     }
+    };
+
+    load();
+  }, [projectId]);
 
   const renderTab = () => {
     switch (activeTab) {
       case 'dashboard':
         return <DashboardTab />;
       case 'setting':
-        return <SettingTab projectId={numericProjectId} />;
+        return (
+          <SettingTab projectId={projectId ? Number(projectId) : undefined} />
+        );
       case 'makers':
-        return <MakersTab projectId={numericProjectId} />;
+        return (
+          <MakersTab projectId={projectId ? Number(projectId) : undefined} />
+        );
       case 'settlement':
         return <SettlementTab projectId={numericProjectId} />;
       default:
@@ -35,8 +54,14 @@ const ProjectResultPage = () => {
   };
 
   return (
-    <div className="max-w-[1425px] w-full min-h-screen mt-30 bg-[#F8F9FC] to-color-grey-96">
-      <ProjectTabs activeTab={activeTab} onChange={setActiveTab} />
+    <div className="w-full min-h-screen mt-30 bg-[#F8F9FC]">
+      <ProjectTabs
+        activeTab={activeTab}
+        onChange={setActiveTab}
+        projectTitle={project?.title ?? ''}
+        projectStatus={project?.fundingStatus}
+      />
+
       <div className="flex justify-center pt-10">{renderTab()}</div>
     </div>
   );

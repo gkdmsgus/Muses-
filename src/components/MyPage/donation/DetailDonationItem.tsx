@@ -150,7 +150,7 @@ const DetailDonationItem = ({ item, onClose }: Props) => {
 
           <button
             onClick={onClose}
-            className="justify-center mt-10 text-[#F00] text-base font-mainFont leading-7 cursor-pointer transition hover:underline"
+            className="justify-center mt-10  mb-5  text-[#F00] text-base font-mainFont leading-7 cursor-pointer transition hover:underline"
           >
             결제 취소
           </button>

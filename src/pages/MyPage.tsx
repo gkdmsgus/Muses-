@@ -27,8 +27,9 @@ export default function MyPage() {
   const { activeTab, setActiveTab, isActivityTab, isCreatorTab } =
     useMyPageTab(initialTab);
 
-  const isCreator = true;
-
+  const role = localStorage.getItem('role');
+  const isCreator = role === 'CREATOR';
+  
   useEffect(() => {
     const fetchData = async () => {
       const userData = await getMyInfo();

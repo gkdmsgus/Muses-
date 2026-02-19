@@ -83,6 +83,7 @@ const Header = () => {
       console.error(error);
     } finally {
       localStorage.removeItem('accessToken');
+      localStorage.removeItem('role');
       setIsLogin(false);
       navigate('/', { replace: true });
     }
@@ -197,7 +198,7 @@ const Header = () => {
           <div className="relative">
             <div className="flex justify-center items-center w-10 h-10 border border-[#D9D9D9] rounded-full">
               <img
-                src={member?.profileImgUrl || profileimg}
+                src={profileimg}
                 alt="profile"
                 className="w-7 h-7 cursor-pointer"
                 onClick={() => {

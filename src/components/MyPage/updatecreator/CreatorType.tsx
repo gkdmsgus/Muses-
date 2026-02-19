@@ -2,8 +2,9 @@ import { useState } from 'react';
 import ModalLayout from './ModalLayout';
 import { TypeSelector } from './TypeSelector';
 import CreatorDocumentForm from './CreatorDocumentForm';
-import { type CreatorType as CreatorKind } from '../types/creatorDocumentConfig';
+import { type CreatorType as CreatorKind, creatorTypeToApi } from '../types/creatorDocumentConfig';
 import { X } from 'lucide-react';
+import { createCreatorApplication } from '../../../api/updateCreator';
 
 interface CreatorTypeProps {
   onClose: () => void;
@@ -11,30 +12,41 @@ interface CreatorTypeProps {
 
 const CreatorType = ({ onClose }: CreatorTypeProps) => {
   const [type, setType] = useState<CreatorKind | null>(null);
+  const [applicationCreated, setApplicationCreated] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleSelect = async (selectedType: CreatorKind) => {
+    setType(selectedType);
+    if (!applicationCreated) {
+      try {
+        setLoading(true);
+        await createCreatorApplication(creatorTypeToApi[selectedType]);
+        setApplicationCreated(true);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
 
   return (
     <ModalLayout onClose={onClose}>
-      {/* 헤더 */}
       <div className="self-stretch pb-4 border-b border-white80 flex justify-between items-center">
-        <div className="text-mainBlack text-xl font-boldFont">
-          크리에이터 전환 신청
-        </div>
-        <button
-          onClick={onClose}
-          className="p-2 bg-white80 rounded-full hover:bg-white60"
-        >
+        <div className="text-mainBlack text-xl font-boldFont">크리에이터 전환 신청</div>
+        <button onClick={onClose} className="p-2 bg-white80 rounded-full hover:bg-white60">
           <X size={20} />
         </button>
       </div>
 
-      {/* 본문 */}
       {type === null ? (
-        <TypeSelector onSelect={setType} />
+        <TypeSelector onSelect={handleSelect} />
       ) : (
-        <CreatorDocumentForm
-          type={type}
-          onBack={() => setType(null)}
-        />
+        <CreatorDocumentForm type={type} onBack={() => setType(null)} />
+      )}
+
+      {loading && (
+        <div className="absolute inset-0 bg-black/20 flex justify-center items-center">
+          <span className="text-white font-boldFont text-lg">신청 생성 중...</span>
+        </div>
       )}
     </ModalLayout>
   );

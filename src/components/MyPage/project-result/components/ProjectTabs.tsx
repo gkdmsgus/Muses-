@@ -1,5 +1,6 @@
 import { MoveLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { PROJECT_STATUS_STYLE } from '../../types/project';
 
 export type ProjectTab = 'dashboard' | 'setting' | 'makers' | 'settlement';
 
@@ -9,14 +10,23 @@ const TABS: { key: ProjectTab; label: string }[] = [
   { key: 'makers', label: '메이커 명단' },
   { key: 'settlement', label: '정산' },
 ];
+type ProjectStatus = 'FUNDING' | 'SUCCESS' | 'SCHEDULED';
 
-interface ProjectTabsProps {
+interface Props {
   activeTab: ProjectTab;
   onChange: (tab: ProjectTab) => void;
+  projectTitle: string;
+  projectStatus?: ProjectStatus;
 }
 
-const ProjectTabs = ({ activeTab, onChange }: ProjectTabsProps) => {
+const ProjectTabs = ({
+  activeTab,
+  onChange,
+  projectTitle,
+  projectStatus,
+}: Props) => {
   const navigate = useNavigate();
+  const statusInfo = projectStatus ? PROJECT_STATUS_STYLE[projectStatus] : null;
 
   return (
     <div className="w-full mx-auto px-20 bg-white border-b border-white60">
@@ -27,22 +37,28 @@ const ProjectTabs = ({ activeTab, onChange }: ProjectTabsProps) => {
             <button
               type="button"
               onClick={() => navigate('/mypage?tab=creator')}
-              className="p-2 rounded-lg"
+              className="p-2 rounded-lg cursor-pointer transition durastion-200 hover:-translate-x-0.5"
               aria-label="마이페이지로 돌아가기"
             >
               <MoveLeft size={20} />
             </button>
 
             <div className="pl-4 text-mainBlack text-2xl font-boldFont leading-8">
-              새벽 2집 앨범 발매 기념 공연
+              {projectTitle}
             </div>
           </div>
 
-          <div className="px-2 py-0.5 bg-[#E0E7FF] rounded flex items-center">
-            <span className="text-[#4F46E5] text-[10px] font-boldFont leading-4">
-              진행중
-            </span>
-          </div>
+          {statusInfo && (
+            <div
+              className={`px-2 py-0.5 rounded flex items-center ${statusInfo.badgeClass}`}
+            >
+              <span
+                className={`text-[10px] font-boldFont leading-4 ${statusInfo.textClass}`}
+              >
+                {statusInfo.label}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* 탭 */}
@@ -55,7 +71,9 @@ const ProjectTabs = ({ activeTab, onChange }: ProjectTabsProps) => {
                 key={tab.key}
                 type="button"
                 onClick={() => onChange(tab.key)}
-                className={`cursor-pointer px-1 pb-3 ${index !== 0 ? 'ml-6' : ''} border-b-2 transition-colors
+                className={`px-1 pb-3 cursor-pointer hover:scale-103 ${
+                  index !== 0 ? 'ml-6' : ''
+                } border-b-2 transition-colors
                 ${
                   isActive
                     ? 'border-[#9333EA] text-[#9333EA] font-semiBoldFont'

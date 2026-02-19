@@ -36,7 +36,7 @@ const InterestProjectList = () => {
         </p>
         <Link
           to="/projects"
-          className="px-5 py-2.5 rounded-full bg-solidPurple text-white text-sm font-mediumFont leading-5 hover:bg-solidPurple/80 transition"
+          className="inline-block px-5 py-2.5 rounded-full bg-solidPurple text-white text-sm font-mediumFont leading-5 transition-all duration-200 ease-in-out hover:bg-solidPurple/80 hover:scale-105"
         >
           둘러보기
         </Link>
@@ -56,6 +56,7 @@ const InterestProjectList = () => {
           title={p.title}
           progress={p.achieveRate}
           dday={formatDday(p.dday)}
+          
         />
       ))}
     </div>
