@@ -6,8 +6,6 @@ import { useParams } from 'react-router-dom';
 import type { ProjectDashboard } from '../../../types/project';
 import { fetchProjectDashboard } from '../../../../../api/project';
 
-
-
 const DashboardTab = () => {
   const { id } = useParams<{ id: string }>();
   const [dashboard, setDashboard] = useState<ProjectDashboard | null>(null);

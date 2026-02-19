@@ -6,7 +6,7 @@ import {
   creatorDocumentConfig,
 } from '../types/creatorDocumentConfig';
 import type { FormEvent } from 'react';
-import {  useState } from 'react';
+import { useState } from 'react';
 import {
   submitCreatorApplication,
   uploadCreatorDoc,
@@ -15,9 +15,10 @@ import {
 interface Props {
   type: CreatorType;
   onBack: () => void;
+  onSuccess?: () => void;
 }
 
-const CreatorDocumentForm = ({ type, onBack }: Props) => {
+const CreatorDocumentForm = ({ type, onBack, onSuccess }: Props) => {
   const { title, files } = creatorDocumentConfig[type];
   const rowCount = Math.ceil(files.length / 2);
 
@@ -56,6 +57,7 @@ const CreatorDocumentForm = ({ type, onBack }: Props) => {
         return;
       }
       alert('크리에이터 전환 신청 완료!');
+      onSuccess?.();
     } finally {
       setLoading(false);
     }

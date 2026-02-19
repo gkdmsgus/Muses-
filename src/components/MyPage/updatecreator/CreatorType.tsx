@@ -2,7 +2,10 @@ import { useState } from 'react';
 import ModalLayout from './ModalLayout';
 import { TypeSelector } from './TypeSelector';
 import CreatorDocumentForm from './CreatorDocumentForm';
-import { type CreatorType as CreatorKind, creatorTypeToApi } from '../types/creatorDocumentConfig';
+import {
+  type CreatorType as CreatorKind,
+  creatorTypeToApi,
+} from '../types/creatorDocumentConfig';
 import { X } from 'lucide-react';
 import { createCreatorApplication } from '../../../api/updateCreator';
 
@@ -21,24 +24,27 @@ const CreatorType = ({ onClose }: CreatorTypeProps) => {
         setLoading(true);
         await createCreatorApplication(creatorTypeToApi[selectedType]);
         setApplicationCreated(true);
-              setType(selectedType);
-
+        setType(selectedType);
       } catch {
-      alert('신청 생성 중 오류가 발생했습니다. 다시 시도해주세요.');
-
+        alert('신청 생성 중 오류가 발생했습니다. 다시 시도해주세요.');
       } finally {
         setLoading(false);
       }
+    } else {
+      setType(selectedType);
     }
-      else {
-    setType(selectedType);
   };
 
   return (
     <ModalLayout onClose={onClose}>
       <div className="self-stretch pb-4 border-b border-white80 flex justify-between items-center">
-        <div className="text-mainBlack text-xl font-boldFont">크리에이터 전환 신청</div>
-        <button onClick={onClose} className="p-2 bg-white80 rounded-full hover:bg-white60">
+        <div className="text-mainBlack text-xl font-boldFont">
+          크리에이터 전환 신청
+        </div>
+        <button
+          onClick={onClose}
+          className="p-2 bg-white80 rounded-full hover:bg-white60"
+        >
           <X size={20} />
         </button>
       </div>
@@ -46,16 +52,21 @@ const CreatorType = ({ onClose }: CreatorTypeProps) => {
       {type === null ? (
         <TypeSelector onSelect={handleSelect} />
       ) : (
-        <CreatorDocumentForm type={type} onBack={() => setType(null)} />
+        <CreatorDocumentForm
+          type={type}
+          onBack={() => setType(null)}
+          onSuccess={onClose}
+        />
       )}
 
       {loading && (
         <div className="absolute inset-0 bg-black/20 flex justify-center items-center">
-          <span className="text-white font-boldFont text-lg">신청 생성 중...</span>
+          <span className="text-white font-boldFont text-lg">
+            신청 생성 중...
+          </span>
         </div>
       )}
     </ModalLayout>
   );
 };
-}
 export default CreatorType;
