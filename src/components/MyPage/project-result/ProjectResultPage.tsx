@@ -13,24 +13,42 @@ import { fetchMyCreatorProjects } from '../../../api/user';
 type ProjectTab = 'dashboard' | 'setting' | 'makers' | 'settlement';
 
 const ProjectResultPage = () => {
-  const { id } = useParams<{ id: string }>();
+  const { projectId } = useParams<{ projectId: string }>();
 
   const [project, setProject] = useState<Project | null>(null);
   const [activeTab, setActiveTab] = useState<ProjectTab>('dashboard');
 
+  const numericProjectId = projectId ? Number(projectId) : undefined;
+
   useEffect(() => {
-    if (!id) return;
+    if (!projectId) return;
 
     const load = async () => {
-      const list = await fetchMyCreatorProjects();
-      const found = list.find((p: Project) => String(p.projectId) === id);
-      setProject(found ?? null);
+      try {
+        const list = await fetchMyCreatorProjects();
+        const found = list.find(
+          (p: Project) => String(p.projectId) === projectId
+        );
+        setProject(found ?? null);
+      } catch (error) {
+        console.error('프로젝트 로딩 실패:', error);
+      }
     };
 
     load();
-  }, [id]);
+  }, [projectId]);
 
   const renderTab = () => {
+    if (!numericProjectId) {
+      return (
+        <div className="w-[1425px] min-h-[713px] pb-8 flex flex-col items-center justify-center gap-8">
+          <div className="text-black60 text-lg">
+            프로젝트를 찾을 수 없습니다.
+          </div>
+        </div>
+      );
+    }
+
     switch (activeTab) {
       case 'dashboard':
         return <DashboardTab />;
@@ -46,7 +64,7 @@ const ProjectResultPage = () => {
   };
 
   return (
-    <div className="w-[1425px] w-full min-h-screen mt-30 bg-[#F8F9FC] to-color-grey-96">
+    <div className="w-full min-h-screen mt-30 bg-[#F8F9FC] to-color-grey-96">
       <ProjectTabs
         activeTab={activeTab}
         onChange={setActiveTab}

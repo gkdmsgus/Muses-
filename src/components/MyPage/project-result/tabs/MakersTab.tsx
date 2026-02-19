@@ -53,6 +53,8 @@ const getQrUI = (status: Makers['qrStatus']) => {
 const MakersTab = ({ projectId }: MakersTabProps) => {
   const [makers, setMakers] = useState<Makers[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const pageSize = 20;
   const totalPages = Math.ceil(makers.length / pageSize);
@@ -63,7 +65,15 @@ const MakersTab = ({ projectId }: MakersTabProps) => {
   );
 
   const fetchMakers = async () => {
+    if (!projectId) {
+      setError('프로젝트 ID가 없습니다.');
+      setLoading(false);
+      return;
+    }
+
     try {
+      setLoading(true);
+      setError(null);
       const response = await api.get<MakersResponse>(
         ENDPOINTS.CREATOR_PROJECT_MAKERS(projectId)
       );
@@ -71,9 +81,16 @@ const MakersTab = ({ projectId }: MakersTabProps) => {
       const items = response.data?.data?.items ?? [];
       setMakers(Array.isArray(items) ? items : []);
       setCurrentPage(1); // 프로젝트 변경 시 페이지 초기화
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error('메이커 명단 로딩 실패:', err);
+      setError(
+        err instanceof Error
+          ? err.message
+          : '메이커 명단을 불러오는데 실패했습니다.'
+      );
       setMakers([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -114,9 +131,24 @@ const MakersTab = ({ projectId }: MakersTabProps) => {
   };
 
   useEffect(() => {
-    if (!projectId) return;
     fetchMakers();
   }, [projectId]);
+
+  if (loading) {
+    return (
+      <div className="w-fit p-8 bg-white rounded-2xl shadow-sm border border-white80 flex flex-col items-center justify-center gap-6 min-h-[400px]">
+        <div className="text-black60 text-lg">메이커 명단을 불러오는 중...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-fit p-8 bg-white rounded-2xl shadow-sm border border-white80 flex flex-col items-center justify-center gap-6 min-h-[400px]">
+        <div className="text-[#EF4444] text-lg">{error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-fit p-8 bg-white rounded-2xl shadow-sm border border-white80 flex flex-col items-center gap-6">
