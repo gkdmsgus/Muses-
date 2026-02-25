@@ -21,7 +21,7 @@ import CheckinResultPage from './pages/CheckinResultPage';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <ScrollToTop />
       <AppLayout />
     </BrowserRouter>
