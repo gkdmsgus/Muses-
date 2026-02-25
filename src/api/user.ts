@@ -36,22 +36,14 @@ export const fetchMyLikedProjects = async (
   page = 0,
   size = 10
 ): Promise<ProjectListResponse> => {
-  const token = localStorage.getItem('accessToken');
+  const res = await axios.get(ENDPOINTS.MY_LIKES_PROJECTS, {
+    params: { page, size },
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+    },
+  });
 
-  const res = await fetch(
-    `${ENDPOINTS.MY_LIKES_PROJECTS}?page=${page}&size=${size}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-console.log("1",res)
-  if (!res.ok) {
-    throw new Error('관심 프로젝트 조회 실패');
-  }
-
-  return res.json();
+  return res.data;
 };
 
 

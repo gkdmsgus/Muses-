@@ -4,6 +4,7 @@ import TicketItemCard from './TicketItemCard';
 import QrCard from './QrCard';
 import { getMyTickets, getCheckinToken } from '../../../api/ticket';
 import { mapTicketToItem, type TicketItem } from '../types/ticket';
+import { getMyInfo } from '../../../api/user';
 
 interface Props {
   onCountChange?: (count: number) => void;
@@ -15,16 +16,19 @@ const TicketCard = ({ onCountChange }: Props) => {
   const [selectedToken, setSelectedToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [memberName, setMemberName] = useState('');
+  const [memberNick, setMemberNick] = useState('');
 
-  // 티켓 리스트 불러오기
+  // 티켓 리스트 + 회원 정보 불러오기
   useEffect(() => {
-    const fetchTickets = async () => {
+    const fetchData = async () => {
       try {
-        const data = await getMyTickets();
+        const [data, member] = await Promise.all([getMyTickets(), getMyInfo()]);
         const mapped = data.map(mapTicketToItem);
-
         setTickets(mapped);
         onCountChange?.(mapped.length);
+        setMemberName(member.name ?? '');
+        setMemberNick(member.nickName ?? '');
       } catch {
         setError(true);
       } finally {
@@ -32,7 +36,7 @@ const TicketCard = ({ onCountChange }: Props) => {
       }
     };
 
-    fetchTickets();
+    fetchData();
   }, []);
 
   // 카드 선택 시 토큰 발급
@@ -61,10 +65,11 @@ const TicketCard = ({ onCountChange }: Props) => {
 
       {selectedTicket && selectedToken && (
         <QrCard
-          ticketId={selectedTicket.ticketId}
           title={selectedTicket.title}
           seat={selectedTicket.selectedSeat}
           ticketToken={selectedToken}
+          memberName={memberName}
+          memberNick={memberNick}
           onClose={() => {
             setSelectedTicket(null);
             setSelectedToken(null);
