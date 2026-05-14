@@ -1,19 +1,23 @@
 import type { ProjectDetailData } from '../types/projectDetails';
 
 const story = (title: string, desc: string) => `
-  <h2>${title}</h2>
-  <p>${desc}</p>
-  <img src="https://picsum.photos/seed/${encodeURIComponent(title).slice(0,10)}/800/450" alt="프로젝트 이미지" style="width:100%;border-radius:12px;margin:16px 0;" />
-  <h3>펀딩 목적</h3>
-  <p>여러분의 소중한 후원이 이 프로젝트를 현실로 만드는 데 큰 힘이 됩니다. 공간 대관, 장비 대여, 홍보비 등 운영 전반에 사용될 예정입니다.</p>
-  <img src="https://picsum.photos/seed/${encodeURIComponent(title).slice(0,10)}2/800/450" alt="프로젝트 이미지2" style="width:100%;border-radius:12px;margin:16px 0;" />
-  <h3>주요 일정</h3>
-  <ul>
+  <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 16px; color: #1F2937;">${title}</h2>
+  <p style="margin-bottom: 24px; color: #4B5563; line-height: 1.6;">${desc}</p>
+  <div style="width: 100%; height: 450px; background-color: #F3F4F6; border-radius: 12px; margin: 24px 0; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+    <img src="https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&q=80&w=800&h=450" alt="프로젝트 이미지" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentElement.style.backgroundColor='#E5E7EB'; this.style.display='none';" />
+  </div>
+  <h3 style="font-size: 20px; font-weight: 700; margin-top: 32px; margin-bottom: 16px; color: #1F2937;">펀딩 목적</h3>
+  <p style="margin-bottom: 24px; color: #4B5563; line-height: 1.6;">여러분의 소중한 후원이 이 프로젝트를 현실로 만드는 데 큰 힘이 됩니다. 공간 대관, 장비 대여, 홍보비 등 운영 전반에 사용될 예정입니다.</p>
+  <div style="width: 100%; height: 450px; background-color: #F3F4F6; border-radius: 12px; margin: 24px 0; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+    <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800&h=450" alt="프로젝트 이미지2" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentElement.style.backgroundColor='#E5E7EB'; this.style.display='none';" />
+  </div>
+  <h3 style="font-size: 20px; font-weight: 700; margin-top: 32px; margin-bottom: 16px; color: #1F2937;">주요 일정</h3>
+  <ul style="margin-bottom: 24px; color: #4B5563; line-height: 1.8; padding-left: 20px;">
     <li>펀딩 마감 후 2주 이내 준비 완료</li>
     <li>행사 당일 현장 진행</li>
     <li>행사 종료 후 결과 리포트 발송</li>
   </ul>
-  <p>많은 응원과 후원 감사드립니다!</p>
+  <p style="font-weight: 600; color: #1F2937;">많은 응원과 후원 감사드립니다!</p>
 `;
 
 export const MOCK_PROJECT_DETAILS: ProjectDetailData[] = [
