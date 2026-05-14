@@ -1,5 +1,6 @@
 import { MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import ProjectCardFooter from './ProjectCardFooter';
 import fallbackPoster from '../../assets/images/fallbackPoster.png';
 import type { Project } from '../../types/projects';
@@ -38,6 +39,9 @@ export default function ProjectCard({
   const isScheduled = project.isScheduled;
   const isClosed =
     project.fundingStatus === 'SUCCESS' || project.fundingStatus === 'FAIL';
+
+  const [imgSrc, setImgSrc] = useState(posterSrc);
+
   return (
     <Link
       to={`/project/${project.projectId}`}
@@ -45,9 +49,14 @@ export default function ProjectCard({
     >
       {/* 위치 및 상태, 썸네일 */}
       <div
-        className={`${posterClassName} p-4 shadow-sm cursor-pointer mb-5 relative overflow-hidden bg-cover bg-center`}
-        style={{ backgroundImage: `url(${posterSrc})` }}
+        className={`${posterClassName} shadow-sm cursor-pointer mb-5 relative overflow-hidden bg-white80`}
       >
+        <img
+          src={imgSrc}
+          alt={project.title}
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          onError={() => setImgSrc(fallbackPoster)}
+        />
         <div
           className="absolute bottom-0 left-0 right-0 h-full rounded-b-3xl"
           style={{
@@ -55,7 +64,7 @@ export default function ProjectCard({
               'linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, transparent 50%)',
           }}
         />
-        <div className="flex items-center mb-4 relative">
+        <div className="flex items-center m-4 relative z-10">
           <div className="flex items-center gap-1 bg-white/90 rounded-lg px-2.5 py-1 shadow-sm mr-2">
             <MapPin className="w-4 h-4 text-solidBlue" />
             <span className="text-[10px] font-boldFont text-[#1F2937]">
