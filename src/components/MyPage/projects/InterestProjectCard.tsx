@@ -10,16 +10,26 @@ const InterestProjectCard = ({
   title,
   progress,
   dday,
+  thumbnailUrl,
 }: InterestProjectCardProps) => {
   const navigate = useNavigate();
 
   return (
-    <div className="w-72 flex flex-col gap-4">
+    <div className="w-[266px] flex flex-col gap-4">
       <div className="rounded-[32px] overflow-hidden shadow">
         <div
-          className="h-96 relative bg-[#D9F99D] cursor-pointer"
+          className="h-80 relative bg-[#D9F99D] cursor-pointer"
           onClick={() => navigate(`/project/${projectId}`)}
         >
+          {thumbnailUrl ? (
+            <img
+              src={thumbnailUrl}
+              alt={title}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full bg-[#D9F99D]" />
+          )}
           <div className="absolute left-4 top-4 flex gap-2">
             <div className="px-2.5 py-1 bg-white rounded-lg flex items-center gap-1">
               <MapPin className="text-[#6366F1]" size={12} />

@@ -15,7 +15,7 @@ const ProfileHeader = ({name}: ProfileHeaderProps) => {
       <button
         type='button'
         onClick={() => navigate('/mypage/editprofile')}
-        className="px-5 py-2 bg-black text-white rounded-full text-sm font-boldFont"
+        className="px-5 py-2 bg-black text-white rounded-full text-sm font-boldFont cursor-pointer hover:bg-black/80 transition-colors"
       >
         프로필 편집
       </button>

@@ -1,22 +1,33 @@
 import { useState } from 'react';
 import { MapPin, Search, Sparkles, ChevronDown, Check } from 'lucide-react';
 
-export default function SearchBar() {
+interface SearchBarProps {
+  keyword: string;
+  onKeywordChange: (value: string) => void;
+  selectedLocation: string;
+  onLocationChange: (value: string) => void;
+}
+
+export default function SearchBar({
+  keyword,
+  onKeywordChange,
+  selectedLocation,
+  onLocationChange,
+}: SearchBarProps) {
   const [isLocationDropdownOpen, setIsLocationDropdownOpen] = useState(false);
-  const [selectedLocation, setSelectedLocation] = useState('전체');
 
   const locations = ['전체', '서울', '경기', '인천', '부산', '제주'];
 
   const popularTags = [
-    '#졸업전시',
-    '#생일카페',
-    '#인디밴드',
-    '#팝업스토어',
-    '#댄스커버',
+    '졸업전시',
+    '생일카페',
+    '인디밴드',
+    '팝업스토어',
+    '댄스커버',
   ];
 
   const handleLocationSelect = (location: string) => {
-    setSelectedLocation(location);
+    onLocationChange(location);
     setIsLocationDropdownOpen(false);
   };
 
@@ -75,9 +86,11 @@ export default function SearchBar() {
 
         {/* 검색바 */}
         <div className="flex-1 relative max-w-[530px] w-full">
-          <Search className="absolute left-6 top-1/2 transform -translate-y-1/2 w-5 h-5 text-black40 cursor-pointer" />
+          <Search className="absolute left-6 top-1/2 transform -translate-y-1/2 w-5 h-5 text-black40" />
           <input
             type="text"
+            value={keyword}
+            onChange={(e) => onKeywordChange(e.target.value)}
             placeholder="프로젝트, 아티스트, 태그 검색"
             className="min-w-[530px] bg-white py-4 pl-13 pr-6 w-full border border-white60 rounded-full focus:border-black40 focus:outline-none"
             style={{
@@ -97,9 +110,10 @@ export default function SearchBar() {
           {popularTags.map((tag) => (
             <button
               key={tag}
+              onClick={() => onKeywordChange(tag)}
               className="text-black60 text-sm font-mediumFont hover:text-[#4F46E5] transition-colors cursor-pointer"
             >
-              {tag}
+              #{tag}
             </button>
           ))}
         </div>

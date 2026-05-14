@@ -94,6 +94,58 @@ const MakersTab = ({ projectId }: MakersTabProps) => {
     }
   };
 
+  const handleDownload = () => {
+    if (makers.length === 0) {
+      alert('다운로드할 메이커 데이터가 없습니다.');
+      return;
+    }
+
+    // CSV 헤더 설정
+    const csvHeaders = [
+      '닉네임',
+      '이름',
+      '전화번호',
+      '이메일',
+      '수량',
+      '리워드',
+      'QR 현황',
+    ];
+
+    // 데이터 행 생성
+    const csvRows = makers.map((m) => {
+      const qrText =
+        m.qrStatus === 'ACTIVE'
+          ? '활성화'
+          : m.qrStatus === 'INACTIVE'
+            ? '비활성화'
+            : '해당 없음';
+
+      return [
+        m.nickname || '-',
+        m.name,
+        m.phone || '-',
+        m.email || '-',
+        m.quantity,
+        `"${m.rewardName.replace(/"/g, '""')}"`, // 쉼표 및 큰따옴표 이스케이프
+        qrText,
+      ].join(',');
+    });
+
+    // 전체 CSV 내용 구성 (BOM 추가로 엑셀 한글 깨짐 방지)
+    const csvContent =
+      '\uFEFF' + [csvHeaders.join(','), ...csvRows].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.setAttribute('download', `메이커명단_${projectId || 'project'}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   const toggleQrStatus = async (
     memberId: number,
     orderId: number,
@@ -155,10 +207,14 @@ const MakersTab = ({ projectId }: MakersTabProps) => {
       {/* header */}
       <div className="w-[702px] flex justify-between items-center">
         <div className="text-xl font-boldFont leading-7">메이커 명단</div>
-        <div className="px-2.5 py-[4.8px] bg-black text-white font-mainFont text-[9.6px] rounded-[4.8px] flex items-center gap-1">
+        <button
+          type="button"
+          onClick={handleDownload}
+          className="px-2.5 py-[4.8px] bg-black text-white font-mainFont text-[9.6px] rounded-[4.8px] flex items-center gap-1 cursor-pointer hover:bg-black/80 transition-colors"
+        >
           <FilePlus2 size={12} />
           다운받기
-        </div>
+        </button>
       </div>
 
       {/* table */}

@@ -32,16 +32,37 @@ export default function MyPage() {
   
   useEffect(() => {
     const fetchData = async () => {
-      const userData = await getMyInfo();
-      setMember(userData);
+      try {
+        const userData = await getMyInfo();
+        setMember(userData);
 
-      if (isCreator) {
-        const summaryData = await getCreatorSummary();
-        setCreatorSummary(summaryData);
+        let serverProjects: Project[] = [];
 
-        // 서버 프로젝트 가져오기
-        const projectData = await fetchMyCreatorProjects();
-        setProjects(projectData);
+        if (isCreator) {
+          const summaryData = await getCreatorSummary();
+          setCreatorSummary(summaryData);
+
+          // 서버 프로젝트 가져오기
+          const projectData = await fetchMyCreatorProjects();
+          serverProjects = projectData;
+        }
+
+        // localStorage에서 로컬 프로젝트 가져오기
+        const localProjectsJson = localStorage.getItem('my_created_projects');
+        const localProjects: Project[] = localProjectsJson
+          ? JSON.parse(localProjectsJson)
+          : [];
+
+        // 로컬 프로젝트를 우선순위로 하여 합침 (최신순)
+        setProjects([...localProjects, ...serverProjects]);
+      } catch (err) {
+        console.error('마이페이지 데이터 로드 실패:', err);
+        
+        // API 실패 시에도 로컬 프로젝트는 보여줌
+        const localProjectsJson = localStorage.getItem('my_created_projects');
+        if (localProjectsJson) {
+          setProjects(JSON.parse(localProjectsJson));
+        }
       }
     };
 

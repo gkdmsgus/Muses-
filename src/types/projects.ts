@@ -28,4 +28,5 @@ export interface InterestProjectCardProps {
   progress: number;
   dday: string;
   projectId: number;
+  thumbnailUrl?: string;
 }

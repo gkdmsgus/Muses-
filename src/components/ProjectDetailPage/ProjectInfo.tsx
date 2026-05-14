@@ -12,12 +12,74 @@ export default function ProjectInfo({ detail }: ProjectInfoProps) {
   const [isLiked, setIsLiked] = useState(false);
   const [likePulseKey, setLikePulseKey] = useState(0);
   const [particles, setParticles] = useState<number[]>([]);
-  const likeCount = isLiked ? 1 : 0;
+
+  // 초기 로드 시 좋아요 상태 확인
+  useEffect(() => {
+    const likedProjects = JSON.parse(localStorage.getItem('my_liked_projects') || '[]');
+    const alreadyLiked = likedProjects.some((p: any) => p.projectId === detail.projectId);
+    setIsLiked(alreadyLiked);
+  }, [detail.projectId]);
+
+  const likeCount = isLiked ? (detail.likeCount || 0) + 1 : (detail.likeCount || 0);
+
   useEffect(() => {
     if (particles.length === 0) return;
     const timer = window.setTimeout(() => setParticles([]), 600);
     return () => window.clearTimeout(timer);
   }, [particles]);
+
+  const handleLikeToggle = () => {
+    const likedProjects = JSON.parse(localStorage.getItem('my_liked_projects') || '[]');
+    let nextLiked = !isLiked;
+    let newLikedProjects;
+
+    if (nextLiked) {
+      // 좋아요 추가
+      const projectToAdd = {
+        projectId: detail.projectId,
+        title: detail.title,
+        thumbnailUrl: detail.thumbnailUrl,
+        achieveRate: detail.achieveRate,
+        deadline: detail.deadline,
+        fundingStatus: detail.status,
+        tags: detail.tags,
+        region: detail.region
+      };
+      newLikedProjects = [projectToAdd, ...likedProjects];
+      
+      // 애니메이션 효과
+      setLikePulseKey((key) => key + 1);
+      const timestamp = Date.now();
+      setParticles(Array.from({ length: 2 }, (_, index) => timestamp + index));
+    } else {
+      // 좋아요 제거
+      newLikedProjects = likedProjects.filter((p: any) => p.projectId !== detail.projectId);
+    }
+
+    localStorage.setItem('my_liked_projects', JSON.stringify(newLikedProjects));
+    setIsLiked(nextLiked);
+  };
+
+  const handleShare = async () => {
+    const shareData = {
+      title: detail.title,
+      text: detail.description,
+      url: window.location.href,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+        alert('프로젝트 링크가 클립보드에 복사되었습니다!');
+      }
+    } catch (err) {
+      if (err instanceof Error && err.name !== 'AbortError') {
+        console.error('공유 중 오류 발생:', err);
+      }
+    }
+  };
 
   return (
     <div className="w-full font-mainFont mb-12">
@@ -47,19 +109,7 @@ export default function ProjectInfo({ detail }: ProjectInfoProps) {
               type="button"
               aria-pressed={isLiked}
               className="relative w-1/2 border border-white60 rounded-xl hover:bg-mainWhite transition-all duration-300 py-3 flex items-center justify-center cursor-pointer"
-              onClick={() => {
-                setIsLiked((prev) => {
-                  const nextLiked = !prev;
-                  if (nextLiked) {
-                    setLikePulseKey((key) => key + 1);
-                    const timestamp = Date.now();
-                    setParticles(
-                      Array.from({ length: 2 }, (_, index) => timestamp + index)
-                    );
-                  }
-                  return nextLiked;
-                });
-              }}
+              onClick={handleLikeToggle}
             >
               <span className="like-heart-wrapper">
                 {particles.map((particle, index) => (
@@ -89,6 +139,7 @@ export default function ProjectInfo({ detail }: ProjectInfoProps) {
             </button>
             <button
               type="button"
+              onClick={handleShare}
               className="w-1/2 border border-white60 rounded-xl hover:bg-mainWhite transition-all duration-300 py-3 flex items-center justify-center cursor-pointer"
             >
               <Share2 className="w-4 h-4 text-black80" />

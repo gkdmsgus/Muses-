@@ -27,7 +27,7 @@ const MyActivitySection = () => {
       </ActivitySection>
 
       <ActivitySection title="관심있는 프로젝트">
-        <div className="self-stretch flex flex-col gap-6">
+        <div className="w-full flex flex-col gap-6">
           <InterestProjectList />
         </div>
       </ActivitySection>

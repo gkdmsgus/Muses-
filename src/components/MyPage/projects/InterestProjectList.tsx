@@ -22,8 +22,27 @@ const InterestProjectList = () => {
 
   useEffect(() => {
     const load = async () => {
-      const res = await fetchMyLikedProjects(0, 10);
-      setProjects(res.data);
+      let serverProjects: Project[] = [];
+      try {
+        const res = await fetchMyLikedProjects(0, 10);
+        serverProjects = res.data;
+      } catch (e) {
+        console.warn('서버에서 관심 프로젝트를 불러오는데 실패했습니다. 로컬 데이터를 사용합니다.');
+      }
+
+      // localStorage에서 좋아요한 프로젝트 가져오기
+      const localLikedJson = localStorage.getItem('my_liked_projects');
+      const localLiked = localLikedJson ? JSON.parse(localLikedJson) : [];
+
+      // 중복 제거 (ID 기준)
+      const combined = [...localLiked];
+      serverProjects.forEach((sp) => {
+        if (!combined.some((lp) => lp.projectId === sp.projectId)) {
+          combined.push(sp);
+        }
+      });
+
+      setProjects(combined);
     };
     load();
   }, []);
@@ -45,7 +64,7 @@ const InterestProjectList = () => {
   }
 
   return (
-    <div className="inline-flex justify-start items-start gap-6">
+    <div className="flex flex-wrap justify-start items-start gap-6">
       {projects.map((p) => (
         <InterestProjectCard
           projectId={p.projectId}
@@ -56,7 +75,7 @@ const InterestProjectList = () => {
           title={p.title}
           progress={p.achieveRate}
           dday={formatDday(p.dday)}
-          
+          thumbnailUrl={p.thumbnailUrl}
         />
       ))}
     </div>
